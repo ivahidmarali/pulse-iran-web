@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-const GROUPS = ["سیاسی", "بین‌الملل", "اقتصادی", "اجتماعی", "ورزشی", "حاشیه"];
+const GROUPS = ["سیاسی", "بین‌الملل", "اقتصادی", "اجتماعی", "ورزشی", "تکنولوژی", "حاشیه"];
 
 export default function TopBarDesktop() {
   return (

@@ -54,6 +54,14 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
       "🥇 ورزش جهانی",
     ],
   },
+  "تکنولوژی":  {
+    emoji: "💻",
+    categories: [
+      "💻 تکنولوژی",
+      "📱 موبایل و گجت",
+      "🤖 هوش مصنوعی",
+    ],
+  },
   "حاشیه":     {
     emoji: "👀",
     categories: [
