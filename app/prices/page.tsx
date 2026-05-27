@@ -56,7 +56,8 @@ function PriceRow({ item }: { item: PriceItem }) {
   const trend = item.trend ?? "flat";
   const changePct = item.change_pct ?? 0;
   return (
-    <div className="flex justify-between items-center p-4 border-b border-white/5">
+    <div className="flex flex-row-reverse justify-between items-center p-4 border-b border-white/5">
+      <p className="text-secondary-fixed-dim font-medium text-right">{info.name}</p>
       <div className="text-left">
         <p className="text-on-surface font-bold">{item.price.toLocaleString("fa-IR")} تومان</p>
         {changePct !== 0 && (
@@ -65,7 +66,6 @@ function PriceRow({ item }: { item: PriceItem }) {
           </p>
         )}
       </div>
-      <p className="text-secondary-fixed-dim font-medium text-right">{info.name}</p>
     </div>
   );
 }
@@ -90,7 +90,7 @@ export default async function PricesPage() {
 
           {/* Currency section */}
           <section className="mb-section-gap">
-            <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">💱 ارزها</h2>
+            <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4 text-right">💱 ارزها</h2>
             <div className="bg-surface-container-low rounded-xl overflow-hidden">
               {currencies.map((p) => <PriceRow key={p.key} item={p} />)}
               {currencies.length === 0 && <p className="p-4 text-on-surface-variant text-sm">داده‌ای موجود نیست</p>}
@@ -99,7 +99,7 @@ export default async function PricesPage() {
 
           {/* Gold section */}
           <section className="mb-section-gap">
-            <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">🪙 طلا و سکه</h2>
+            <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4 text-right">🪙 طلا و سکه</h2>
             <div className="bg-surface-container-low rounded-xl overflow-hidden">
               {gold.map((p) => <PriceRow key={p.key} item={p} />)}
               {gold.length === 0 && <p className="p-4 text-on-surface-variant text-sm">داده‌ای موجود نیست</p>}
@@ -108,7 +108,7 @@ export default async function PricesPage() {
 
           {others.length > 0 && (
             <section>
-              <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">سایر</h2>
+              <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4 text-right">سایر</h2>
               <div className="bg-surface-container-low rounded-xl overflow-hidden">
                 {others.map((p) => <PriceRow key={p.key} item={p} />)}
               </div>
@@ -129,14 +129,14 @@ export default async function PricesPage() {
           <div className="grid grid-cols-12 gap-gutter">
             <section className="col-span-8 space-y-section-gap">
               <div>
-                <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">💱 ارزها</h2>
+                <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4 text-right">💱 ارزها</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {currencies.map((p) => <PriceCard key={p.key} item={p} />)}
                   {currencies.length === 0 && <p className="col-span-2 text-on-surface-variant">داده‌ای موجود نیست</p>}
                 </div>
               </div>
               <div>
-                <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">🪙 طلا و سکه</h2>
+                <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4 text-right">🪙 طلا و سکه</h2>
                 <div className="grid grid-cols-3 gap-4">
                   {gold.map((p) => <PriceCard key={p.key} item={p} />)}
                   {gold.length === 0 && <p className="col-span-3 text-on-surface-variant">داده‌ای موجود نیست</p>}
@@ -145,7 +145,7 @@ export default async function PricesPage() {
             </section>
             <aside className="col-span-4">
               <div className="bg-surface-container-low rounded-xl overflow-hidden">
-                <h3 className="text-title-md font-title-md text-secondary-fixed-dim p-4 border-b border-white/5">همه قیمت‌ها</h3>
+                <h3 className="text-title-md font-title-md text-secondary-fixed-dim p-4 border-b border-white/5 text-right">همه قیمت‌ها</h3>
                 {prices.map((p) => <PriceRow key={p.key} item={p} />)}
               </div>
             </aside>
