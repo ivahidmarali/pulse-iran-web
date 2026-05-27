@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
@@ -69,6 +70,12 @@ async function fetchData(categories?: string[], source?: string) {
     };
   }
 }
+
+export const metadata: Metadata = {
+  title: "دسته‌بندی اخبار",
+  description: "مرور اخبار ایران بر اساس دسته‌بندی: سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر",
+  keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
+};
 
 export default async function CategoriesPage({
   searchParams,

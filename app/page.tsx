@@ -10,6 +10,7 @@ import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, PriceItem } from "@/lib/types";
+import { articleHref } from "@/lib/utils";
 
 async function fetchData(categories?: string[]) {
   try {
@@ -166,7 +167,7 @@ export default async function HomePage({
               </div>
               <div className="space-y-4">
                 {breaking.slice(0, 5).map((item, i) => (
-                  <Link key={item.item_id} href={`/article/${encodeURIComponent(item.item_id)}`} className="flex gap-3 group cursor-pointer">
+                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group cursor-pointer">
                     <span className="text-2xl font-black text-secondary-fixed-dim/20 group-hover:text-secondary-fixed-dim transition-colors shrink-0">
                       {(i + 1).toLocaleString("fa-IR")}
                     </span>

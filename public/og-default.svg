@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#101415"/>
+      <stop offset="100%" style="stop-color:#1a2428"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3cd7ff;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#a2e7ff;stop-opacity:0.4"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Accent bar -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#accent)"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="200" x2="1200" y2="200" stroke="#3cd7ff" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="0" y1="400" x2="1200" y2="400" stroke="#3cd7ff" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="300" y1="0" x2="300" y2="630" stroke="#3cd7ff" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="#3cd7ff" stroke-opacity="0.04" stroke-width="1"/>
+  <line x1="900" y1="0" x2="900" y2="630" stroke="#3cd7ff" stroke-opacity="0.04" stroke-width="1"/>
+  <!-- Pulse circle -->
+  <circle cx="600" cy="280" r="80" fill="none" stroke="#3cd7ff" stroke-opacity="0.15" stroke-width="1"/>
+  <circle cx="600" cy="280" r="55" fill="none" stroke="#3cd7ff" stroke-opacity="0.1" stroke-width="1"/>
+  <!-- Site name in Persian -->
+  <text x="600" y="260" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="#3cd7ff" text-anchor="middle" direction="rtl">پالس ایران</text>
+  <!-- Tagline -->
+  <text x="600" y="340" font-family="Arial, sans-serif" font-size="28" fill="#a2e7ff" fill-opacity="0.7" text-anchor="middle" direction="rtl">اخبار فوری ایران و جهان</text>
+  <!-- Bottom URL -->
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="20" fill="#3cd7ff" fill-opacity="0.4" text-anchor="middle">pulse-iran.com</text>
+</svg>

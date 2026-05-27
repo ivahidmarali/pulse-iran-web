@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
@@ -17,6 +18,12 @@ async function fetchSearch(query: string): Promise<{ items: NewsItem[]; total: n
     return { items: [], total: 0 };
   }
 }
+
+export const metadata: Metadata = {
+  title: "جستجو در اخبار",
+  description: "جستجو در میان هزاران خبر ایران و جهان از منابع مختلف",
+  robots: { index: false, follow: true },
+};
 
 export default async function SearchPage({
   searchParams,

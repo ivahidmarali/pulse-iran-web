@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NewsItem } from "@/lib/types";
+import { articleHref } from "@/lib/utils";
 
 interface Props {
   item: NewsItem;
@@ -67,7 +68,7 @@ function categoryBorder(category?: string): string {
 }
 
 export default function NewsCard({ item, variant = "default" }: Props) {
-  const href = `/article/${encodeURIComponent(item.item_id)}`;
+  const href = articleHref(item.item_id, item.title);
   const ago = timeAgo(item.posted_at);
   const emoji = catEmoji(item.category);
   const border = categoryBorder(item.category);

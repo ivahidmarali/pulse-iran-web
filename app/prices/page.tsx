@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import { getPrices } from "@/lib/api";
 import { PriceItem } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "نرخ ارز و طلا",
+  description: "نرخ زنده دلار، یورو، طلا، سکه و ارزهای دیجیتال در ایران — به‌روزرسانی لحظه‌ای",
+  keywords: ["نرخ دلار", "قیمت طلا", "قیمت سکه", "نرخ ارز", "بیت کوین", "ایران"],
+  openGraph: { type: "website" },
+};
 
 async function fetchPrices(): Promise<PriceItem[]> {
   try {
