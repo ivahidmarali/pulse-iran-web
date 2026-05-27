@@ -1,4 +1,9 @@
-const BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+// Server-side: use internal URL (127.0.0.1:8000) to avoid external firewall
+// Client-side: use NEXT_PUBLIC_API_URL which must go through nginx proxy (/api)
+const BASE =
+  typeof window === "undefined"
+    ? (process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000")
+    : (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost/api");
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
