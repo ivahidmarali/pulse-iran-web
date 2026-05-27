@@ -11,6 +11,7 @@ export interface NewsItem {
   summary?: string;
   link?: string;
   importance?: "high" | "medium" | "low";
+  telegram_posted?: boolean;
 }
 
 export interface PriceItem {
