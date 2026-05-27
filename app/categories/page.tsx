@@ -6,7 +6,7 @@ import Footer from "@/components/layout/Footer";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import NewsCard from "@/components/news/NewsCard";
 import MobileCategoryFeed from "@/components/news/MobileCategoryFeed";
-import { getNews, getSources } from "@/lib/api";
+import { getNews, getSources, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
 
@@ -43,18 +43,30 @@ const LEAN_LABEL_COLOR: Record<string, string> = {
 
 async function fetchData(categories?: string[], source?: string) {
   try {
-    const [filteredData, allData, sources] = await Promise.all([
+    const [filteredData, allData, sources, activeCats] = await Promise.all([
       getNews(1, 30, categories, source),
       getNews(1, 50),
       getSources(),
+      getCategories(),
     ]);
+    // Compute which groups have at least one article in the DB
+    const activeCatNames = new Set(activeCats.map((c) => c.name));
+    const activeGroups = Object.entries(CATEGORY_GROUPS)
+      .filter(([, g]) => g.categories.some((c) => activeCatNames.has(c)))
+      .map(([name]) => name);
     return {
       news: filterValid(filteredData.items),
       allNews: filterValid(allData.items),
       sources,
+      activeGroups,
     };
   } catch {
-    return { news: [] as NewsItem[], allNews: [] as NewsItem[], sources: [] as SourceInfo[] };
+    return {
+      news: [] as NewsItem[],
+      allNews: [] as NewsItem[],
+      sources: [] as SourceInfo[],
+      activeGroups: undefined as string[] | undefined,
+    };
   }
 }
 
@@ -65,7 +77,7 @@ export default async function CategoriesPage({
 }) {
   const { cat, group, source } = await searchParams;
   const categories = getCategoryFilter(cat, group);
-  const { news, allNews, sources } = await fetchData(
+  const { news, allNews, sources, activeGroups } = await fetchData(
     categories.length ? categories : undefined,
     source,
   );
@@ -94,7 +106,7 @@ export default async function CategoriesPage({
         <main className="max-w-7xl mx-auto px-container-margin py-section-gap">
           {/* Category tabs */}
           <div className="mb-section-gap">
-            <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" />
+            <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
           </div>
 
           <div className="grid grid-cols-12 gap-gutter">

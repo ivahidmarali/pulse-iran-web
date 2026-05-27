@@ -75,6 +75,10 @@ export async function getSources() {
   return apiFetch<import("./types").SourceInfo[]>("/sources");
 }
 
+export async function getCategories() {
+  return apiFetch<{ name: string; count: number }[]>("/categories");
+}
+
 export async function getAdminStats(token: string) {
   return apiFetch<import("./types").AdminStats>("/admin/stats", {
     headers: { Authorization: `Bearer ${token}` },

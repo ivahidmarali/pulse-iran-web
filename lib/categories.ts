@@ -11,9 +11,6 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
       "🏛 سیاست داخلی",
       "🎙 ترامپ",
       "🇮🇷🇺🇸 ایران و آمریکا",
-      "👑 خامنه‌ای",
-      "🫀 پزشکیان",
-      "🎖 قالیباف",
       "🔵 اصلاح‌طلبان",
       "🔴 اصولگرایان",
     ],
@@ -65,10 +62,9 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
   },
 };
 
-/** Extract emoji prefix (everything before the first space) from a category string. */
+/** Return the full category string for exact LIKE prefix matching. */
 function emojiPrefix(cat: string): string {
-  const idx = cat.indexOf(" ");
-  return idx > 0 ? cat.slice(0, idx) : cat;
+  return cat;
 }
 
 /**

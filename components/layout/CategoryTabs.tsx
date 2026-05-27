@@ -8,12 +8,14 @@ interface Props {
   selectedCat?: string;
   selectedGroup?: string;
   baseUrl?: string;
+  visibleGroups?: string[];
 }
 
 export default function CategoryTabs({
   selectedCat,
   selectedGroup,
   baseUrl = "/categories",
+  visibleGroups,
 }: Props) {
   const router = useRouter();
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
@@ -65,7 +67,9 @@ export default function CategoryTabs({
         dir="rtl"
         className="flex flex-row gap-1.5 overflow-x-auto no-scrollbar snap-x snap-mandatory"
       >
-        {Object.entries(CATEGORY_GROUPS).map(([groupName, group]) => {
+        {Object.entries(CATEGORY_GROUPS).filter(([groupName]) =>
+          !visibleGroups || groupName === "همه" || visibleGroups.includes(groupName)
+        ).map(([groupName, group]) => {
           const active = activeGroup === groupName;
           const hasSubCats = group.categories.length > 0;
 
