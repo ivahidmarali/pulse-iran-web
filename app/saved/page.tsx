@@ -28,33 +28,53 @@ export default function SavedPage() {
     localStorage.setItem("saved_news", JSON.stringify([...updated].reverse()));
   };
 
+  const clearAll = () => {
+    localStorage.removeItem("saved_news");
+    setItems([]);
+  };
+
+  const ItemList = () => (
+    <>
+      {items.length === 0 ? (
+        <p className="text-on-surface-variant text-sm text-right">هنوز خبری ذخیره نکرده‌اید</p>
+      ) : (
+        <>
+          <p className="text-on-surface-variant text-sm text-right mb-4">{items.length} خبر ذخیره شده</p>
+          <div className="space-y-3">
+            {items.map((item) => (
+              <div key={item.id} className="relative bg-surface-container-low rounded-xl p-4 border border-white/5">
+                <Link href={`/article/${encodeURIComponent(item.id)}`}>
+                  <p className="text-sm font-medium text-on-surface text-right line-clamp-3 pl-12">{item.title}</p>
+                  <p className="text-xs text-secondary-fixed-dim text-right mt-1">{item.source}</p>
+                </Link>
+                <button
+                  onClick={() => remove(item.id)}
+                  className="absolute top-3 left-3 text-xs text-red-400 bg-gray-900/80 px-2 py-1 rounded hover:text-red-300 transition-colors"
+                >
+                  حذف
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            onClick={clearAll}
+            className="w-full mt-4 py-2 bg-gray-800 text-red-400 rounded text-sm hover:bg-gray-700 transition-colors"
+          >
+            پاک کردن همه
+          </button>
+        </>
+      )}
+    </>
+  );
+
   return (
     <div className="min-h-screen cyber-grid" dir="rtl">
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
         <main className="pb-24 px-container-margin py-section-gap">
-          <h1 className="text-title-md font-title-md text-secondary-fixed-dim mb-6 text-right">ذخیره‌شده‌ها</h1>
-          {items.length === 0 ? (
-            <p className="text-on-surface-variant text-sm text-right">هیچ خبری ذخیره نشده است.</p>
-          ) : (
-            <div className="space-y-3">
-              {items.map((item) => (
-                <div key={item.id} className="bg-surface-container-low rounded-xl p-4 border border-white/5 flex flex-col gap-2">
-                  <Link href={`/article/${encodeURIComponent(item.id)}`}>
-                    <p className="text-sm font-medium text-on-surface text-right line-clamp-3">{item.title}</p>
-                    <p className="text-xs text-secondary-fixed-dim text-right mt-1">{item.source}</p>
-                  </Link>
-                  <button
-                    onClick={() => remove(item.id)}
-                    className="self-start text-xs text-red-400 hover:text-red-300 transition-colors"
-                  >
-                    حذف
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+          <h1 className="text-title-md font-title-md text-secondary-fixed-dim mb-6 text-right">🔖 خبرهای ذخیره‌شده</h1>
+          <ItemList />
         </main>
         <BottomNav />
       </div>
@@ -62,28 +82,9 @@ export default function SavedPage() {
       {/* Desktop */}
       <div className="hidden md:block">
         <TopBarDesktop />
-        <main className="max-w-3xl mx-auto px-container-margin py-section-gap">
-          <h1 className="text-headline-lg font-headline-lg text-on-surface mb-8 text-right">ذخیره‌شده‌ها</h1>
-          {items.length === 0 ? (
-            <p className="text-on-surface-variant text-right">هیچ خبری ذخیره نشده است.</p>
-          ) : (
-            <div className="space-y-4">
-              {items.map((item) => (
-                <div key={item.id} className="bg-surface-container-low rounded-xl p-5 border border-white/5 flex items-start justify-between gap-4">
-                  <Link href={`/article/${encodeURIComponent(item.id)}`} className="flex-1 group">
-                    <p className="text-base font-medium text-on-surface group-hover:text-secondary-fixed-dim transition-colors text-right line-clamp-2">{item.title}</p>
-                    <p className="text-sm text-secondary-fixed-dim text-right mt-1">{item.source}</p>
-                  </Link>
-                  <button
-                    onClick={() => remove(item.id)}
-                    className="shrink-0 text-xs text-red-400 hover:text-red-300 transition-colors mt-1"
-                  >
-                    حذف
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+        <main className="max-w-2xl mx-auto px-container-margin py-section-gap">
+          <h1 className="text-headline-lg font-headline-lg text-on-surface mb-8 text-right">🔖 خبرهای ذخیره‌شده</h1>
+          <ItemList />
         </main>
         <Footer />
       </div>
