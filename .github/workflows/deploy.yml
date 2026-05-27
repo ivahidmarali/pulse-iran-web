@@ -7,10 +7,13 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    timeout-minutes: 15
 
-      - name: Setup Node
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -19,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build (validate before deploying)
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
         run: npm run build
@@ -33,17 +36,30 @@ jobs:
           script: |
             set -e
             cd ~/pulse-iran-web
-
-            # Pull latest code
             git pull origin main
-
-            # Ensure env file exists
             echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
-
-            # Install & build
-            npm ci
+            npm ci --silent
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} npm run build
-
-            # Reload via PM2
             pm2 reload pulse-iran-web --update-env || pm2 start npm --name pulse-iran-web -- start
             pm2 save
+
+      - name: Health check
+        run: |
+          sleep 5
+          curl -sf --max-time 10 http://${{ secrets.DEPLOY_HOST }} -o /dev/null
+
+      - name: Notify success
+        if: success()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_LOG_CHANNEL_ID }}" \
+            -d parse_mode="Markdown" \
+            -d text="✅ *Web deployed successfully*%0Acommit: \`$(echo $GITHUB_SHA | cut -c1-7)\`%0Abranch: \`main\`"
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d chat_id="${{ secrets.TELEGRAM_LOG_CHANNEL_ID }}" \
+            -d parse_mode="Markdown" \
+            -d text="❌ *Web deploy FAILED*%0Acommit: \`$(echo $GITHUB_SHA | cut -c1-7)\`%0A[View logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
