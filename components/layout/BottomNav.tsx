@@ -7,6 +7,7 @@ const NAV = [
   { href: "/categories", label: "دسته‌بندی", emoji: "📂" },
   { href: "/prices", label: "قیمت‌ها", emoji: "💰" },
   { href: "/search", label: "جستجو", emoji: "🔍" },
+  { href: "/saved", label: "ذخیره‌ها", emoji: "🔖" },
 ];
 
 export default function BottomNav() {

@@ -76,12 +76,21 @@ export default async function ArticlePage({
 
             {/* Action bar */}
             <div className="flex flex-row-reverse items-center justify-between py-4 border-y border-white/5 mb-6">
-              <ArticleActions title={item.title} source={item.source} />
+              <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
             </div>
 
             {/* Body */}
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
-              <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+              {item.summary && item.summary !== item.title ? (
+                <p className="font-body-lg text-body-lg text-on-surface leading-8">{item.summary}</p>
+              ) : item.link ? (
+                <a href={item.link} target="_blank" rel="noopener noreferrer"
+                   className="text-secondary-fixed-dim underline text-sm">
+                  برای مطالعه کامل خبر به منبع اصلی مراجعه کنید 🔗
+                </a>
+              ) : (
+                <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+              )}
               <div className="flex items-center gap-3 mt-4 text-label-sm text-on-surface-variant">
                 <span>منبع:</span>
                 <span className="text-secondary-fixed-dim">{item.source}</span>
@@ -95,10 +104,10 @@ export default async function ArticlePage({
               <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">📰 اخبار مرتبط</h2>
               <div className="flex flex-row-reverse gap-3 overflow-x-auto pb-2 no-scrollbar">
                 {related.map((rel) => (
-                  <Link key={rel.item_id} href={`/article/${encodeURIComponent(rel.item_id)}`} className="shrink-0 w-64 bg-surface-container-low rounded-lg p-3 border border-white/5">
-                    <div className="text-label-sm text-secondary-fixed-dim mb-1">{rel.source}</div>
-                    <p className="text-sm font-medium line-clamp-2">{rel.title}</p>
-                    <span className="text-[10px] text-outline mt-2 block">🕐 {timeAgo(rel.posted_at)}</span>
+                  <Link key={rel.item_id} href={`/article/${encodeURIComponent(rel.item_id)}`} className="shrink-0 w-52 bg-surface-container-low rounded-lg p-3 border border-white/5">
+                    <div className="text-label-sm text-secondary-fixed-dim mb-1 text-right">{rel.source}</div>
+                    <p className="text-sm font-medium line-clamp-3 text-right">{rel.title}</p>
+                    <span className="text-[10px] text-outline mt-2 block text-right">🕐 {timeAgo(rel.posted_at)}</span>
                   </Link>
                 ))}
               </div>
@@ -167,16 +176,30 @@ export default async function ArticlePage({
                   <span>📰 منبع: <span className="text-secondary-fixed-dim">{item.source}</span></span>
                   <span>🕐 {ago}</span>
                 </div>
-                <ArticleActions title={item.title} source={item.source} />
+                <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
               </div>
             </header>
 
             {/* Content */}
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
-              <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+              {item.summary && item.summary !== item.title ? (
+                <p className="font-body-lg text-body-lg text-on-surface leading-8">{item.summary}</p>
+              ) : item.link ? (
+                <a href={item.link} target="_blank" rel="noopener noreferrer"
+                   className="text-secondary-fixed-dim underline text-sm">
+                  برای مطالعه کامل خبر به منبع اصلی مراجعه کنید 🔗
+                </a>
+              ) : (
+                <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+              )}
               <div className="mt-6 pt-6 border-t border-white/10 flex items-center gap-3 text-on-surface-variant text-label-sm">
                 <span>منبع اصلی:</span>
-                <span className="text-secondary-fixed-dim">{item.source} 🔗</span>
+                {item.link ? (
+                  <a href={item.link} target="_blank" rel="noopener noreferrer"
+                     className="text-secondary-fixed-dim hover:underline">{item.source} 🔗</a>
+                ) : (
+                  <span className="text-secondary-fixed-dim">{item.source}</span>
+                )}
               </div>
             </div>
 

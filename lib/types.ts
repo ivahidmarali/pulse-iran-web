@@ -8,6 +8,8 @@ export interface NewsItem {
   category?: string;
   is_breaking?: boolean;
   image_url?: string;
+  summary?: string;
+  link?: string;
 }
 
 export interface PriceItem {
