@@ -81,15 +81,18 @@ export default async function ArticlePage({
 
             {/* Body */}
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
-              {item.summary && item.summary !== item.title ? (
+              {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
                 <p className="font-body-lg text-body-lg text-on-surface leading-8">{item.summary}</p>
-              ) : item.link ? (
-                <a href={item.link} target="_blank" rel="noopener noreferrer"
-                   className="text-secondary-fixed-dim underline text-sm">
-                  برای مطالعه کامل خبر به منبع اصلی مراجعه کنید 🔗
-                </a>
               ) : (
-                <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+                <div className="text-center py-4 space-y-4">
+                  <p className="text-on-surface-variant text-sm">متن کامل خبر در منبع اصلی موجود است</p>
+                  {item.link && (
+                    <a href={item.link} target="_blank" rel="noopener noreferrer"
+                       className="inline-block px-4 py-2 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 text-secondary-fixed-dim rounded-lg text-sm hover:bg-secondary-fixed-dim/30 transition-colors">
+                      مطالعه در منبع اصلی 🔗
+                    </a>
+                  )}
+                </div>
               )}
               <div className="flex items-center gap-3 mt-4 text-label-sm text-on-surface-variant">
                 <span>منبع:</span>
@@ -105,7 +108,9 @@ export default async function ArticlePage({
               <div className="flex flex-row-reverse gap-3 overflow-x-auto pb-2 no-scrollbar">
                 {related.map((rel) => (
                   <Link key={rel.item_id} href={`/article/${encodeURIComponent(rel.item_id)}`} className="shrink-0 w-52 bg-surface-container-low rounded-lg p-3 border border-white/5">
-                    <div className="text-label-sm text-secondary-fixed-dim mb-1 text-right">{rel.source}</div>
+                    {!rel.source.startsWith("@") && (
+                      <div className="text-label-sm text-secondary-fixed-dim mb-1 text-right">{rel.source}</div>
+                    )}
                     <p className="text-sm font-medium line-clamp-3 text-right">{rel.title}</p>
                     <span className="text-[10px] text-outline mt-2 block text-right">🕐 {timeAgo(rel.posted_at)}</span>
                   </Link>
@@ -126,12 +131,9 @@ export default async function ArticlePage({
           {/* Right sidebar */}
           <aside className="col-span-3 h-fit sticky top-24">
             <div className="flex flex-col gap-gutter p-gutter bg-surface-container-low border-l border-white/5 shadow-md rounded-xl">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-2xl">📊</span>
-                <div>
-                  <h2 className="font-title-md text-title-md text-secondary-fixed-dim leading-none">اطلاعات خبر</h2>
-                  <p className="font-label-sm text-label-sm text-on-surface-variant">🕐 {ago}</p>
-                </div>
+              <div className="mb-2">
+                <h2 className="font-title-md text-title-md text-secondary-fixed-dim leading-none">اطلاعات خبر</h2>
+                <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">🕐 {ago}</p>
               </div>
 
               <div className="mt-2">
@@ -182,15 +184,18 @@ export default async function ArticlePage({
 
             {/* Content */}
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
-              {item.summary && item.summary !== item.title ? (
+              {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
                 <p className="font-body-lg text-body-lg text-on-surface leading-8">{item.summary}</p>
-              ) : item.link ? (
-                <a href={item.link} target="_blank" rel="noopener noreferrer"
-                   className="text-secondary-fixed-dim underline text-sm">
-                  برای مطالعه کامل خبر به منبع اصلی مراجعه کنید 🔗
-                </a>
               ) : (
-                <p className="font-body-lg text-body-lg text-on-surface">{item.title}</p>
+                <div className="text-center py-6 space-y-4">
+                  <p className="text-on-surface-variant text-sm">متن کامل خبر در منبع اصلی موجود است</p>
+                  {item.link && (
+                    <a href={item.link} target="_blank" rel="noopener noreferrer"
+                       className="inline-block px-4 py-2 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 text-secondary-fixed-dim rounded-lg text-sm hover:bg-secondary-fixed-dim/30 transition-colors">
+                      مطالعه در منبع اصلی 🔗
+                    </a>
+                  )}
+                </div>
               )}
               <div className="mt-6 pt-6 border-t border-white/10 flex items-center gap-3 text-on-surface-variant text-label-sm">
                 <span>منبع اصلی:</span>
@@ -213,7 +218,9 @@ export default async function ArticlePage({
                 <div className="grid grid-cols-3 gap-6">
                   {related.slice(0, 3).map((rel) => (
                     <Link key={rel.item_id} href={`/article/${encodeURIComponent(rel.item_id)}`} className="bg-surface-container-low p-4 rounded-xl border border-white/5 hover:border-secondary-fixed-dim/30 transition-all group">
-                      <div className="text-label-sm text-on-surface-variant mb-2">{rel.source}</div>
+                      {!rel.source.startsWith("@") && (
+                        <div className="text-label-sm text-on-surface-variant mb-2">{rel.source}</div>
+                      )}
                       <h3 className="font-body-md text-body-md text-on-surface group-hover:text-secondary-fixed-dim transition-colors line-clamp-3">{rel.title}</h3>
                       <div className="mt-4 text-outline text-label-sm">
                         🕐 {timeAgo(rel.posted_at)}
