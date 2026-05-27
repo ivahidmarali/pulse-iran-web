@@ -20,6 +20,7 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
     categories: [
       "⚔️ جنگ و بحران",
       "💥 اسرائیل و غزه",
+      "🇷🇺🇺🇦 روسیه و اوکراین",
       "🪖 روسیه و اوکراین",
       "🇸🇦 عربستان",
       "🇹🇷 ترکیه",
@@ -58,6 +59,8 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
     categories: [
       "👀 حاشیه و جنجال",
       "🎭 فرهنگ و هنر",
+      "📰 خبر",
+      "🚨 خبر فوری",
     ],
   },
 };

@@ -121,7 +121,7 @@ export default function CategoryTabs({
                       }`}
                       onClick={() => navigate(catUrl(cat))}
                     >
-                      {cat}
+                      <span className="emoji-flag">{cat}</span>
                     </button>
                   ))}
                 </div>
@@ -181,7 +181,7 @@ export default function CategoryTabs({
                     }`}
                     onClick={() => navigate(catUrl(cat))}
                   >
-                    {cat}
+                    <span className="emoji-flag">{cat}</span>
                   </button>
                 ))}
               </div>

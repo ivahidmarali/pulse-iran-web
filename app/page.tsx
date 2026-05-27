@@ -69,18 +69,16 @@ export default async function HomePage({
             </div>
           )}
 
-          {/* Currency scroll */}
+          {/* Currency grid */}
           {currencyPrices.length > 0 && (
             <div className="px-container-margin mb-section-gap">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3">قیمت‌ها</h2>
                 <Link href="/prices" className="text-secondary-fixed-dim text-label-sm font-label-sm">مشاهده همه</Link>
               </div>
-              <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+              <div className="grid grid-cols-2 gap-2">
                 {currencyPrices.map((p) => (
-                  <div key={p.key} className="shrink-0 w-40">
-                    <CurrencyRow item={p} />
-                  </div>
+                  <CurrencyRow key={p.key} item={p} />
                 ))}
               </div>
             </div>
