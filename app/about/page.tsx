@@ -126,7 +126,7 @@ export default async function AboutPage() {
               برای دریافت فوری‌ترین خبرها، به کانال تلگرام پالس ایران بپیوندید. ما فیلتر نمی‌کنیم، شما انتخاب می‌کنید.
             </p>
             <a
-              href="https://t.me/pulse_iran"
+              href="https://t.me/palsiran"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-3 bg-secondary-container text-on-secondary-container px-8 py-3 rounded-full font-bold hover:shadow-[0px_0px_20px_rgba(0,210,253,0.4)] transition-all active:scale-95"

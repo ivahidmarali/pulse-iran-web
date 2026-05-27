@@ -49,9 +49,9 @@ export default function Footer() {
         {/* Telegram */}
         <div className="space-y-4">
           <h3 className="text-white font-bold mb-4">کانال تلگرام</h3>
-          <p className="text-on-surface-variant text-sm">@palse_iran</p>
+          <p className="text-on-surface-variant text-sm">@palsiran</p>
           <a
-            href="https://t.me/palse_iran"
+            href="https://t.me/palsiran"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#229ED9] text-white px-6 py-2 rounded-full font-bold text-sm hover:opacity-90 transition-opacity"
