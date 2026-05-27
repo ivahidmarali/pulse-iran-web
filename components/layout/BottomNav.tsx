@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 const NAV = [
   { href: "/", label: "خانه", emoji: "🏠" },
   { href: "/categories", label: "دسته‌بندی", emoji: "📂" },
-  { href: "/prices", label: "قیمت‌ها", emoji: "💰" },
+  { href: "/prices", label: "نرخ ارز", emoji: "💰" },
   { href: "/search", label: "جستجو", emoji: "🔍" },
   { href: "/saved", label: "ذخیره‌ها", emoji: "🔖" },
 ];
