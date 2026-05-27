@@ -49,20 +49,50 @@ jobs:
             pm2 reload pulse-iran-web --update-env || pm2 start npm --name pulse-iran-web -- start
             pm2 save
 
-            # Nginx: deploy new config and set up SSL
-            cp ~/pulse-iran-web/nginx.conf /etc/nginx/sites-available/palsiran.com
+            # ── Nginx setup ─────────────────────────────────────────────
+            # Phase 1: always deploy an HTTP-only config (safe, no cert needed)
+            cat > /etc/nginx/sites-available/palsiran.com <<'NGINXEOF'
+            server {
+                listen 80;
+                server_name palsiran.com www.palsiran.com;
+                if ($host = www.palsiran.com) {
+                    return 301 http://palsiran.com$request_uri;
+                }
+                location / {
+                    proxy_pass         http://127.0.0.1:3000;
+                    proxy_http_version 1.1;
+                    proxy_set_header   Upgrade $http_upgrade;
+                    proxy_set_header   Connection 'upgrade';
+                    proxy_set_header   Host $host;
+                    proxy_set_header   X-Real-IP $remote_addr;
+                    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+                    proxy_set_header   X-Forwarded-Proto $scheme;
+                    proxy_cache_bypass $http_upgrade;
+                }
+                location /api/ {
+                    proxy_pass       http://127.0.0.1:8000/;
+                    proxy_set_header Host $host;
+                    proxy_set_header X-Real-IP $remote_addr;
+                }
+                location /_next/static/ {
+                    proxy_pass http://127.0.0.1:3000/_next/static/;
+                    expires 1y;
+                    add_header Cache-Control "public, immutable";
+                }
+            }
+            NGINXEOF
+
             ln -sf /etc/nginx/sites-available/palsiran.com /etc/nginx/sites-enabled/palsiran.com
             rm -f /etc/nginx/sites-enabled/pulse-iran 2>/dev/null || true
-
-            # Install certbot and get SSL cert (keeps existing if already valid)
-            apt-get install -y -q certbot python3-certbot-nginx
-            certbot certonly --nginx -d palsiran.com -d www.palsiran.com \
-              --non-interactive --agree-tos -m admin@palsiran.com \
-              --keep-until-expiring 2>/dev/null \
-              || echo "SSL cert skipped - check DNS is pointing to this server"
-
-            # Reload nginx only if config is valid
             nginx -t && systemctl reload nginx
+
+            # Phase 2: install certbot and attempt SSL (upgrades HTTP config to HTTPS)
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -q certbot python3-certbot-nginx
+            certbot --nginx -d palsiran.com -d www.palsiran.com \
+              --non-interactive --agree-tos -m admin@palsiran.com \
+              --redirect 2>/dev/null \
+              && echo "SSL configured — site is now HTTPS" \
+              || echo "SSL pending — set DNS A record for palsiran.com to $(curl -s ifconfig.me), then redeploy"
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
