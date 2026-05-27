@@ -79,7 +79,9 @@ export default function NewsCard({ item, variant = "default" }: Props) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.image_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-background" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-background flex items-center justify-center">
+            <span className="text-7xl opacity-20">{catEmoji(item.category)}</span>
+          </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-10" />
         <div className="absolute bottom-0 p-6 z-20 space-y-3">
