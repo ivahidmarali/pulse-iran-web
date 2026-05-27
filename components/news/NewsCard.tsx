@@ -89,7 +89,10 @@ export default function NewsCard({ item, variant = "default" }: Props) {
           {item.is_breaking && (
             <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">🚨 فوری</span>
           )}
-          {emoji && !item.is_breaking && (
+          {!item.is_breaking && item.importance === "high" && (
+            <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">مهم</span>
+          )}
+          {emoji && !item.is_breaking && item.importance !== "high" && (
             <span className="bg-surface-container/80 px-3 py-1 rounded-full text-xs font-bold">{item.category}</span>
           )}
           <h1 className="font-bold text-[20px] leading-snug text-on-surface line-clamp-3">{item.title}</h1>
@@ -115,7 +118,10 @@ export default function NewsCard({ item, variant = "default" }: Props) {
             {item.is_breaking && (
               <span className="text-[10px] text-red-400 font-bold">🚨 فوری</span>
             )}
-            {emoji && !item.is_breaking && (
+            {!item.is_breaking && item.importance === "high" && (
+              <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">مهم</span>
+            )}
+            {emoji && !item.is_breaking && item.importance !== "high" && (
               <span className="text-[11px] text-secondary-fixed-dim/70 font-medium">{emoji}</span>
             )}
           </div>

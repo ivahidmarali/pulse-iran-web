@@ -10,6 +10,7 @@ export interface NewsItem {
   image_url?: string;
   summary?: string;
   link?: string;
+  importance?: "high" | "medium" | "low";
 }
 
 export interface PriceItem {
