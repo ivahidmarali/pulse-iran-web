@@ -56,15 +56,17 @@ function PriceRow({ item }: { item: PriceItem }) {
   const trend = item.trend ?? "flat";
   const changePct = item.change_pct ?? 0;
   return (
-    <div className="flex flex-row-reverse justify-between items-center p-4 border-b border-white/5">
-      <p className="text-secondary-fixed-dim font-medium text-right">{info.name}</p>
+    <div dir="ltr" className="flex justify-between items-center p-4 border-b border-white/5">
       <div className="text-left">
-        <p className="text-on-surface font-bold">{item.price.toLocaleString("fa-IR")} تومان</p>
+        <p className="text-on-surface font-bold tabular-nums">{item.price.toLocaleString("fa-IR")} تومان</p>
         {changePct !== 0 && (
           <p className={`text-xs mt-0.5 ${trend === "up" ? "text-green-400" : trend === "down" ? "text-red-400" : "text-on-surface-variant"}`}>
             {trend === "up" ? "🔺" : trend === "down" ? "🔻" : "◼"} {Math.abs(changePct).toFixed(1)}٪
           </p>
         )}
+      </div>
+      <div className="text-right">
+        <p className="text-secondary-fixed-dim font-medium">{info.name}</p>
       </div>
     </div>
   );
@@ -82,7 +84,7 @@ export default async function PricesPage() {
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 px-container-margin py-section-gap">
+        <main dir="rtl" className="pb-24 px-container-margin py-section-gap">
           <div className="flex flex-row-reverse items-center gap-2 mb-section-gap">
             <span className="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse" />
             <h1 className="text-title-md font-title-md text-secondary-fixed-dim">قیمت‌های زنده</h1>
@@ -121,7 +123,7 @@ export default async function PricesPage() {
       {/* Desktop */}
       <div className="hidden md:block">
         <TopBarDesktop />
-        <main className="max-w-7xl mx-auto px-container-margin py-section-gap">
+        <main dir="rtl" className="max-w-7xl mx-auto px-container-margin py-section-gap">
           <div className="flex flex-row-reverse items-center gap-3 mb-section-gap">
             <span className="w-3 h-3 rounded-full bg-secondary-fixed-dim animate-pulse" />
             <h1 className="text-headline-lg font-headline-lg text-on-surface">قیمت‌های لحظه‌ای</h1>
