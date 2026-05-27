@@ -37,6 +37,9 @@ jobs:
             # Pull latest code
             git pull origin main
 
+            # Ensure env file exists
+            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
+
             # Install & build
             npm ci
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} npm run build
