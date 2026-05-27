@@ -1,5 +1,5 @@
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://pulse-iran.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://palsiran.com";
 
 /** Generate a URL-safe Persian slug from a title */
 export function generateSlug(title: string): string {

@@ -25,6 +25,7 @@ jobs:
       - name: Build (validate before deploying)
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
         run: npm run build
 
       - name: Deploy to server
@@ -33,21 +34,44 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
+          envs: NEXT_PUBLIC_API_URL,NEXT_PUBLIC_SITE_URL
           script: |
             set -e
             cd ~/pulse-iran-web
             git pull origin main
-            echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" > .env.local
-            echo "INTERNAL_API_URL=http://127.0.0.1:8000" >> .env.local
+
+            # Write env vars
+            printf "NEXT_PUBLIC_API_URL=%s\nNEXT_PUBLIC_SITE_URL=%s\nINTERNAL_API_URL=http://127.0.0.1:8000\n" \
+              "$NEXT_PUBLIC_API_URL" "$NEXT_PUBLIC_SITE_URL" > .env.local
+
             npm ci --silent
-            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }} npm run build
+            NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" NEXT_PUBLIC_SITE_URL="$NEXT_PUBLIC_SITE_URL" npm run build
             pm2 reload pulse-iran-web --update-env || pm2 start npm --name pulse-iran-web -- start
             pm2 save
+
+            # Nginx: deploy new config and set up SSL
+            cp ~/pulse-iran-web/nginx.conf /etc/nginx/sites-available/palsiran.com
+            ln -sf /etc/nginx/sites-available/palsiran.com /etc/nginx/sites-enabled/palsiran.com
+            rm -f /etc/nginx/sites-enabled/pulse-iran 2>/dev/null || true
+
+            # Install certbot and get SSL cert (keeps existing if already valid)
+            apt-get install -y -q certbot python3-certbot-nginx
+            certbot certonly --nginx -d palsiran.com -d www.palsiran.com \
+              --non-interactive --agree-tos -m admin@palsiran.com \
+              --keep-until-expiring 2>/dev/null \
+              || echo "SSL cert skipped - check DNS is pointing to this server"
+
+            # Reload nginx only if config is valid
+            nginx -t && systemctl reload nginx
+        env:
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
 
       - name: Health check
         run: |
           sleep 5
-          curl -sf --max-time 10 http://${{ secrets.DEPLOY_HOST }} -o /dev/null
+          curl -sf --max-time 15 https://palsiran.com -o /dev/null || \
+          curl -sf --max-time 15 http://${{ secrets.DEPLOY_HOST }} -o /dev/null
 
       - name: Notify success
         if: success()
