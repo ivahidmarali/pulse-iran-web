@@ -18,6 +18,7 @@ interface Props {
 export default function ArticleActions({ title, itemId, source }: Props) {
   const [saved, setSaved] = useState(false);
   const [saveLabel, setSaveLabel] = useState("ذخیره");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const list: SavedNews[] = JSON.parse(localStorage.getItem("saved_news") || "[]");
@@ -41,12 +42,25 @@ export default function ArticleActions({ title, itemId, source }: Props) {
     }
   };
 
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator.share({ title, url: window.location.href }).catch(() => {});
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      alert("لینک کپی شد ✓");
+  const handleShare = async () => {
+    const url = window.location.href;
+    const shareData = { title, url };
+
+    if (navigator.share && navigator.canShare?.(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch {
+        // user cancelled or error — fall through to copy
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      prompt("لینک را کپی کنید:", url);
     }
   };
 
@@ -60,7 +74,7 @@ export default function ArticleActions({ title, itemId, source }: Props) {
         onClick={handleShare}
         className="px-3 py-2 bg-gray-800 rounded text-sm text-gray-300 hover:bg-gray-700 transition-colors"
       >
-        اشتراک‌گذاری
+        {copied ? "✓ کپی شد" : "اشتراک‌گذاری"}
       </button>
       <a
         href={telegramUrl}
