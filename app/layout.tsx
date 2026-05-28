@@ -50,6 +50,16 @@ export const metadata: Metadata = {
       "اخبار فوری ایران و جهان، پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس.",
     images: ["/og-default.jpg"],
   },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+    other: [
+      { rel: 'manifest', url: '/site.webmanifest' },
+    ],
+  },
   alternates: {
     canonical: SITE_URL,
     languages: { fa: SITE_URL },
