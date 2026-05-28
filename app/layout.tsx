@@ -98,6 +98,8 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className="dark">
       <head>
         <meta charSet="utf-8" />
+        <link rel="preconnect" href="https://palsiran.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         {/* JSON-LD content is static trusted server data — no XSS risk */}
         {/* eslint-disable-next-line react/no-danger */}

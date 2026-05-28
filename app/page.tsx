@@ -65,7 +65,7 @@ export default async function HomePage({
           {/* Hero */}
           {hero && (
             <div className="px-container-margin mb-section-gap mt-3">
-              <NewsCard item={hero} variant="hero" />
+              <NewsCard item={hero} variant="hero" priority />
             </div>
           )}
 
@@ -76,7 +76,7 @@ export default async function HomePage({
                 <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3">قیمت‌ها</h2>
                 <Link href="/prices" className="text-secondary-fixed-dim text-label-sm font-label-sm">مشاهده همه</Link>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 min-h-[130px]">
                 {currencyPrices.map((p) => (
                   <CurrencyRow key={p.key} item={p} />
                 ))}
@@ -113,7 +113,7 @@ export default async function HomePage({
               <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
             </div>
 
-            {hero && <NewsCard item={hero} variant="hero" />}
+            {hero && <NewsCard item={hero} variant="hero" priority />}
 
             <div className="grid grid-cols-2 gap-gutter">
               {rest.slice(0, 2).map((item) => (
@@ -149,7 +149,7 @@ export default async function HomePage({
                 <h2 className="font-title-md text-title-md text-secondary-fixed-dim">مانیتورینگ زنده</h2>
                 <span className="text-secondary-fixed-dim text-xl">💰</span>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-3 min-h-[200px]">
                 {prices.slice(0, 3).map((p) => (
                   <CurrencyRow key={p.key} item={p} />
                 ))}

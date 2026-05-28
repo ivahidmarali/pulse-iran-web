@@ -1,10 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { NewsItem } from "@/lib/types";
 import { articleHref } from "@/lib/utils";
 
 interface Props {
   item: NewsItem;
   variant?: "default" | "horizontal" | "compact" | "hero";
+  priority?: boolean;
 }
 
 function timeAgo(dateStr: string): string {
@@ -67,7 +69,7 @@ function categoryBorder(category?: string): string {
   return "border-white/5";
 }
 
-export default function NewsCard({ item, variant = "default" }: Props) {
+export default function NewsCard({ item, variant = "default", priority = false }: Props) {
   const href = articleHref(item.item_id, item.title);
   const ago = timeAgo(item.posted_at);
   const emoji = catEmoji(item.category);
@@ -77,8 +79,14 @@ export default function NewsCard({ item, variant = "default" }: Props) {
     return (
       <Link href={href} className="block relative group overflow-hidden rounded-xl bg-surface-container-high aspect-[16/9] pulse-glow">
         {item.image_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.image_url} alt={item.title} className="absolute inset-0 w-full h-full object-cover" />
+          <Image
+            src={item.image_url}
+            alt={item.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover"
+            priority={priority}
+          />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-background flex items-center justify-center">
             <span className="text-7xl opacity-20">{catEmoji(item.category)}</span>
@@ -111,7 +119,7 @@ export default function NewsCard({ item, variant = "default" }: Props) {
     return (
       <Link
         href={href}
-        className={`flex gap-4 p-4 bg-surface-container-low rounded-lg items-start border-r-[3px] ${border} border-t border-b border-l border-white/5 hover:bg-surface-variant/30 transition-colors`}
+        className={`flex gap-4 p-4 bg-surface-container-low rounded-lg items-start border-r-[3px] ${border} border-t border-b border-l border-white/5 hover:bg-surface-variant/30 transition-colors min-h-[88px]`}
       >
         <div className="flex-1 space-y-1.5">
           <div className="flex items-center gap-2">
@@ -168,7 +176,7 @@ export default function NewsCard({ item, variant = "default" }: Props) {
   return (
     <Link
       href={href}
-      className={`bg-surface-container-low rounded-lg overflow-hidden flex flex-col border-t-2 ${border} border-x border-b border-white/5 hover:border-secondary-fixed-dim/30 transition-all group`}
+      className={`bg-surface-container-low rounded-lg overflow-hidden flex flex-col border-t-2 ${border} border-x border-b border-white/5 hover:border-secondary-fixed-dim/30 transition-all group min-h-[120px]`}
     >
       <div className="p-4 space-y-2">
         <div className="flex justify-between items-center text-xs text-on-surface-variant">
