@@ -38,6 +38,7 @@ export async function getNews(
     total: number;
     page: number;
     per_page: number;
+    pages: number;
     has_more: boolean;
   }>(`/news?${q}`);
 }
