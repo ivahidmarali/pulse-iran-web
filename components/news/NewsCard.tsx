@@ -9,14 +9,23 @@ interface Props {
   priority?: boolean;
 }
 
+function toPersianNum(n: number): string {
+  return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
+}
+
 function timeAgo(dateStr: string): string {
-  const diff = Date.now() - new Date(dateStr).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 60) return `${mins} دقیقه پیش`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs} ساعت پیش`;
-  const days = Math.floor(hrs / 24);
-  return `${days} روز پیش`;
+  // Ensure UTC parsing — append Z if no timezone info present
+  const normalized = /[Zz]|[+-]\d{2}:\d{2}$/.test(dateStr) ? dateStr : dateStr + 'Z';
+  const diffMs = Date.now() - new Date(normalized).getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 1) return 'همین الان';
+  if (diffMins < 60) return `${toPersianNum(diffMins)} دقیقه پیش`;
+  if (diffHours < 24) return `${toPersianNum(diffHours)} ساعت پیش`;
+  if (diffDays === 1) return 'دیروز';
+  return `${toPersianNum(diffDays)} روز پیش`;
 }
 
 // Category emoji prefix — return the first "word" (emoji) before the first space
