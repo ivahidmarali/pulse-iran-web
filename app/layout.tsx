@@ -60,6 +60,9 @@ export const metadata: Metadata = {
       { rel: 'manifest', url: '/site.webmanifest' },
     ],
   },
+  other: {
+    "linkedin:owner": "palsiran",
+  },
   alternates: {
     canonical: SITE_URL,
     languages: { fa: SITE_URL },
