@@ -15,7 +15,7 @@ import { articleHref } from "@/lib/utils";
 async function fetchData(categories?: string[]) {
   try {
     const [newsData, prices, breaking, cats] = await Promise.all([
-      getNews(1, 20, categories?.length ? categories : undefined),
+      getNews(1, 33, categories?.length ? categories : undefined),
       getPrices(),
       getBreakingNews(),
       getCategories(),

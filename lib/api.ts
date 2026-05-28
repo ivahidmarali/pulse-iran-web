@@ -22,7 +22,7 @@ async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
 
 export async function getNews(
   page = 1,
-  perPage = 20,
+  perPage = 33,
   categories?: string[],
   source?: string,
 ) {

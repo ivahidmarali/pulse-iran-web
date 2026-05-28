@@ -45,8 +45,8 @@ const LEAN_LABEL_COLOR: Record<string, string> = {
 async function fetchData(categories?: string[], source?: string) {
   try {
     const [filteredData, allData, sources, activeCats] = await Promise.all([
-      getNews(1, 30, categories, source),
-      getNews(1, 50),
+      getNews(1, 33, categories, source),
+      getNews(1, 33),
       getSources(),
       getCategories(),
     ]);
