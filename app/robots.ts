@@ -1,15 +1,13 @@
-import { SITE_URL } from "@/lib/utils";
+import { MetadataRoute } from 'next'
 
-export default function robots() {
+export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/admin/", "/api/"],
-      },
-    ],
-    sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
-  };
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/admin/', '/api/'],
+    },
+    sitemap: 'https://palsiran.com/sitemap.xml',
+    host: 'https://palsiran.com',
+  }
 }
