@@ -10,12 +10,14 @@ import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, PriceItem } from "@/lib/types";
-import { articleHref } from "@/lib/utils";
+import { articleHref, toPersianNum } from "@/lib/utils";
 
-async function fetchData(categories?: string[]) {
+const PAGE_SIZE = 33;
+
+async function fetchData(categories?: string[], page = 1) {
   try {
     const [newsData, prices, breaking, cats] = await Promise.all([
-      getNews(1, 33, categories?.length ? categories : undefined),
+      getNews(page, PAGE_SIZE, categories?.length ? categories : undefined),
       getPrices(),
       getBreakingNews(),
       getCategories(),
@@ -30,20 +32,32 @@ async function fetchData(categories?: string[]) {
       prices,
       breaking,
       activeGroups,
+      page: newsData.page,
+      pages: newsData.pages ?? 1,
     };
   } catch {
-    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[] };
+    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[], page: 1, pages: 1 };
   }
 }
 
 export default async function HomePage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; group?: string }>;
+  searchParams: Promise<{ cat?: string; group?: string; page?: string }>;
 }) {
-  const { cat, group } = await searchParams;
+  const { cat, group, page: pageParam } = await searchParams;
+  const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const categories = getCategoryFilter(cat, group);
-  const { news, prices, breaking, activeGroups } = await fetchData(categories);
+  const { news, prices, breaking, activeGroups, page, pages } = await fetchData(categories, currentPage);
+
+  function pageUrl(p: number) {
+    const q = new URLSearchParams();
+    if (cat) q.set("cat", cat);
+    if (group) q.set("group", group);
+    if (p > 1) q.set("page", String(p));
+    const qs = q.toString();
+    return qs ? `/?${qs}` : "/";
+  }
   const hero = news[0];
   const rest = news.slice(1);
   const breakingTitles = breaking.slice(0, 5).map((b) => b.title);
@@ -96,6 +110,25 @@ export default async function HomePage({
               <NewsCard key={item.item_id} item={item} variant="horizontal" />
             ))}
           </div>
+
+          {/* Mobile pagination */}
+          {pages > 1 && (
+            <div className="px-container-margin flex justify-center items-center gap-3 mt-6 mb-2">
+              {page > 1 && (
+                <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                  ← قبلی
+                </Link>
+              )}
+              <span className="text-sm text-on-surface-variant">
+                صفحه {toPersianNum(page)} از {toPersianNum(pages)}
+              </span>
+              {page < pages && (
+                <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                  بعدی →
+                </Link>
+              )}
+            </div>
+          )}
         </main>
         <BottomNav />
       </div>
@@ -176,6 +209,25 @@ export default async function HomePage({
             </section>
           </aside>
         </main>
+
+        {/* Desktop pagination */}
+        {pages > 1 && (
+          <div className="max-w-[1600px] mx-auto px-container-margin pb-section-gap flex justify-center items-center gap-3">
+            {page > 1 && (
+              <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                ← قبلی
+              </Link>
+            )}
+            <span className="text-sm text-on-surface-variant">
+              صفحه {toPersianNum(page)} از {toPersianNum(pages)}
+            </span>
+            {page < pages && (
+              <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                بعدی →
+              </Link>
+            )}
+          </div>
+        )}
         <Footer />
       </div>
     </div>

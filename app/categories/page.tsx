@@ -10,6 +10,9 @@ import MobileCategoryFeed from "@/components/news/MobileCategoryFeed";
 import { getNews, getSources, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
+import { toPersianNum } from "@/lib/utils";
+
+const PAGE_SIZE = 33;
 
 function filterValid(items: NewsItem[]): NewsItem[] {
   return items.filter((item) => item.title && item.title.trim().length > 5);
@@ -42,11 +45,11 @@ const LEAN_LABEL_COLOR: Record<string, string> = {
   "رسمی دولتی": "text-green-500/80",
 };
 
-async function fetchData(categories?: string[], source?: string) {
+async function fetchData(categories?: string[], source?: string, page = 1) {
   try {
     const [filteredData, allData, sources, activeCats] = await Promise.all([
-      getNews(1, 33, categories, source),
-      getNews(1, 33),
+      getNews(page, PAGE_SIZE, categories, source),
+      getNews(1, PAGE_SIZE),
       getSources(),
       getCategories(),
     ]);
@@ -60,6 +63,8 @@ async function fetchData(categories?: string[], source?: string) {
       allNews: filterValid(allData.items),
       sources,
       activeGroups,
+      page: filteredData.page,
+      pages: filteredData.pages ?? 1,
     };
   } catch {
     return {
@@ -67,6 +72,8 @@ async function fetchData(categories?: string[], source?: string) {
       allNews: [] as NewsItem[],
       sources: [] as SourceInfo[],
       activeGroups: undefined as string[] | undefined,
+      page: 1,
+      pages: 1,
     };
   }
 }
@@ -80,14 +87,26 @@ export const metadata: Metadata = {
 export default async function CategoriesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; group?: string; source?: string }>;
+  searchParams: Promise<{ cat?: string; group?: string; source?: string; page?: string }>;
 }) {
-  const { cat, group, source } = await searchParams;
+  const { cat, group, source, page: pageParam } = await searchParams;
+  const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const categories = getCategoryFilter(cat, group);
-  const { news, allNews, sources, activeGroups } = await fetchData(
+  const { news, allNews, sources, activeGroups, page, pages } = await fetchData(
     categories.length ? categories : undefined,
     source,
+    currentPage,
   );
+
+  function pageUrl(p: number) {
+    const q = new URLSearchParams();
+    if (cat) q.set("cat", cat);
+    if (group) q.set("group", group);
+    if (source) q.set("source", source);
+    if (p > 1) q.set("page", String(p));
+    const qs = q.toString();
+    return qs ? `/categories?${qs}` : "/categories";
+  }
 
   // Sidebar: highlight active group's sub-categories
   const activeGroupCats = cat
@@ -184,11 +203,30 @@ export default async function CategoriesPage({
                   <p>خبری در این دسته‌بندی یافت نشد</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 gap-gutter">
-                  {news.map((item) => (
-                    <NewsCard key={item.item_id} item={item} />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-3 gap-gutter">
+                    {news.map((item) => (
+                      <NewsCard key={item.item_id} item={item} />
+                    ))}
+                  </div>
+                  {pages > 1 && (
+                    <div className="flex justify-center items-center gap-3 mt-8">
+                      {page > 1 && (
+                        <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                          ← قبلی
+                        </Link>
+                      )}
+                      <span className="text-sm text-on-surface-variant">
+                        صفحه {toPersianNum(page)} از {toPersianNum(pages)}
+                      </span>
+                      {page < pages && (
+                        <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                          بعدی →
+                        </Link>
+                      )}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

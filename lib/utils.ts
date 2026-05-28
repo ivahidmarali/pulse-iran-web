@@ -1,3 +1,7 @@
+export function toPersianNum(n: number): string {
+  return n.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
+}
+
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://palsiran.com";
 
