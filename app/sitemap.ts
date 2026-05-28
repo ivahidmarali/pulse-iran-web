@@ -5,17 +5,30 @@ import type { NewsItem } from "@/lib/types";
 import type { MetadataRoute } from "next";
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
+const PAGE_SIZE = 100;
+
+async function fetchAllArticles(): Promise<NewsItem[]> {
+  const items: NewsItem[] = [];
+  let page = 1;
+  while (true) {
+    const res = await fetch(
+      `${INTERNAL_API}/news?page=${page}&per_page=${PAGE_SIZE}`,
+      { cache: "no-store" }
+    );
+    if (!res.ok) break;
+    const data = await res.json();
+    const batch: NewsItem[] = data.items ?? [];
+    items.push(...batch);
+    if (!data.has_more || batch.length < PAGE_SIZE) break;
+    page++;
+  }
+  return items;
+}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let newsItems: NewsItem[] = [];
   try {
-    const res = await fetch(`${INTERNAL_API}/news?page=1&per_page=1000`, {
-      cache: "no-store",
-    });
-    if (res.ok) {
-      const data = await res.json();
-      newsItems = data.items ?? [];
-    }
+    newsItems = await fetchAllArticles();
   } catch {}
 
   const staticRoutes: MetadataRoute.Sitemap = [
