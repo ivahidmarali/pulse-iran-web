@@ -38,7 +38,7 @@ export default function TehranClock() {
 
   return (
     <div className="text-right leading-tight">
-      <div className="text-sm font-bold text-secondary-fixed-dim tabular-nums flex items-center gap-0">
+      <div className="text-sm font-bold text-secondary-fixed-dim tabular-nums flex items-center gap-0" dir="ltr">
         <span>{hours}</span>
         <span className={`transition-opacity duration-100 ${colon ? "opacity-100" : "opacity-20"}`}>:</span>
         <span>{minutes}</span>
