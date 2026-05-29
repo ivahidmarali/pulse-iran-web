@@ -9,8 +9,11 @@ export default function TopBarMobile() {
         </h1>
       </Link>
       <div className="flex items-center gap-4">
-        <Link href="/search" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors text-2xl leading-none">
-          🔍
+        <Link href="/search" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">
+          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
         </Link>
       </div>
     </header>

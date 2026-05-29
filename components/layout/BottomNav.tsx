@@ -15,12 +15,14 @@ const navItems = [
     ),
   },
   {
-    href: "/search",
-    label: "جستجو",
-    icon: (_active: boolean) => (
-      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
-        <circle cx="11" cy="11" r="8"/>
-        <path d="M21 21l-4.35-4.35"/>
+    href: "/categories",
+    label: "دسته\u200cبندی",
+    icon: (active: boolean) => (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
       </svg>
     ),
   },
@@ -36,14 +38,12 @@ const navItems = [
     ),
   },
   {
-    href: "/categories",
-    label: "دسته\u200cبندی",
-    icon: (active: boolean) => (
-      <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
-        <rect x="3" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="3" width="7" height="7" rx="1"/>
-        <rect x="3" y="14" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="7" height="7" rx="1"/>
+    href: "/search",
+    label: "جستجو",
+    icon: (_active: boolean) => (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
       </svg>
     ),
   },
