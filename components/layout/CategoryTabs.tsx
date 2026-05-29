@@ -9,7 +9,6 @@ interface Props {
   selectedGroup?: string;
   baseUrl?: string;
   visibleGroups?: string[];
-  mobileDirectFilter?: boolean; // skip bottom sheet on mobile, navigate directly
 }
 
 export default function CategoryTabs({
@@ -17,11 +16,9 @@ export default function CategoryTabs({
   selectedGroup,
   baseUrl = "/categories",
   visibleGroups,
-  mobileDirectFilter = false,
 }: Props) {
   const router = useRouter();
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
-  const [mobileSheet, setMobileSheet] = useState<string | null>(null);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const activeGroup = getActiveGroup(selectedCat, selectedGroup);
@@ -38,17 +35,13 @@ export default function CategoryTabs({
   const catUrl = (cat: string) => `${baseUrl}?cat=${encodeURIComponent(cat)}`;
 
   const handleTabClick = (groupName: string) => {
-    const hasSubCats = CATEGORY_GROUPS[groupName].categories.length > 0;
-    if (!hasSubCats || mobileDirectFilter) {
+    // Mobile: always navigate directly, never show dropdown/sheet
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
       navigate(groupUrl(groupName));
       return;
     }
-    // Mobile: open bottom sheet. Desktop: navigate to group.
-    if (typeof window !== "undefined" && window.innerWidth >= 768) {
-      navigate(groupUrl(groupName));
-    } else {
-      setMobileSheet(mobileSheet === groupName ? null : groupName);
-    }
+    // Desktop: navigate to group URL
+    navigate(groupUrl(groupName));
   };
 
   const handleMouseEnter = (groupName: string) => {
@@ -92,7 +85,7 @@ export default function CategoryTabs({
               >
                 {groupName}
                 {hasSubCats && (
-                  <span className={`text-[9px] opacity-50 mt-0.5 ${mobileDirectFilter ? "hidden md:inline" : ""}`}>▾</span>
+                  <span className="hidden md:inline text-[9px] opacity-50 mt-0.5">▾</span>
                 )}
               </button>
 
@@ -133,64 +126,6 @@ export default function CategoryTabs({
         })}
       </div>
 
-      {/* ── Mobile bottom sheet overlay ── */}
-      {mobileSheet && (
-        <div className="md:hidden">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm"
-            onClick={() => setMobileSheet(null)}
-          />
-
-          {/* Sheet */}
-          <div
-            dir="rtl"
-            className="fixed bottom-0 inset-x-0 bg-surface-container-highest rounded-t-2xl z-50 pb-8 shadow-2xl"
-          >
-            {/* Handle */}
-            <div className="flex justify-center pt-3 pb-4">
-              <div className="w-10 h-1 bg-white/20 rounded-full" />
-            </div>
-
-            <div className="px-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-title-md font-bold">{mobileSheet}</h3>
-                <button
-                  className="text-on-surface-variant text-sm"
-                  onClick={() => setMobileSheet(null)}
-                >
-                  بستن
-                </button>
-              </div>
-
-              {/* "All" option */}
-              <button
-                className="w-full min-h-[48px] px-4 py-3 mb-3 bg-surface-container rounded-xl text-sm text-right hover:bg-white/5 transition-colors text-on-surface-variant"
-                onClick={() => navigate(groupUrl(mobileSheet))}
-              >
-                همه {mobileSheet}
-              </button>
-
-              {/* Sub-category grid */}
-              <div className="grid grid-cols-2 gap-2">
-                {CATEGORY_GROUPS[mobileSheet].categories.map((cat) => (
-                  <button
-                    key={cat}
-                    className={`min-h-[48px] px-3 py-3 rounded-xl text-sm text-right transition-colors leading-snug ${
-                      selectedCat === cat
-                        ? "bg-secondary-fixed-dim/20 ring-1 ring-secondary-fixed-dim text-secondary-fixed-dim font-bold"
-                        : "bg-surface-container hover:bg-white/5 text-on-surface"
-                    }`}
-                    onClick={() => navigate(catUrl(cat))}
-                  >
-                    <span className="emoji-flag">{cat}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }
