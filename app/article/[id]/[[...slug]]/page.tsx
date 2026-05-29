@@ -7,6 +7,7 @@ import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import ArticleActions from "@/components/article/ArticleActions";
+import TelegramEmbed from "@/components/article/TelegramEmbed";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
@@ -177,6 +178,17 @@ export default async function ArticlePage({
               {item.title}
             </h1>
 
+            {item.video_url ? (
+              <TelegramEmbed videoUrl={item.video_url} />
+            ) : item.image_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={item.image_url}
+                alt={item.title}
+                className="w-full rounded-xl object-cover max-h-64 mb-6"
+              />
+            ) : null}
+
             <div className="flex flex-row-reverse items-center justify-between py-4 border-y border-white/5 mb-6">
               <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
             </div>
@@ -311,6 +323,17 @@ export default async function ArticlePage({
                 <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
               </div>
             </header>
+
+            {item.video_url ? (
+              <TelegramEmbed videoUrl={item.video_url} />
+            ) : item.image_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={item.image_url}
+                alt={item.title}
+                className="w-full rounded-xl object-cover max-h-96"
+              />
+            ) : null}
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
               {item.summary && item.summary !== item.title && item.summary.length > 30 ? (

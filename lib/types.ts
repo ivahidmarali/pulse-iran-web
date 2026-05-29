@@ -12,6 +12,7 @@ export interface NewsItem {
   link?: string;
   importance?: "high" | "medium" | "low";
   telegram_posted?: boolean;
+  video_url?: string;
 }
 
 export interface PriceItem {
