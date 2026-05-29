@@ -98,9 +98,20 @@ export default async function HomePage({
                 {currencyPrices.map((p) => {
                   const up = p.trend === "up";
                   const down = p.trend === "down";
-                  const SYMBOLS: Record<string, string> = {
-                    price_dollar_rl: "$", price_eur: "€", price_aed: "د", price_gbp: "£", price_try: "₺",
+                  const META: Record<string, { symbol: string; name: string }> = {
+                    price_dollar_rl: { symbol: "$", name: "دلار" },
+                    price_eur: { symbol: "€", name: "یورو" },
+                    price_aed: { symbol: "د", name: "درهم" },
+                    price_gbp: { symbol: "£", name: "پوند" },
+                    price_try: { symbol: "₺", name: "لیر" },
+                    geram18: { symbol: "Au", name: "طلا ۱۸" },
+                    sekeb: { symbol: "⬡", name: "سکه" },
+                    sekke: { symbol: "⬡", name: "سکه" },
+                    nim: { symbol: "½", name: "نیم سکه" },
+                    rob: { symbol: "¼", name: "ربع سکه" },
+                    mesghal: { symbol: "Au", name: "مثقال" },
                   };
+                  const meta = META[p.key] ?? { symbol: "؟", name: p.key };
                   return (
                     <Link
                       key={p.key}
@@ -111,8 +122,9 @@ export default async function HomePage({
                         <span className={`text-[10px] font-bold tabular-nums ${up ? "text-emerald-400" : down ? "text-red-400" : "text-on-surface-variant"}`}>
                           {p.change_pct && p.change_pct !== 0 ? `${up ? "▲" : "▼"}${Math.abs(p.change_pct).toFixed(1)}٪` : "—"}
                         </span>
-                        <span className="text-xs font-black text-secondary-fixed-dim">{SYMBOLS[p.key] ?? "؟"}</span>
+                        <span className="text-xs font-black text-secondary-fixed-dim">{meta.symbol}</span>
                       </div>
+                      <span className="text-[11px] text-on-surface-variant text-right">{meta.name}</span>
                       <span className="text-sm font-bold text-on-surface tabular-nums text-right">
                         {p.price.toLocaleString("fa-IR")}
                       </span>
