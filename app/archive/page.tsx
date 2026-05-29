@@ -36,7 +36,7 @@ export default async function ArchivePage({
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 px-container-margin py-4">
+        <main className="pb-4 px-container-margin py-4">
           {/* Filters */}
           <div className="flex flex-col gap-3 mb-section-gap">
             <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3">آرشیو اخبار</h2>

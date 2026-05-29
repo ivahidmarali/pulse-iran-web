@@ -79,7 +79,7 @@ export default async function HomePage({
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
         </div>
 
-        <main className="pb-24 pt-3">
+        <main className="pb-4 pt-3">
           {/* Hero */}
           {hero && (
             <div className="px-container-margin mb-4">

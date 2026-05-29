@@ -155,7 +155,7 @@ export default async function PricesPage() {
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 px-container-margin pt-4">
+        <main className="pb-4 px-container-margin pt-4">
           {/* header */}
           <div className="flex items-center justify-between mb-6">
             <span className="text-[11px] text-on-surface-variant">هر ۵ دقیقه به‌روز می‌شود</span>

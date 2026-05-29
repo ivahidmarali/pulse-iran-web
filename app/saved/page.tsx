@@ -129,7 +129,7 @@ export default function SavedPage() {
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 px-container-margin pt-6">
+        <main className="pb-4 px-container-margin pt-6">
           {content}
         </main>
         <MobileFooter />

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function MobileFooter() {
   return (
-    <footer className="bg-surface-container border-t border-white/5 px-container-margin py-6 md:hidden">
+    <footer className="bg-surface-container border-t border-white/5 px-container-margin pt-6 pb-24 md:hidden">
       <div className="flex items-center justify-between mb-4">
         <span className="text-[10px] text-outline">@palsiran</span>
         <span className="text-sm font-bold text-secondary-fixed-dim">پالس ایران</span>

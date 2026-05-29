@@ -109,7 +109,7 @@ export default async function SourcesPage() {
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 pt-4">
+        <main className="pb-4 pt-4">
           {/* Page header */}
           <div className="flex items-center justify-between px-container-margin mb-5">
             <span className="text-xs text-on-surface-variant">{toPersianNum(sources.length)} منبع</span>

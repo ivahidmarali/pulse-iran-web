@@ -162,7 +162,7 @@ export default async function ArticlePage({
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24">
+        <main className="pb-4">
           {item.is_breaking && <BreakingTicker items={[item.title]} />}
 
           <article className="px-container-margin py-section-gap">

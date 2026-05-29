@@ -121,7 +121,7 @@ export default async function CategoriesPage({
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
         </div>
 
-        <main className="pb-24 px-container-margin pt-4">
+        <main className="pb-4 px-container-margin pt-4">
           {source && (
             <div className="flex items-center gap-2 mb-4">
               <span className="text-sm font-medium text-on-surface">اخبار {source}</span>

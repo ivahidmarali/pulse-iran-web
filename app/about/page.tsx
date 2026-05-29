@@ -47,7 +47,7 @@ export default async function AboutPage() {
         <TopBarDesktop />
       </div>
 
-      <main className="pb-24 md:pb-0">
+      <main className="pb-4 md:pb-0">
         {/* Hero / Mission */}
         <section className="relative py-section-gap px-container-margin overflow-hidden">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full opacity-10 pointer-events-none">
