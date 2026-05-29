@@ -30,6 +30,7 @@ export interface SourceInfo {
   credibility?: number;
   max_per_day?: number;
   today_count?: number;
+  count?: number;
 }
 
 export interface DailyStats {
