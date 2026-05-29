@@ -104,7 +104,7 @@ export default async function SourcesPage() {
   if (grouped["سایر"]) orderedGroups.push(["سایر", grouped["سایر"]]);
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <TopBarMobile />
@@ -115,41 +115,25 @@ export default async function SourcesPage() {
             <h1 className="text-base font-bold text-on-surface">منابع خبری</h1>
           </div>
 
-          {/* Legend chips */}
-          <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin pb-4">
-            {orderedGroups.map(([lean]) => {
-              const meta = LEAN_META[lean];
+          {/* Flat source list */}
+          <div className="px-container-margin space-y-2">
+            {sources.map((src) => {
+              const meta = LEAN_META[src.political_lean ?? ""];
               return (
-                <span
-                  key={lean}
-                  className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium ${meta?.bg ?? "bg-white/5"} ${meta?.text ?? "text-on-surface-variant"}`}
+                <Link
+                  key={src.name}
+                  href={`/categories?source=${encodeURIComponent(src.name)}`}
+                  className="flex items-center gap-3 p-4 bg-surface-container rounded-lg border border-white/5 hover:border-secondary-fixed-dim/30 transition-all"
                 >
-                  {lean}
-                </span>
-              );
-            })}
-          </div>
-
-          {/* Grouped sections */}
-          <div className="space-y-4 px-container-margin">
-            {orderedGroups.map(([lean, items]) => {
-              const meta = LEAN_META[lean];
-              return (
-                <section key={lean} className="bg-surface-container rounded-2xl border border-white/5 overflow-hidden">
-                  {/* Section header */}
-                  <div className={`flex items-center justify-between px-4 py-2.5 border-b border-white/5 ${meta?.bg ?? "bg-white/5"}`}>
-                    <span className="text-xs text-on-surface-variant tabular-nums">
-                      {toPersianNum(items.length)} منبع
-                    </span>
-                    <span className={`text-xs font-bold ${meta?.text ?? "text-on-surface-variant"}`}>
-                      {lean}
-                    </span>
-                  </div>
-                  {/* Source rows */}
-                  <div className="divide-y divide-white/5">
-                    {items.map((src) => <SourceRow key={src.name} src={src} />)}
-                  </div>
-                </section>
+                  <div className={`w-1.5 h-8 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"}`} />
+                  <span className="flex-1 text-sm font-medium text-on-surface">{src.name}</span>
+                  <span className="text-xs text-secondary-fixed-dim tabular-nums font-bold shrink-0">
+                    {toPersianNum(src.count ?? 0)}
+                  </span>
+                  <svg viewBox="0 0 16 16" className="w-3 h-3 text-on-surface-variant/40 shrink-0" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <path d="M10 4L6 8l4 4"/>
+                  </svg>
+                </Link>
               );
             })}
           </div>
