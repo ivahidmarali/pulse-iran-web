@@ -58,10 +58,13 @@ export default async function HomePage({
     const qs = q.toString();
     return qs ? `/?${qs}` : "/";
   }
-  const hero = news[0];
-  const rest = news.slice(1);
+  const hero = news.find((a) => a.image_url && a.image_url.trim() !== "") ?? news[0];
+  const rest = news.filter((a) => a.item_id !== hero?.item_id);
   const breakingTitles = breaking.slice(0, 5).map((b) => b.title);
   const currencyPrices = prices.slice(0, 4);
+  const CURRENCY_KEYS = ["price_dollar_rl", "price_eur", "price_gbp"];
+  const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
+  const widgetPrices = CURRENCY_KEYS.map((k) => priceMap[k]).filter(Boolean);
 
   return (
     <div className="min-h-screen cyber-grid" dir="rtl">
@@ -203,7 +206,7 @@ export default async function HomePage({
                 <span className="text-secondary-fixed-dim text-xl">💰</span>
               </div>
               <div className="space-y-3 min-h-[200px]">
-                {prices.slice(0, 3).map((p) => (
+                {widgetPrices.map((p) => (
                   <CurrencyRow key={p.key} item={p} />
                 ))}
               </div>
