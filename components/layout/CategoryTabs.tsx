@@ -9,6 +9,7 @@ interface Props {
   selectedGroup?: string;
   baseUrl?: string;
   visibleGroups?: string[];
+  mobileDirectFilter?: boolean; // skip bottom sheet on mobile, navigate directly
 }
 
 export default function CategoryTabs({
@@ -16,6 +17,7 @@ export default function CategoryTabs({
   selectedGroup,
   baseUrl = "/categories",
   visibleGroups,
+  mobileDirectFilter = false,
 }: Props) {
   const router = useRouter();
   const [hoveredGroup, setHoveredGroup] = useState<string | null>(null);
@@ -37,7 +39,7 @@ export default function CategoryTabs({
 
   const handleTabClick = (groupName: string) => {
     const hasSubCats = CATEGORY_GROUPS[groupName].categories.length > 0;
-    if (!hasSubCats) {
+    if (!hasSubCats || mobileDirectFilter) {
       navigate(groupUrl(groupName));
       return;
     }
@@ -90,7 +92,7 @@ export default function CategoryTabs({
               >
                 {groupName}
                 {hasSubCats && (
-                  <span className="text-[9px] opacity-50 mt-0.5">▾</span>
+                  <span className={`text-[9px] opacity-50 mt-0.5 ${mobileDirectFilter ? "hidden md:inline" : ""}`}>▾</span>
                 )}
               </button>
 

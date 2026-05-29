@@ -72,7 +72,7 @@ export default async function HomePage({
 
         {/* Sticky category tabs */}
         <div className="sticky top-[104px] z-30 bg-background/90 backdrop-blur-md border-b border-white/5 px-container-margin py-2">
-          <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
+          <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} mobileDirectFilter />
         </div>
 
         <main className="pb-24 pt-2">
