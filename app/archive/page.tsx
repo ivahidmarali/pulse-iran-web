@@ -32,7 +32,7 @@ export default async function ArchivePage({
   const rest = items.slice(1);
 
   return (
-    <div className="min-h-screen cyber-grid">
+    <div className="cyber-grid">
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />

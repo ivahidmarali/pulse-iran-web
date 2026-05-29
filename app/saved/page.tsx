@@ -125,7 +125,7 @@ export default function SavedPage() {
   );
 
   return (
-    <div className="min-h-screen cyber-grid">
+    <div className="cyber-grid">
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />

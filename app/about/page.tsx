@@ -39,7 +39,7 @@ export default async function AboutPage() {
   const sources = await fetchSources();
 
   return (
-    <div className="min-h-screen cyber-grid">
+    <div className="cyber-grid">
       <div className="md:hidden">
         <TopBarMobile />
       </div>

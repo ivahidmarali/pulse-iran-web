@@ -151,7 +151,7 @@ export default async function PricesPage() {
   const gold = GOLD_KEYS.map((k) => priceMap[k]).filter(Boolean) as PriceItem[];
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />

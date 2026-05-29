@@ -111,7 +111,7 @@ export default async function CategoriesPage({
     : group ? (CATEGORY_GROUPS[group]?.categories ?? []) : [];
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <TopBarMobile />

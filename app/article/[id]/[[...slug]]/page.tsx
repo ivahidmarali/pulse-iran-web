@@ -116,7 +116,7 @@ export default async function ArticlePage({
 
   if (!item) {
     return (
-      <div className="min-h-screen cyber-grid flex items-center justify-center text-on-surface-variant">
+      <div className="cyber-grid flex items-center justify-center text-on-surface-variant">
         <div className="text-center">
           <span className="text-[64px] block mb-4">📰</span>
           <p>خبر یافت نشد</p>
@@ -158,7 +158,7 @@ export default async function ArticlePage({
   };
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />

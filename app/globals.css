@@ -11,6 +11,9 @@
     font-family: 'Vazirmatn', sans-serif;
     background-color: #101415;
     color: #e0e3e5;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overscroll-behavior-y: none;
   }
 }
 

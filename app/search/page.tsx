@@ -77,7 +77,7 @@ export default async function SearchPage({
   const { items, total } = await fetchSearch(query);
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <main className="pb-4">

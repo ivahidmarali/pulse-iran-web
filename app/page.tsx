@@ -68,7 +68,7 @@ export default async function HomePage({
   const widgetPrices = CURRENCY_KEYS.map((k) => priceMap[k]).filter(Boolean);
 
   return (
-    <div className="min-h-screen cyber-grid" dir="rtl">
+    <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <TopBarMobile />
