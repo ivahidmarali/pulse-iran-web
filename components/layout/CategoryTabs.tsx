@@ -25,7 +25,6 @@ export default function CategoryTabs({
 
   const navigate = (url: string) => {
     router.push(url);
-    setMobileSheet(null);
     setHoveredGroup(null);
   };
 
