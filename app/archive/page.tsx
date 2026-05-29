@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
@@ -7,6 +8,13 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
 import { getArchive, getSources } from "@/lib/api";
 import { NewsItem, SourceInfo } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "آرشیو اخبار",
+  description:
+    "مرور آرشیو کامل اخبار ایران و جهان از بیش از ۴۵ منبع خبری — فیلتر بر اساس تاریخ، منبع و موضوع",
+  keywords: ["آرشیو اخبار", "اخبار قدیمی", "بایگانی اخبار", "اخبار ایران"],
+};
 
 async function fetchData(date?: string, source?: string, page = 1) {
   try {

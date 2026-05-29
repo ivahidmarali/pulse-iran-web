@@ -154,8 +154,8 @@ export default async function ArticlePage({
         ? item.summary.slice(0, 160)
         : item.title.slice(0, 160),
     image: imageUrl,
-    datePublished: item.posted_at,
-    dateModified: item.posted_at,
+    datePublished: new Date(item.posted_at).toISOString(),
+    dateModified: new Date(item.posted_at).toISOString(),
     author: { "@type": "Organization", name: item.source },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },

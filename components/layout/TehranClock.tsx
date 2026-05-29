@@ -34,7 +34,7 @@ export default function TehranClock() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!hours) return null;
+  if (!hours) return <div className="w-16 h-8" aria-hidden />;
 
   return (
     <div className="text-right leading-tight">

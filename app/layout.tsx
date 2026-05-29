@@ -123,7 +123,7 @@ const organizationJsonLd = JSON.stringify({
     width: 512,
     height: 512,
   },
-  sameAs: [],
+  sameAs: ["https://t.me/palsiran"],
   publishingPrinciples: `${SITE_URL}/about`,
 });
 
@@ -136,7 +136,10 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://cdn1.khabaronline.ir" />
+        <link rel="preconnect" href="https://media.mehrnews.com" />
+        <link rel="preconnect" href="https://newsmedia.tasnimnews.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         {/* JSON-LD content is static trusted server data — no XSS risk */}
         {/* eslint-disable-next-line react/no-danger */}
