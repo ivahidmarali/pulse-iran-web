@@ -6,7 +6,6 @@ import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import NewsCard from "@/components/news/NewsCard";
-import MobileCategoryFeed from "@/components/news/MobileCategoryFeed";
 import { getNews, getSources, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
@@ -47,9 +46,8 @@ const LEAN_LABEL_COLOR: Record<string, string> = {
 
 async function fetchData(categories?: string[], source?: string, page = 1) {
   try {
-    const [filteredData, allData, sources, activeCats] = await Promise.all([
+    const [filteredData, sources, activeCats] = await Promise.all([
       getNews(page, PAGE_SIZE, categories, source),
-      getNews(1, PAGE_SIZE),
       getSources(),
       getCategories(),
     ]);
@@ -60,7 +58,6 @@ async function fetchData(categories?: string[], source?: string, page = 1) {
       .map(([name]) => name);
     return {
       news: filterValid(filteredData.items),
-      allNews: filterValid(allData.items),
       sources,
       activeGroups,
       page: filteredData.page,
@@ -69,7 +66,6 @@ async function fetchData(categories?: string[], source?: string, page = 1) {
   } catch {
     return {
       news: [] as NewsItem[],
-      allNews: [] as NewsItem[],
       sources: [] as SourceInfo[],
       activeGroups: undefined as string[] | undefined,
       page: 1,
@@ -92,7 +88,7 @@ export default async function CategoriesPage({
   const { cat, group, source, page: pageParam } = await searchParams;
   const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const categories = getCategoryFilter(cat, group);
-  const { news, allNews, sources, activeGroups, page, pages } = await fetchData(
+  const { news, sources, activeGroups, page, pages } = await fetchData(
     categories.length ? categories : undefined,
     source,
     currentPage,
@@ -119,8 +115,72 @@ export default async function CategoriesPage({
       <div className="md:hidden">
         <TopBarMobile />
 
-        <main className="pb-24 px-container-margin pt-3">
-          <MobileCategoryFeed allNews={allNews} />
+        {/* Sticky category tabs */}
+        <div className="sticky top-16 z-30 bg-background/90 backdrop-blur-md border-b border-white/5 px-container-margin py-2">
+          <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
+        </div>
+
+        <main className="pb-24 px-container-margin pt-4">
+          {source && (
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-sm font-medium text-on-surface">اخبار {source}</span>
+              <Link href="/categories" className="text-xs text-secondary-fixed-dim">× حذف فیلتر</Link>
+            </div>
+          )}
+
+          {news.length === 0 ? (
+            <div className="text-center py-16 text-on-surface-variant text-sm">خبری یافت نشد</div>
+          ) : (
+            <div className="space-y-3">
+              {news.map((item) => (
+                <NewsCard key={item.item_id} item={item} variant="horizontal" />
+              ))}
+            </div>
+          )}
+
+          {pages > 1 && (
+            <div className="flex justify-center items-center gap-3 mt-6">
+              {page > 1 && (
+                <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
+                  ← قبلی
+                </Link>
+              )}
+              <span className="text-sm text-on-surface-variant">
+                صفحه {toPersianNum(page)} از {toPersianNum(pages)}
+              </span>
+              {page < pages && (
+                <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
+                  بعدی →
+                </Link>
+              )}
+            </div>
+          )}
+
+          {/* Sources section */}
+          <section className="mt-10">
+            <h2 className="text-base font-bold border-r-4 border-secondary-fixed-dim pr-3 mb-4">منابع خبری</h2>
+            <div className="grid grid-cols-2 gap-2">
+              {sources.map((src) => {
+                const isActive = source === src.name;
+                return (
+                  <Link
+                    key={src.name}
+                    href={isActive ? "/categories" : `/categories?source=${encodeURIComponent(src.name)}`}
+                    className={`p-3 rounded-xl text-sm font-medium flex justify-between items-center transition-all ${
+                      isActive
+                        ? "bg-secondary-fixed-dim/15 ring-1 ring-secondary-fixed-dim text-secondary-fixed-dim"
+                        : "bg-surface-container text-on-surface hover:bg-surface-container-high"
+                    }`}
+                  >
+                    <span className="truncate">{src.name}</span>
+                    <span className="text-secondary-fixed-dim text-xs shrink-0 mr-1">
+                      {toPersianNum(src.count ?? 0)}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
         </main>
         <BottomNav />
       </div>
