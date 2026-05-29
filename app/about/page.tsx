@@ -2,6 +2,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
@@ -139,6 +140,7 @@ export default async function AboutPage() {
       </main>
 
       <div className="md:hidden">
+        <MobileFooter />
         <BottomNav />
       </div>
       <div className="hidden md:block">

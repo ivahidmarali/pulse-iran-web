@@ -5,6 +5,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import ArticleActions from "@/components/article/ArticleActions";
 import TelegramEmbed from "@/components/article/TelegramEmbed";
@@ -245,13 +246,14 @@ export default async function ArticlePage({
             </section>
           )}
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 
       {/* Desktop */}
       <div className="hidden md:block">
         {item.is_breaking && <BreakingTicker items={[item.title]} />}
-        <TopBarDesktop />
+        <TopBarDesktop stickyTop={item.is_breaking ? "top-10" : "top-0"} />
 
         <main className="max-w-7xl mx-auto px-container-margin py-section-gap grid grid-cols-12 gap-gutter">
           <aside className="col-span-3 h-fit sticky top-24">

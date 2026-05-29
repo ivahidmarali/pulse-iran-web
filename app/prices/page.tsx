@@ -3,6 +3,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import { getPrices } from "@/lib/api";
 import { PriceItem } from "@/lib/types";
 
@@ -189,6 +190,7 @@ export default async function PricesPage() {
             </div>
           </section>
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 

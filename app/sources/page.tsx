@@ -4,6 +4,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
 import { toPersianNum } from "@/lib/utils";
@@ -138,6 +139,7 @@ export default async function SourcesPage() {
             })}
           </div>
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 

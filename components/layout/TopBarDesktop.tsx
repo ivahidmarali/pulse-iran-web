@@ -43,10 +43,10 @@ function NavLinks() {
   );
 }
 
-export default function TopBarDesktop() {
+export default function TopBarDesktop({ stickyTop = "top-0" }: { stickyTop?: string }) {
   return (
     <header
-      className="w-full sticky top-10 z-50 bg-surface/90 backdrop-blur-xl border-b border-white/5 hidden md:grid md:grid-cols-3 items-center px-container-margin h-14"
+      className={`w-full sticky ${stickyTop} z-50 bg-surface/90 backdrop-blur-xl border-b border-white/5 hidden md:grid md:grid-cols-3 items-center px-container-margin h-14`}
       dir="rtl"
     >
       {/* RIGHT — category nav */}

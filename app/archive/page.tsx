@@ -3,6 +3,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
 import { getArchive, getSources } from "@/lib/api";
 import { NewsItem, SourceInfo } from "@/lib/types";
@@ -74,6 +75,7 @@ export default async function ArchivePage({
             <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page + 1) })}`} className="px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold">بعدی</Link>
           </div>
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 

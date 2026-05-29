@@ -5,6 +5,7 @@ import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import BreakingTicker from "@/components/layout/BreakingTicker";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
 import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
@@ -153,13 +154,14 @@ export default async function HomePage({
             </div>
           )}
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
         {breakingTitles.length > 0 && <BreakingTicker items={breakingTitles} topOffset="top-0" />}
-        <TopBarDesktop />
+        <TopBarDesktop stickyTop={breakingTitles.length > 0 ? "top-10" : "top-0"} />
 
         <main className="max-w-[1600px] mx-auto grid grid-cols-12 gap-gutter px-container-margin pt-gutter pb-section-gap">
           {/* Left: 6 cols */}

@@ -6,6 +6,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import { articleHref } from "@/lib/utils";
 
 interface SavedNews {
@@ -131,6 +132,7 @@ export default function SavedPage() {
         <main className="pb-24 px-container-margin pt-6">
           {content}
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 

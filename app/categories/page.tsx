@@ -4,6 +4,7 @@ import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
+import MobileFooter from "@/components/layout/MobileFooter";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import NewsCard from "@/components/news/NewsCard";
 import { getNews, getSources, getCategories } from "@/lib/api";
@@ -182,6 +183,7 @@ export default async function CategoriesPage({
             </div>
           </section>
         </main>
+        <MobileFooter />
         <BottomNav />
       </div>
 
