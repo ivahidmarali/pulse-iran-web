@@ -38,6 +38,8 @@ jobs:
           script: |
             set -e
             cd ~/pulse-iran-web
+            git checkout -- .
+            git clean -fd -e .env.local -e node_modules
             git pull origin main
 
             # Write env vars
