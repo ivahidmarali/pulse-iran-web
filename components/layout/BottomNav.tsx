@@ -66,7 +66,7 @@ export default function BottomNav() {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <nav className="fixed bottom-0 w-full z-50 bg-surface-container/95 backdrop-blur-xl border-t border-white/5 flex flex-row-reverse justify-around items-center px-2 py-3 md:hidden safe-area-pb">
+    <nav className="fixed bottom-0 w-full z-50 bg-surface-container border-t border-white/10 flex flex-row-reverse justify-around items-center px-2 py-3 md:hidden safe-area-pb">
       {navItems.map((item) => {
         const active = isActive(item.href);
         return (
