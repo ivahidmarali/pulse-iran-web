@@ -1,5 +1,6 @@
 interface Props {
   items?: string[];
+  topOffset?: string;
 }
 
 const DEFAULT_ITEMS = [
@@ -8,10 +9,10 @@ const DEFAULT_ITEMS = [
   "پوشش ۴۵+ منبع خبری بدون فیلترینگ محتوا",
 ];
 
-export default function BreakingTicker({ items = DEFAULT_ITEMS }: Props) {
+export default function BreakingTicker({ items = DEFAULT_ITEMS, topOffset = "top-16" }: Props) {
   const text = items.join(" • ");
   return (
-    <div className="w-full bg-secondary-container text-on-secondary-container h-10 flex items-center overflow-hidden sticky top-16 z-[55] border-b border-secondary-fixed-dim/20">
+    <div className={`w-full bg-secondary-container text-on-secondary-container h-10 flex items-center overflow-hidden sticky ${topOffset} z-[55] border-b border-secondary-fixed-dim/20`}>
       <div className="px-4 bg-secondary-fixed-dim text-on-secondary-fixed font-bold z-10 whitespace-nowrap flex items-center gap-2 h-full shrink-0">
         <span>🚨</span>
         خبر فوری

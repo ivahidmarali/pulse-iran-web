@@ -158,7 +158,7 @@ export default async function HomePage({
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
-        {breakingTitles.length > 0 && <BreakingTicker items={breakingTitles} />}
+        {breakingTitles.length > 0 && <BreakingTicker items={breakingTitles} topOffset="top-0" />}
         <TopBarDesktop />
 
         <main className="max-w-[1600px] mx-auto grid grid-cols-12 gap-gutter px-container-margin pt-gutter pb-section-gap">
