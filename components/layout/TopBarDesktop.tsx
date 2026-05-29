@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import TehranClock from "./TehranClock";
 
 const GROUPS = ["سیاسی", "بین‌الملل", "اقتصادی", "اجتماعی", "ورزشی", "تکنولوژی", "حاشیه"];
 
@@ -63,8 +64,9 @@ export default function TopBarDesktop() {
         </Link>
       </div>
 
-      {/* LEFT — search + about */}
-      <div className="flex items-center gap-2 justify-start flex-row-reverse">
+      {/* LEFT — clock + search + about */}
+      <div className="flex items-center gap-4 justify-start flex-row-reverse">
+        <TehranClock />
         <Link
           href="/about"
           className="px-3 py-1.5 rounded-lg text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-200"
