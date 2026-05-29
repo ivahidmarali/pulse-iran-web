@@ -62,10 +62,10 @@ export default async function HomePage({
   const hero = news.find((a) => a.image_url && a.image_url.trim() !== "") ?? news[0];
   const rest = news.filter((a) => a.item_id !== hero?.item_id);
   const breakingTitles = breaking.slice(0, 5).map((b) => b.title);
+  const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const HOME_PRICE_KEYS = ["price_dollar_rl", "price_eur", "geram18", "sekeb"];
   const currencyPrices = HOME_PRICE_KEYS.map((k) => priceMap[k]).filter(Boolean);
   const CURRENCY_KEYS = ["price_dollar_rl", "price_eur", "price_gbp"];
-  const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const widgetPrices = CURRENCY_KEYS.map((k) => priceMap[k]).filter(Boolean);
 
   return (
