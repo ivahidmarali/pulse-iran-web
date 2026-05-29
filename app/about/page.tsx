@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import BottomNav from "@/components/layout/BottomNav";
 import TopBarMobile from "@/components/layout/TopBarMobile";
 import TopBarDesktop from "@/components/layout/TopBarDesktop";
@@ -6,6 +7,12 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "درباره پالس ایران",
+  description:
+    "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی — روش‌شناسی، اصول تحریریه و نحوه دسته‌بندی گرایش سیاسی منابع",
+};
 
 const LEAN_COLOR: Record<string, string> = {
   "اصول‌گرا": "bg-green-500/50",
@@ -77,6 +84,52 @@ export default async function AboutPage() {
                 <div className="text-label-sm font-label-sm text-on-surface-variant">{label}</div>
               </GlassCard>
             ))}
+          </div>
+        </section>
+
+        {/* Methodology */}
+        <section className="px-container-margin mb-section-gap">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="border-r-4 border-secondary-fixed-dim pr-4">
+              <h3 className="text-title-md font-title-md text-on-surface">روش‌شناسی تحریریه</h3>
+              <p className="text-label-sm font-label-sm text-on-surface-variant">نحوه جمع‌آوری، پردازش و نمایش اخبار</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-on-surface-variant leading-relaxed">
+              <div className="space-y-3">
+                <h4 className="text-on-surface font-bold">جمع‌آوری اخبار</h4>
+                <p>اخبار به‌صورت خودکار از بیش از ۴۵ کانال تلگرامی و خبرگزاری رسمی پایش و جمع‌آوری می‌شود. سیستم ما ۲۴ ساعته فعال است و اخبار جدید را در کمتر از ۱۲ میلی‌ثانیه شناسایی و منتشر می‌کند. هر خبر همراه با لینک مستقیم به منبع اصلی ارائه می‌شود.</p>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-on-surface font-bold">دسته‌بندی گرایش سیاسی</h4>
+                <p>هر منبع خبری بر اساس سابقه تحریریه، مواضع رسمی و الگوی پوشش خبری در یکی از ۱۱ دسته گرایش سیاسی طبقه‌بندی شده است — از «رسمی دولتی» و «اصولگرا» تا «لیبرال غربی» و «مخالف جمهوری اسلامی». این طبقه‌بندی به خوانندگان کمک می‌کند تا زاویه دید هر منبع را بشناسند.</p>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-on-surface font-bold">خلاصه‌سازی هوشمند</h4>
+                <p>خلاصه اخبار با کمک هوش مصنوعی تولید می‌شود تا خوانندگان بتوانند سریع‌تر به اصل مطلب دسترسی پیدا کنند. در هر مورد، انتساب به منبع اصلی حفظ می‌شود و لینک مستقیم به متن کامل خبر ارائه می‌گردد.</p>
+              </div>
+              <div className="space-y-3">
+                <h4 className="text-on-surface font-bold">اصل بی‌طرفی</h4>
+                <p>پالس ایران هیچ فیلتر سیاسی بر محتوا اعمال نمی‌کند. اخبار از تمام طیف‌های سیاسی منتشر می‌شود تا خوانندگان خود بتوانند با دسترسی به تنوع آرا، قضاوت مستقل داشته باشند.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Contact */}
+        <section className="px-container-margin mb-section-gap">
+          <div className="max-w-4xl mx-auto">
+            <GlassCard className="p-6 md:p-8 text-center">
+              <h3 className="text-title-md font-title-md text-on-surface mb-3">تماس با ما</h3>
+              <p className="text-sm text-on-surface-variant mb-4">برای پیشنهادات، انتقادات یا همکاری با ما تماس بگیرید</p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="mailto:info@palsiran.com" className="inline-flex items-center gap-2 px-6 py-2 bg-secondary-container text-on-secondary-container rounded-full text-sm font-bold hover:opacity-90 transition-opacity">
+                  info@palsiran.com
+                </a>
+                <a href="https://t.me/palsiran" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-2 bg-[#229ED9] text-white rounded-full text-sm font-bold hover:opacity-90 transition-opacity">
+                  @palsiran
+                </a>
+              </div>
+            </GlassCard>
           </div>
         </section>
 

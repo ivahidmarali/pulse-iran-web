@@ -125,6 +125,14 @@ const organizationJsonLd = JSON.stringify({
   },
   sameAs: ["https://t.me/palsiran"],
   publishingPrinciples: `${SITE_URL}/about`,
+  knowsAbout: [
+    "Iran news",
+    "Persian politics",
+    "Iranian economy",
+    "Middle East",
+    "Currency exchange rates",
+    "Tehran Stock Exchange",
+  ],
 });
 
 export default function RootLayout({
@@ -141,6 +149,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://media.mehrnews.com" />
         <link rel="preconnect" href="https://newsmedia.tasnimnews.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
+        <link rel="alternate" type="application/rss+xml" title="پالس ایران" href={`${SITE_URL}/feed.xml`} />
         {/* JSON-LD content is static trusted server data — no XSS risk */}
         {/* eslint-disable-next-line react/no-danger */}
         <script

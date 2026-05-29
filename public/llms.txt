@@ -12,6 +12,7 @@
 - /sources — List of all monitored news sources with political lean indicators
 - /about — About Pulse Iran, methodology, and editorial principles
 - /article/[id]/[slug] — Individual news articles with source attribution
+- /feed.xml — RSS feed with latest 30 articles
 
 ## Language
 
@@ -24,7 +25,17 @@ Direction: RTL
 - Each article links back to the original source
 - Prices are updated every 5 minutes from live market data
 - Content is summarized using AI with source attribution preserved
+- Sources are classified by political lean across 11 categories
+
+## Usage Restrictions
+
+- Search indexing and real-time retrieval: permitted
+- AI-generated search summaries and citations: permitted
+- AI model training or fine-tuning: prohibited
+- Automated scraping without written permission: prohibited
 
 ## Contact
 
 Website: https://palsiran.com
+Email: info@palsiran.com
+Telegram: https://t.me/palsiran

@@ -12,8 +12,10 @@ export default function MobileFooter() {
         <Link href="/categories" className="hover:text-on-surface transition-colors">دسته‌بندی</Link>
         <Link href="/prices" className="hover:text-on-surface transition-colors">نرخ ارز</Link>
         <Link href="/about" className="hover:text-on-surface transition-colors">درباره ما</Link>
+        <Link href="/privacy" className="hover:text-on-surface transition-colors">حریم خصوصی</Link>
+        <Link href="/terms" className="hover:text-on-surface transition-colors">شرایط</Link>
       </div>
-      <p className="text-[10px] text-outline/60 mt-3 text-center">تمامی حقوق محفوظ است</p>
+      <p className="text-[10px] text-outline/60 mt-3 text-center">تمامی حقوق محفوظ است | info@palsiran.com</p>
     </footer>
   );
 }

@@ -31,22 +31,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     newsItems = await fetchAllArticles();
   } catch {}
 
+  const now = new Date();
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, changeFrequency: "hourly", priority: 1 },
-    { url: `${SITE_URL}/prices`, changeFrequency: "hourly", priority: 0.9 },
-    { url: `${SITE_URL}/categories`, changeFrequency: "daily", priority: 0.8 },
-    { url: `${SITE_URL}/archive`, changeFrequency: "daily", priority: 0.6 },
-    { url: `${SITE_URL}/search`, changeFrequency: "daily", priority: 0.6 },
-    { url: `${SITE_URL}/sources`, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.3 },
+    { url: SITE_URL, lastModified: now },
+    { url: `${SITE_URL}/prices`, lastModified: now },
+    { url: `${SITE_URL}/categories`, lastModified: now },
+    { url: `${SITE_URL}/archive`, lastModified: now },
+    { url: `${SITE_URL}/search`, lastModified: now },
+    { url: `${SITE_URL}/sources`, lastModified: now },
+    { url: `${SITE_URL}/about`, lastModified: new Date("2026-05-29") },
+    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29") },
+    { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
   ];
 
-  const articleRoutes: MetadataRoute.Sitemap = newsItems.map((item) => ({
-    url: `${SITE_URL}/article/${encodeURIComponent(item.item_id)}/${generateSlug(item.title)}`,
-    lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
-    changeFrequency: "weekly",
-    priority: item.importance === "high" ? 0.9 : 0.7,
-  }));
+  const articleRoutes: MetadataRoute.Sitemap = newsItems.map((item) => {
+    const slug = generateSlug(item.title);
+    const encodedSlug = encodeURIComponent(slug);
+    return {
+      url: `${SITE_URL}/article/${encodeURIComponent(item.item_id)}/${encodedSlug}`,
+      lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
+    };
+  });
 
   return [...staticRoutes, ...articleRoutes];
 }

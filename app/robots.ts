@@ -8,22 +8,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/admin/', '/api/'],
       },
-      {
-        userAgent: 'GPTBot',
-        disallow: '/',
-      },
-      {
-        userAgent: 'ClaudeBot',
-        disallow: '/',
-      },
-      {
-        userAgent: 'CCBot',
-        disallow: '/',
-      },
-      {
-        userAgent: 'Google-Extended',
-        disallow: '/',
-      },
+      // Search bots explicitly allowed
       {
         userAgent: 'OAI-SearchBot',
         allow: '/',
@@ -32,8 +17,8 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'PerplexityBot',
         allow: '/',
       },
+      // Training bots managed by Cloudflare (GPTBot, ClaudeBot, CCBot, Google-Extended)
     ],
     sitemap: 'https://palsiran.com/sitemap.xml',
-    host: 'https://palsiran.com',
   }
 }

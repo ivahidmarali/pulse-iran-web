@@ -7,10 +7,16 @@ export const SITE_URL =
 
 /** Generate a URL-safe Persian slug from a title */
 export function generateSlug(title: string): string {
-  const slug = title
+  let slug = title
     .replace(/\s+/g, "-")
     .replace(/[^\u0600-\u06FF\w-]/g, "")
-    .slice(0, 60);
+    .replace(/^[-]+/, "")
+    .replace(/[-]+$/, "");
+  // Break at last hyphen before position 60 for clean word boundary
+  if (slug.length > 60) {
+    const lastHyphen = slug.lastIndexOf("-", 60);
+    slug = lastHyphen > 10 ? slug.slice(0, lastHyphen) : slug.slice(0, 60);
+  }
   return slug || "خبر";
 }
 

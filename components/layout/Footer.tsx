@@ -21,6 +21,8 @@ export default function Footer() {
               ["قیمت ارز", "/prices"],
               ["آرشیو", "/archive"],
               ["درباره ما", "/about"],
+              ["حریم خصوصی", "/privacy"],
+              ["شرایط استفاده", "/terms"],
             ].map(([label, href]) => (
               <li key={href}>
                 <Link href={href} className="hover:text-on-surface transition-colors">{label}</Link>
@@ -65,7 +67,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center mt-8 pt-6 border-t border-white/5">
-        <p className="text-outline text-xs opacity-80">© ۱۴۰۴ پالس ایران — تمامی حقوق محفوظ است</p>
+        <p className="text-outline text-xs opacity-80">© ۱۴۰۴ پالس ایران — تمامی حقوق محفوظ است | <a href="mailto:info@palsiran.com" className="hover:text-on-surface-variant transition-colors">info@palsiran.com</a></p>
       </div>
     </footer>
   );

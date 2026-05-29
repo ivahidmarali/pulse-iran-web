@@ -65,6 +65,20 @@ function SourceRow({ src }: { src: SourceInfo }) {
   );
 }
 
+function CredibilityBar({ value }: { value?: number }) {
+  if (value == null) return null;
+  const pct = Math.min(100, Math.max(0, value));
+  const color = pct >= 80 ? "bg-green-500" : pct >= 60 ? "bg-yellow-500" : "bg-red-500";
+  return (
+    <div className="flex items-center gap-1.5" title={`اعتبار: ${pct}%`}>
+      <div className="w-12 h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div className={`h-full ${color} rounded-full`} style={{ width: `${pct}%` }} />
+      </div>
+      <span className="text-[9px] text-on-surface-variant tabular-nums">{toPersianNum(pct)}%</span>
+    </div>
+  );
+}
+
 function SourceCard({ src }: { src: SourceInfo }) {
   const meta = LEAN_META[src.political_lean ?? ""];
   return (
@@ -78,6 +92,7 @@ function SourceCard({ src }: { src: SourceInfo }) {
         {src.political_lean && (
           <p className={`text-[11px] mt-0.5 ${meta?.text ?? "text-on-surface-variant"}`}>{src.political_lean}</p>
         )}
+        <CredibilityBar value={src.credibility} />
       </div>
       <span className="text-xs text-secondary-fixed-dim font-bold tabular-nums shrink-0">
         {toPersianNum(src.count ?? 0)}

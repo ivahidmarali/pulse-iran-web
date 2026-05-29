@@ -23,9 +23,10 @@ const getArticle = cache(async (id: string): Promise<NewsItem | null> => {
   }
 });
 
-async function fetchRelated(excludeId: string): Promise<NewsItem[]> {
+async function fetchRelated(excludeId: string, category?: string): Promise<NewsItem[]> {
   try {
-    const data = await getNews(1, 6);
+    const cats = category ? [category] : undefined;
+    const data = await getNews(1, 6, cats);
     return (data.items ?? []).filter((n) => n.item_id !== excludeId);
   } catch {
     return [];
@@ -109,10 +110,9 @@ export default async function ArticlePage({
 }) {
   const { id } = await params;
   const decodedId = decodeURIComponent(id);
-  const [item, related] = await Promise.all([
-    getArticle(decodedId),
-    fetchRelated(decodedId),
-  ]);
+  const article = await getArticle(decodedId);
+  const related = await fetchRelated(decodedId, article?.category);
+  const item = article;
 
   if (!item) {
     return (
@@ -153,12 +153,21 @@ export default async function ArticlePage({
       item.summary && item.summary.length > 30
         ? item.summary.slice(0, 160)
         : item.title.slice(0, 160),
-    image: imageUrl,
+    image: {
+      "@type": "ImageObject",
+      url: imageUrl,
+      width: 1200,
+      height: 630,
+    },
     datePublished: new Date(item.posted_at).toISOString(),
     dateModified: new Date(item.posted_at).toISOString(),
     author: { "@type": "Organization", name: item.source },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", "[data-speakable]"],
+    },
     inLanguage: "fa",
     ...(catName !== "اخبار" ? { articleSection: catName } : {}),
     ...(item.link ? { url: item.link } : {}),
@@ -199,7 +208,7 @@ export default async function ArticlePage({
 
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
               {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
-                <p className="font-body-lg text-body-lg text-on-surface leading-8">
+                <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
                   {item.summary}
                 </p>
               ) : (
@@ -337,7 +346,7 @@ export default async function ArticlePage({
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
               {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
-                <p className="font-body-lg text-body-lg text-on-surface leading-8">
+                <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
                   {item.summary}
                 </p>
               ) : (
