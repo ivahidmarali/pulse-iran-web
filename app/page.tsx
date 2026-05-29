@@ -75,35 +75,55 @@ export default async function HomePage({
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} mobileDirectFilter />
         </div>
 
-        <main className="pb-24 pt-2">
+        <main className="pb-24 pt-3">
           {/* Hero */}
           {hero && (
-            <div className="px-container-margin mb-section-gap mt-3">
+            <div className="px-container-margin mb-4">
               <NewsCard item={hero} variant="hero" priority />
             </div>
           )}
 
-          {/* Currency grid */}
+          {/* Currency strip — horizontal scroll */}
           {currencyPrices.length > 0 && (
-            <div className="px-container-margin mb-section-gap">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3">قیمت‌ها</h2>
-                <Link href="/prices" className="text-secondary-fixed-dim text-label-sm font-label-sm">مشاهده همه</Link>
+            <div className="mb-5">
+              <div className="flex items-center justify-between px-container-margin mb-2">
+                <Link href="/prices" className="text-[11px] text-secondary-fixed-dim font-medium">مشاهده همه ←</Link>
+                <span className="text-xs font-bold text-on-surface-variant">قیمت‌ها</span>
               </div>
-              <div className="grid grid-cols-2 gap-2 min-h-[130px]">
-                {currencyPrices.map((p) => (
-                  <CurrencyRow key={p.key} item={p} />
-                ))}
+              <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin">
+                {currencyPrices.map((p) => {
+                  const up = p.trend === "up";
+                  const down = p.trend === "down";
+                  const SYMBOLS: Record<string, string> = {
+                    price_dollar_rl: "$", price_eur: "€", price_aed: "د", price_gbp: "£", price_try: "₺",
+                  };
+                  return (
+                    <Link
+                      key={p.key}
+                      href="/prices"
+                      className="shrink-0 bg-surface-container rounded-xl px-3 py-2.5 flex flex-col gap-1 min-w-[90px] border border-white/5"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`text-[10px] font-bold tabular-nums ${up ? "text-emerald-400" : down ? "text-red-400" : "text-on-surface-variant"}`}>
+                          {p.change_pct && p.change_pct !== 0 ? `${up ? "▲" : "▼"}${Math.abs(p.change_pct).toFixed(1)}٪` : "—"}
+                        </span>
+                        <span className="text-xs font-black text-secondary-fixed-dim">{SYMBOLS[p.key] ?? "؟"}</span>
+                      </div>
+                      <span className="text-sm font-bold text-on-surface tabular-nums text-right">
+                        {p.price.toLocaleString("fa-IR")}
+                      </span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
           )}
 
           {/* News feed */}
-          <div className="px-container-margin space-y-3">
-            <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">آخرین اخبار</h2>
+          <div className="px-container-margin space-y-2.5">
             {rest.length === 0 && (
-              <div className="text-center py-16 text-on-surface-variant">
-                <p>خبری در این دسته‌بندی یافت نشد</p>
+              <div className="text-center py-16 text-on-surface-variant text-sm">
+                خبری در این دسته‌بندی یافت نشد
               </div>
             )}
             {rest.map((item) => (
@@ -115,15 +135,15 @@ export default async function HomePage({
           {pages > 1 && (
             <div className="px-container-margin flex justify-center items-center gap-3 mt-6 mb-2">
               {page > 1 && (
-                <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
                   ← قبلی
                 </Link>
               )}
               <span className="text-sm text-on-surface-variant">
-                صفحه {toPersianNum(page)} از {toPersianNum(pages)}
+                {toPersianNum(page)} / {toPersianNum(pages)}
               </span>
               {page < pages && (
-                <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant hover:text-on-surface transition-colors">
+                <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
                   بعدی →
                 </Link>
               )}

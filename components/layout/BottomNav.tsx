@@ -5,12 +5,32 @@ import { useEffect, useState } from "react";
 
 const navItems = [
   {
-    href: "/",
-    label: "خانه",
+    href: "/saved",
+    label: "ذخیره\u200cها",
     icon: (active: boolean) => (
       <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
-        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-        <path d="M9 21V12h6v9"/>
+        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+      </svg>
+    ),
+  },
+  {
+    href: "/search",
+    label: "جستجو",
+    icon: (_active: boolean) => (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+    ),
+  },
+  {
+    href: "/prices",
+    label: "نرخ ارز",
+    icon: (active: boolean) => (
+      <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M14.5 8H9.5a2 2 0 000 4h5a2 2 0 010 4H9"/>
+        <path d="M12 6v2m0 8v2"/>
       </svg>
     ),
   },
@@ -27,32 +47,12 @@ const navItems = [
     ),
   },
   {
-    href: "/prices",
-    label: "نرخ ارز",
+    href: "/",
+    label: "خانه",
     icon: (active: boolean) => (
       <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M14.5 8H9.5a2 2 0 000 4h5a2 2 0 010 4H9"/>
-        <path d="M12 6v2m0 8v2"/>
-      </svg>
-    ),
-  },
-  {
-    href: "/search",
-    label: "جستجو",
-    icon: (_active: boolean) => (
-      <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
-        <circle cx="11" cy="11" r="8"/>
-        <path d="M21 21l-4.35-4.35"/>
-      </svg>
-    ),
-  },
-  {
-    href: "/saved",
-    label: "ذخیره\u200cها",
-    icon: (active: boolean) => (
-      <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
-        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+        <path d="M9 21V12h6v9"/>
       </svg>
     ),
   },
