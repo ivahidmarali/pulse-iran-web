@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
+import { Vazirmatn } from "next/font/google";
 import Script from "next/script";
 import { SITE_URL } from "@/lib/utils";
 import "./globals.css";
+
+const vazirmatn = Vazirmatn({
+  subsets: ["arabic"],
+  variable: "--font-vazirmatn",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -91,15 +98,33 @@ export const metadata: Metadata = {
 const websiteJsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
   name: "پالس ایران",
   url: SITE_URL,
   description: "اخبار فوری ایران و جهان، بی‌طرف از همه منابع",
   inLanguage: "fa",
+  publisher: { "@id": `${SITE_URL}/#organization` },
   potentialAction: {
     "@type": "SearchAction",
     target: `${SITE_URL}/search?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
+});
+
+const organizationJsonLd = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "@id": `${SITE_URL}/#organization`,
+  name: "پالس ایران",
+  url: SITE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/android-chrome-512x512.png`,
+    width: 512,
+    height: 512,
+  },
+  sameAs: [],
+  publishingPrinciples: `${SITE_URL}/about`,
 });
 
 export default function RootLayout({
@@ -108,10 +133,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fa" dir="rtl" className="dark">
+    <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
         <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://palsiran.com" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         {/* JSON-LD content is static trusted server data — no XSS risk */}
@@ -119,6 +143,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: websiteJsonLd }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
         />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PMJG9DYRN3"

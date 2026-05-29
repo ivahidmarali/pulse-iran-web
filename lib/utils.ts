@@ -7,10 +7,11 @@ export const SITE_URL =
 
 /** Generate a URL-safe Persian slug from a title */
 export function generateSlug(title: string): string {
-  return title
+  const slug = title
     .replace(/\s+/g, "-")
     .replace(/[^\u0600-\u06FF\w-]/g, "")
     .slice(0, 60);
+  return slug || "خبر";
 }
 
 /** Internal href for an article page (with optional slug for SEO) */

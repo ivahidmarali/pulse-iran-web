@@ -34,8 +34,8 @@ export default function ArticleActions({ title, itemId, source }: Props) {
       setSaved(false);
       setSaveLabel("ذخیره");
     } else {
-      existing.push({ id: itemId, title, source, url: window.location.href });
-      localStorage.setItem("saved_news", JSON.stringify(existing));
+      const updated = [...existing, { id: itemId, title, source, url: window.location.href }].slice(-50);
+      localStorage.setItem("saved_news", JSON.stringify(updated));
       setSaved(true);
       setSaveLabel("ذخیره شد ✓");
       setTimeout(() => setSaveLabel("حذف از ذخیره‌شده‌ها"), 2000);
@@ -64,9 +64,11 @@ export default function ArticleActions({ title, itemId, source }: Props) {
     }
   };
 
-  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(
-    typeof window !== "undefined" ? window.location.href : ""
-  )}&text=${encodeURIComponent(title)}`;
+  const [currentUrl, setCurrentUrl] = useState("");
+  useEffect(() => {
+    setCurrentUrl(window.location.href);
+  }, []);
+  const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}`;
 
   return (
     <div className="flex items-center gap-2 flex-wrap">

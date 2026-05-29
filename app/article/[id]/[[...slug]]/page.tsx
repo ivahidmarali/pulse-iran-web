@@ -134,9 +134,20 @@ export default async function ArticlePage({
   const catName = categoryName(item.category);
 
   // Build JSON-LD from trusted server-only data
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "اخبار", item: `${SITE_URL}/categories` },
+      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60) },
+    ],
+  };
+
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
+    "@id": canonical,
     headline: item.title,
     description:
       item.summary && item.summary.length > 30
@@ -146,12 +157,8 @@ export default async function ArticlePage({
     datePublished: item.posted_at,
     dateModified: item.posted_at,
     author: { "@type": "Organization", name: item.source },
-    publisher: {
-      "@type": "Organization",
-      name: "پالس ایران",
-      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
-    },
-    mainEntityOfPage: canonical,
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     inLanguage: "fa",
     ...(catName !== "اخبار" ? { articleSection: catName } : {}),
     ...(item.link ? { url: item.link } : {}),
@@ -401,6 +408,8 @@ export default async function ArticlePage({
         <Footer />
       </div>
 
+      {/* BreadcrumbList JSON-LD — trusted server data */}
+      <JsonLd data={breadcrumbJsonLd} />
       {/* NewsArticle JSON-LD — all values from trusted server data */}
       <JsonLd data={jsonLdData} />
     </div>

@@ -75,11 +75,19 @@ async function fetchData(categories?: string[], source?: string, page = 1) {
   }
 }
 
-export const metadata: Metadata = {
-  title: "دسته‌بندی اخبار",
-  description: "مرور اخبار ایران بر اساس دسته‌بندی: سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر",
-  keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ cat?: string; group?: string; source?: string }>;
+}): Promise<Metadata> {
+  const { cat, group, source } = await searchParams;
+  const label = cat || group || source || "دسته‌بندی اخبار";
+  return {
+    title: label,
+    description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label} — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر`,
+    keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
+  };
+}
 
 export default async function CategoriesPage({
   searchParams,

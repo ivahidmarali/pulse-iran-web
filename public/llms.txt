@@ -1,0 +1,30 @@
+# Pulse Iran (palsiran.com)
+
+> Persian-language news aggregator covering Iran and world news from 45+ sources — unbiased, real-time.
+
+## Sections
+
+- / — Homepage: latest breaking news, currency prices, category filters
+- /prices — Live exchange rates: USD, EUR, GBP, AED, TRY, gold, coins
+- /categories — Browse news by category: politics, economy, international, sports, society
+- /archive — Full news archive with date and source filters
+- /search — Full-text search across all articles
+- /sources — List of all monitored news sources with political lean indicators
+- /about — About Pulse Iran, methodology, and editorial principles
+- /article/[id]/[slug] — Individual news articles with source attribution
+
+## Language
+
+Primary language: Persian (fa)
+Direction: RTL
+
+## Content Policy
+
+- News articles are aggregated from Telegram channels and verified Iranian/international news agencies
+- Each article links back to the original source
+- Prices are updated every 5 minutes from live market data
+- Content is summarized using AI with source attribution preserved
+
+## Contact
+
+Website: https://palsiran.com

@@ -144,6 +144,34 @@ const GoldIcon = () => (
   </svg>
 );
 
+function PricesJsonLd({ prices }: { prices: PriceItem[] }) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "نرخ زنده ارز و طلا در ایران",
+    description: "نرخ لحظه‌ای دلار، یورو، طلا، سکه و ارزهای دیجیتال در بازار ایران",
+    url: "https://palsiran.com/prices",
+    temporalCoverage: new Date().toISOString().split("T")[0],
+    dateModified: new Date().toISOString(),
+    publisher: { "@id": "https://palsiran.com/#organization" },
+    variableMeasured: prices.map((p) => {
+      const meta = PRICE_META[p.key];
+      return {
+        "@type": "PropertyValue",
+        name: meta?.name ?? p.key,
+        value: p.price,
+        unitText: "IRR",
+      };
+    }),
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
+
 export default async function PricesPage() {
   const prices = await fetchPrices();
   const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
@@ -152,6 +180,7 @@ export default async function PricesPage() {
 
   return (
     <div className="cyber-grid" dir="rtl">
+      <PricesJsonLd prices={prices} />
       {/* Mobile */}
       <div className="md:hidden">
         <TopBarMobile />

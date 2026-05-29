@@ -72,7 +72,9 @@ export default async function ArchivePage({
             {page > 1 && (
               <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page - 1) })}`} className="px-4 py-2 bg-surface-container rounded-lg text-sm">قبلی</Link>
             )}
-            <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page + 1) })}`} className="px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold">بعدی</Link>
+            {items.length > 0 && (
+              <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page + 1) })}`} className="px-4 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold">بعدی</Link>
+            )}
           </div>
         </main>
         <MobileFooter />
@@ -128,7 +130,9 @@ export default async function ArchivePage({
             {page > 1 && (
               <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page - 1) })}`} className="px-6 py-2 bg-surface-container rounded-lg text-sm hover:bg-surface-container-high">صفحه قبل</Link>
             )}
-            <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page + 1) })}`} className="px-6 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold hover:opacity-90">صفحه بعد</Link>
+            {items.length > 0 && (
+              <Link href={`/archive?${new URLSearchParams({ ...(date ? { date } : {}), ...(source ? { source } : {}), page: String(page + 1) })}`} className="px-6 py-2 bg-secondary-container text-on-secondary-container rounded-lg text-sm font-bold hover:opacity-90">صفحه بعد</Link>
+            )}
           </div>
         </main>
         <Footer />

@@ -73,7 +73,7 @@ export default function BottomNav() {
           <Link
             key={item.href}
             href={item.href}
-            className={`flex flex-col items-center gap-1 px-3 py-1 rounded-xl transition-all ${
+            className={`flex flex-col items-center justify-center gap-1 min-h-[48px] min-w-[48px] rounded-xl transition-all ${
               active ? "text-secondary-fixed-dim" : "text-on-surface-variant"
             }`}
           >

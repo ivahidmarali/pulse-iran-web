@@ -12,7 +12,6 @@ const nextConfig = {
       { protocol: "https", hostname: "cdn*.telesco.pe" },
       // Fallback for any other sources
       { protocol: "https", hostname: "**" },
-      { protocol: "http", hostname: "**" },
     ],
   },
 };
