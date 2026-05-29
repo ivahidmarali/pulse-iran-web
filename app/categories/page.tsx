@@ -116,7 +116,7 @@ export default async function CategoriesPage({
         <TopBarMobile />
 
         {/* Sticky category tabs */}
-        <div className="sticky top-16 z-30 bg-background/90 backdrop-blur-md border-b border-white/5 px-container-margin py-2">
+        <div className="sticky top-16 z-30 bg-background border-b border-white/5 px-container-margin py-2">
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
         </div>
 
