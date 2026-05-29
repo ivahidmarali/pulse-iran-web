@@ -13,33 +13,27 @@ export const metadata: Metadata = {
   description: "فهرست منابع خبری پالس ایران — رسانه‌های داخلی و خارجی با گرایش سیاسی",
 };
 
-const LEAN_BAR: Record<string, string> = {
-  "اصولگرا":               "bg-green-500",
-  "اصلاح‌طلب":             "bg-blue-500",
-  "اصلاح‌طلب میانه":       "bg-blue-400",
-  "محافظه‌کار میانه":      "bg-yellow-500",
-  "لیبرال غربی":           "bg-purple-500",
-  "مخالف جمهوری اسلامی":  "bg-red-500",
-  "لیبرال آمریکایی":      "bg-purple-400",
-  "چپ لیبرال":             "bg-indigo-400",
-  "محافظه‌کار عربی":       "bg-yellow-600",
-  "مستقل":                 "bg-slate-400",
-  "رسمی دولتی":            "bg-green-600",
+const LEAN_META: Record<string, { bar: string; text: string; bg: string }> = {
+  "اصولگرا":               { bar: "bg-green-500",   text: "text-green-400",   bg: "bg-green-500/10" },
+  "رسمی دولتی":            { bar: "bg-green-600",   text: "text-green-500",   bg: "bg-green-600/10" },
+  "اصلاح‌طلب":             { bar: "bg-blue-500",    text: "text-blue-400",    bg: "bg-blue-500/10" },
+  "اصلاح‌طلب میانه":       { bar: "bg-blue-400",    text: "text-blue-300",    bg: "bg-blue-400/10" },
+  "محافظه‌کار میانه":      { bar: "bg-yellow-500",  text: "text-yellow-400",  bg: "bg-yellow-500/10" },
+  "لیبرال غربی":           { bar: "bg-purple-500",  text: "text-purple-400",  bg: "bg-purple-500/10" },
+  "لیبرال آمریکایی":      { bar: "bg-purple-400",  text: "text-purple-300",  bg: "bg-purple-400/10" },
+  "چپ لیبرال":             { bar: "bg-indigo-400",  text: "text-indigo-300",  bg: "bg-indigo-400/10" },
+  "مخالف جمهوری اسلامی":  { bar: "bg-red-500",     text: "text-red-400",     bg: "bg-red-500/10" },
+  "محافظه‌کار عربی":       { bar: "bg-yellow-600",  text: "text-yellow-500",  bg: "bg-yellow-600/10" },
+  "مستقل":                 { bar: "bg-slate-400",   text: "text-slate-400",   bg: "bg-slate-400/10" },
 };
 
-const LEAN_TEXT: Record<string, string> = {
-  "اصولگرا":               "text-green-400",
-  "اصلاح‌طلب":             "text-blue-400",
-  "اصلاح‌طلب میانه":       "text-blue-300",
-  "محافظه‌کار میانه":      "text-yellow-400",
-  "لیبرال غربی":           "text-purple-400",
-  "مخالف جمهوری اسلامی":  "text-red-400",
-  "لیبرال آمریکایی":      "text-purple-300",
-  "چپ لیبرال":             "text-indigo-300",
-  "محافظه‌کار عربی":       "text-yellow-500",
-  "مستقل":                 "text-slate-400",
-  "رسمی دولتی":            "text-green-500",
-};
+// Preferred display order for lean groups
+const LEAN_ORDER = [
+  "رسمی دولتی", "اصولگرا", "محافظه‌کار میانه",
+  "اصلاح‌طلب", "اصلاح‌طلب میانه", "مستقل",
+  "لیبرال غربی", "لیبرال آمریکایی", "چپ لیبرال",
+  "مخالف جمهوری اسلامی", "محافظه‌کار عربی",
+];
 
 async function fetchSources(): Promise<SourceInfo[]> {
   try {
@@ -49,20 +43,39 @@ async function fetchSources(): Promise<SourceInfo[]> {
   }
 }
 
+function SourceRow({ src }: { src: SourceInfo }) {
+  const meta = LEAN_META[src.political_lean ?? ""];
+  return (
+    <Link
+      href={`/categories?source=${encodeURIComponent(src.name)}`}
+      className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
+    >
+      <div className={`w-1.5 h-8 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"}`} />
+      <span className="flex-1 text-sm font-medium text-on-surface">{src.name}</span>
+      <div className="flex items-center gap-2 shrink-0">
+        <span className="text-xs text-secondary-fixed-dim tabular-nums font-bold">
+          {toPersianNum(src.count ?? 0)}
+        </span>
+        <svg viewBox="0 0 16 16" className="w-3 h-3 text-on-surface-variant/40" fill="none" stroke="currentColor" strokeWidth={2}>
+          <path d="M10 4L6 8l4 4"/>
+        </svg>
+      </div>
+    </Link>
+  );
+}
+
 function SourceCard({ src }: { src: SourceInfo }) {
-  const barColor = LEAN_BAR[src.political_lean ?? ""] ?? "bg-white/10";
-  const textColor = LEAN_TEXT[src.political_lean ?? ""] ?? "text-on-surface-variant";
+  const meta = LEAN_META[src.political_lean ?? ""];
   return (
     <Link
       href={`/categories?source=${encodeURIComponent(src.name)}`}
       className="flex items-center gap-3 p-4 bg-surface-container rounded-2xl border border-white/5 hover:border-secondary-fixed-dim/30 transition-all"
     >
-      {/* lean color bar */}
-      <div className={`w-1 h-10 rounded-full shrink-0 ${barColor} opacity-70`} />
+      <div className={`w-1 h-10 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"} opacity-70`} />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-on-surface">{src.name}</p>
         {src.political_lean && (
-          <p className={`text-[11px] mt-0.5 ${textColor}`}>{src.political_lean}</p>
+          <p className={`text-[11px] mt-0.5 ${meta?.text ?? "text-on-surface-variant"}`}>{src.political_lean}</p>
         )}
       </div>
       <span className="text-xs text-secondary-fixed-dim font-bold tabular-nums shrink-0">
@@ -75,24 +88,76 @@ function SourceCard({ src }: { src: SourceInfo }) {
 export default async function SourcesPage() {
   const sources = await fetchSources();
 
+  // Group by political lean
+  const grouped: Record<string, SourceInfo[]> = {};
+  for (const src of sources) {
+    const lean = src.political_lean || "سایر";
+    if (!grouped[lean]) grouped[lean] = [];
+    grouped[lean].push(src);
+  }
+
+  // Build ordered group list
+  const orderedGroups: [string, SourceInfo[]][] = [];
+  for (const lean of LEAN_ORDER) {
+    if (grouped[lean]) orderedGroups.push([lean, grouped[lean]]);
+  }
+  if (grouped["سایر"]) orderedGroups.push(["سایر", grouped["سایر"]]);
+
   return (
     <div className="min-h-screen cyber-grid" dir="rtl">
-      {/* Mobile */}
+      {/* ── Mobile ── */}
       <div className="md:hidden">
         <TopBarMobile />
-        <main className="pb-24 px-container-margin pt-6">
-          <div className="flex items-center justify-between mb-6">
-            <span className="text-xs text-on-surface-variant">{toPersianNum(sources.length)} منبع فعال</span>
+        <main className="pb-24 pt-4">
+          {/* Page header */}
+          <div className="flex items-center justify-between px-container-margin mb-5">
+            <span className="text-xs text-on-surface-variant">{toPersianNum(sources.length)} منبع</span>
             <h1 className="text-base font-bold text-on-surface">منابع خبری</h1>
           </div>
-          <div className="space-y-2">
-            {sources.map((src) => <SourceCard key={src.name} src={src} />)}
+
+          {/* Legend chips */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin pb-4">
+            {orderedGroups.map(([lean]) => {
+              const meta = LEAN_META[lean];
+              return (
+                <span
+                  key={lean}
+                  className={`shrink-0 px-2.5 py-1 rounded-full text-[11px] font-medium ${meta?.bg ?? "bg-white/5"} ${meta?.text ?? "text-on-surface-variant"}`}
+                >
+                  {lean}
+                </span>
+              );
+            })}
+          </div>
+
+          {/* Grouped sections */}
+          <div className="space-y-4 px-container-margin">
+            {orderedGroups.map(([lean, items]) => {
+              const meta = LEAN_META[lean];
+              return (
+                <section key={lean} className="bg-surface-container rounded-2xl border border-white/5 overflow-hidden">
+                  {/* Section header */}
+                  <div className={`flex items-center justify-between px-4 py-2.5 border-b border-white/5 ${meta?.bg ?? "bg-white/5"}`}>
+                    <span className="text-xs text-on-surface-variant tabular-nums">
+                      {toPersianNum(items.length)} منبع
+                    </span>
+                    <span className={`text-xs font-bold ${meta?.text ?? "text-on-surface-variant"}`}>
+                      {lean}
+                    </span>
+                  </div>
+                  {/* Source rows */}
+                  <div className="divide-y divide-white/5">
+                    {items.map((src) => <SourceRow key={src.name} src={src} />)}
+                  </div>
+                </section>
+              );
+            })}
           </div>
         </main>
         <BottomNav />
       </div>
 
-      {/* Desktop */}
+      {/* ── Desktop ── */}
       <div className="hidden md:block">
         <TopBarDesktop />
         <main className="max-w-3xl mx-auto px-container-margin py-10">
