@@ -52,6 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@palsiran_news",
+    creator: "@palsiran_news",
     title: "پالس ایران | اخبار فوری ایران و جهان",
     description:
       "اخبار فوری ایران و جهان، پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس.",
@@ -123,7 +125,7 @@ const organizationJsonLd = JSON.stringify({
     width: 512,
     height: 512,
   },
-  sameAs: ["https://t.me/palsiran"],
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
   publishingPrinciples: `${SITE_URL}/about`,
   knowsAbout: [
     "Iran news",
@@ -144,6 +146,9 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
         <meta charSet="utf-8" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn1.khabaronline.ir" />
         <link rel="preconnect" href="https://media.mehrnews.com" />

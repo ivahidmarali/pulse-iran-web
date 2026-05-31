@@ -4,7 +4,10 @@ export default function MobileFooter() {
   return (
     <footer className="bg-surface-container border-t border-white/5 px-container-margin pt-6 pb-16 md:hidden">
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[10px] text-outline">@palsiran</span>
+        <div className="flex items-center gap-3">
+          <a href="https://t.me/palsiran" target="_blank" rel="noopener noreferrer" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">تلگرام</a>
+          <a href="https://x.com/palsiran_news" target="_blank" rel="noopener noreferrer" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">𝕏</a>
+        </div>
         <span className="text-sm font-bold text-secondary-fixed-dim">پالس ایران</span>
       </div>
       <div className="flex flex-row-reverse flex-wrap gap-x-4 gap-y-1 text-[11px] text-on-surface-variant">
