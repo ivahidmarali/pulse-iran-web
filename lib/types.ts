@@ -13,6 +13,9 @@ export interface NewsItem {
   importance?: "high" | "medium" | "low";
   telegram_posted?: boolean;
   video_url?: string;
+  source_count?: number;
+  confirming_sources?: string;
+  verification_status?: "verified" | "reviewing" | "unverified";
 }
 
 export interface PriceItem {

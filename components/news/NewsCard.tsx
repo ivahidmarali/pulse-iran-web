@@ -35,6 +35,14 @@ function catEmoji(category?: string): string {
   return spaceIdx > 0 ? category.slice(0, spaceIdx) : category;
 }
 
+// Verification badge text + color
+function verificationBadge(status?: string, count?: number): { text: string; cls: string } | null {
+  if (!status || status === "unverified" || !count || count < 2) return null;
+  if (status === "verified") return { text: `${toPersianNum(count)} منبع`, cls: "text-green-400 bg-green-500/15" };
+  if (status === "reviewing") return { text: `${toPersianNum(count)} منبع`, cls: "text-yellow-400 bg-yellow-500/15" };
+  return null;
+}
+
 // Border color per category (covers all 28 DB categories)
 function categoryBorder(category?: string): string {
   if (!category) return "border-white/5";
@@ -83,6 +91,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
   const ago = timeAgo(item.posted_at);
   const emoji = catEmoji(item.category);
   const border = categoryBorder(item.category);
+  const vBadge = verificationBadge(item.verification_status, item.source_count);
 
   if (variant === "hero") {
     return (
@@ -118,6 +127,11 @@ export default function NewsCard({ item, variant = "default", priority = false }
             {item.political_lean && <span className="text-outline/70 text-[10px]">{item.political_lean}</span>}
             <span>•</span>
             <span>{ago}</span>
+            {vBadge && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
+                {vBadge.text}
+              </span>
+            )}
           </div>
         </div>
       </Link>
@@ -153,6 +167,11 @@ export default function NewsCard({ item, variant = "default", priority = false }
             )}
             <span>·</span>
             <span>{ago}</span>
+            {vBadge && (
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
+                {vBadge.text}
+              </span>
+            )}
           </div>
         </div>
       </Link>
@@ -175,6 +194,11 @@ export default function NewsCard({ item, variant = "default", priority = false }
             )}
             <span>·</span>
             <span>{ago}</span>
+            {vBadge && (
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
+                {vBadge.text}
+              </span>
+            )}
           </div>
         </div>
       </Link>
@@ -202,6 +226,11 @@ export default function NewsCard({ item, variant = "default", priority = false }
               <span>·</span>
               <span className="text-outline/60">{item.political_lean}</span>
             </>
+          )}
+          {vBadge && (
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
+              {vBadge.text}
+            </span>
           )}
         </div>
       </div>

@@ -42,6 +42,16 @@ function categoryName(category?: string): string {
   return category;
 }
 
+function toPersianNum(n: number): string {
+  return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
+}
+
+const VERIFICATION_STATUS = {
+  verified: { emoji: '✅', text: 'تأیید شده', color: 'text-green-400', bg: 'bg-green-500/15' },
+  reviewing: { emoji: '🔄', text: 'در حال بررسی', color: 'text-yellow-400', bg: 'bg-yellow-500/15' },
+  unverified: { emoji: '⚠️', text: 'تأیید نشده', color: 'text-gray-400', bg: 'bg-gray-500/15' },
+};
+
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -196,6 +206,23 @@ export default async function ArticlePage({
               {item.title}
             </h1>
 
+            {item.verification_status && item.verification_status !== "unverified" && item.source_count && item.source_count >= 2 && (() => {
+              const vs = VERIFICATION_STATUS[item.verification_status];
+              const sources = (item.confirming_sources || "").split(",").filter(Boolean).map(s => s.trim());
+              return (
+                <div className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-lg ${vs.bg}`}>
+                  <span className={`text-xs font-bold ${vs.color}`}>
+                    {vs.emoji} {vs.text} از {toPersianNum(item.source_count)} منبع
+                  </span>
+                  {sources.length > 0 && (
+                    <span className="text-[11px] text-outline">
+                      {sources.slice(0, 5).join(' • ')}
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
+
             {item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
@@ -329,6 +356,24 @@ export default async function ArticlePage({
               <h1 className="font-headline-lg text-headline-lg text-on-surface leading-snug mb-6">
                 {item.title}
               </h1>
+
+              {item.verification_status && item.verification_status !== "unverified" && item.source_count && item.source_count >= 2 && (() => {
+                const vs = VERIFICATION_STATUS[item.verification_status];
+                const sources = (item.confirming_sources || "").split(",").filter(Boolean).map(s => s.trim());
+                return (
+                  <div className={`flex items-center gap-3 mb-6 px-4 py-2.5 rounded-lg ${vs.bg}`}>
+                    <span className={`text-sm font-bold ${vs.color}`}>
+                      {vs.emoji} {vs.text} از {toPersianNum(item.source_count)} منبع
+                    </span>
+                    {sources.length > 0 && (
+                      <span className="text-xs text-outline">
+                        {sources.slice(0, 5).join(' • ')}
+                      </span>
+                    )}
+                  </div>
+                );
+              })()}
+
               <div className="flex items-center justify-between py-4 border-y border-white/5 text-on-surface-variant">
                 <div className="flex items-center gap-4 text-sm">
                   <span>📰 منبع: <span className="text-secondary-fixed-dim">{item.source}</span></span>
