@@ -7,14 +7,6 @@ import { SITE_URL } from "@/lib/utils";
 import { getArchive, getSources } from "@/lib/api";
 import { NewsItem, SourceInfo } from "@/lib/types";
 
-export const metadata: Metadata = {
-  title: "آرشیو اخبار",
-  description:
-    "مرور آرشیو کامل اخبار ایران و جهان از بیش از ۴۵ منبع خبری — فیلتر بر اساس تاریخ، منبع و موضوع",
-  keywords: ["آرشیو اخبار", "اخبار قدیمی", "بایگانی اخبار", "اخبار ایران"],
-  alternates: { canonical: `${SITE_URL}/archive`, languages: { fa: `${SITE_URL}/archive`, "x-default": `${SITE_URL}/archive` } },
-};
-
 async function fetchData(date?: string, source?: string, page = 1) {
   try {
     const [archiveData, sources] = await Promise.all([
@@ -31,11 +23,17 @@ export async function generateMetadata({
   searchParams,
 }: {
   searchParams: Promise<{ date?: string; source?: string; page?: string }>;
-}) {
+}): Promise<Metadata> {
   const { page: pageStr } = await searchParams;
   const page = parseInt(pageStr ?? "1", 10) || 1;
-  if (page > 3) return { robots: { index: false, follow: true } };
-  return {};
+  const base: Metadata = {
+    title: "آرشیو اخبار",
+    description: "مرور آرشیو کامل اخبار ایران و جهان از بیش از ۴۵ منبع خبری — فیلتر بر اساس تاریخ، منبع و موضوع",
+    keywords: ["آرشیو اخبار", "اخبار قدیمی", "بایگانی اخبار", "اخبار ایران"],
+    alternates: { canonical: `${SITE_URL}/archive`, languages: { fa: `${SITE_URL}/archive`, "x-default": `${SITE_URL}/archive` } },
+  };
+  if (page > 3) return { ...base, robots: { index: false, follow: true } };
+  return base;
 }
 
 export default async function ArchivePage({
