@@ -169,7 +169,7 @@ export default async function HomePage({
           {/* Left: 6 cols */}
           <section className="col-span-6 flex flex-col gap-section-gap">
             {/* Desktop category tabs */}
-            <div className="sticky top-[72px] z-30 bg-background/80 backdrop-blur-md py-2 -mx-2 px-2 rounded-xl">
+            <div className="sticky top-[72px] z-30 bg-background/80 backdrop-blur-md border-b border-white/5 py-2">
               <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
             </div>
 
