@@ -1,6 +1,6 @@
 export const revalidate = 3600;
 
-import { generateSlug, SITE_URL } from "@/lib/utils";
+import { articleUrl, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
 import type { MetadataRoute } from "next";
 
@@ -31,6 +31,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     newsItems = await fetchAllArticles();
   } catch {}
 
+  // Deduplicate by item_id — keep the first (most recent) occurrence
+  const seen = new Set<string>();
+  const uniqueItems = newsItems.filter((item) => {
+    if (seen.has(item.item_id)) return false;
+    seen.add(item.item_id);
+    return true;
+  });
+
   const now = new Date();
 
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -45,14 +53,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
   ];
 
-  const articleRoutes: MetadataRoute.Sitemap = newsItems.map((item) => {
-    const slug = generateSlug(item.title);
-    const encodedSlug = encodeURIComponent(slug);
-    return {
-      url: `${SITE_URL}/article/${encodeURIComponent(item.item_id)}/${encodedSlug}`,
-      lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
-    };
-  });
+  // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata
+  const articleRoutes: MetadataRoute.Sitemap = uniqueItems.map((item) => ({
+    url: articleUrl(item.item_id, item.title),
+    lastModified: item.posted_at ? new Date(item.posted_at) : now,
+  }));
 
   return [...staticRoutes, ...articleRoutes];
 }
