@@ -4,6 +4,7 @@ export const revalidate = 300; // regenerate every 5 minutes
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
 const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+const MAX_PER_PAGE = 100; // API hard limit (le=100)
 
 interface Item {
   item_id: string;
@@ -14,7 +15,7 @@ interface Item {
 export async function GET() {
   let items: Item[] = [];
   try {
-    const res = await fetch(`${INTERNAL_API}/news?page=1&per_page=1000`, {
+    const res = await fetch(`${INTERNAL_API}/news?page=1&per_page=${MAX_PER_PAGE}`, {
       cache: "no-store",
     });
     if (res.ok) {
