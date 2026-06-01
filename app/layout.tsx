@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import Script from "next/script";
 import { SITE_URL } from "@/lib/utils";
+import Header from "@/components/layout/Header";
+import BottomNav from "@/components/layout/BottomNav";
+import NonAdminOnly from "@/components/layout/NonAdminOnly";
 import "./globals.css";
 
 const vazirmatn = Vazirmatn({
@@ -179,6 +182,10 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="bg-background text-on-surface antialiased">
+        <NonAdminOnly>
+          <Header />
+          <BottomNav />
+        </NonAdminOnly>
         {children}
       </body>
     </html>

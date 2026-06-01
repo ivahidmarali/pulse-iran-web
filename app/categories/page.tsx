@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import CategoryTabs from "@/components/layout/CategoryTabs";
@@ -122,8 +119,6 @@ export default async function CategoriesPage({
     <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
-        <TopBarMobile />
-
         {/* Sticky category tabs */}
         <div className="sticky top-16 z-30 bg-background border-b border-white/5 px-container-margin py-2">
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
@@ -192,12 +187,10 @@ export default async function CategoriesPage({
           </section>
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
-        <TopBarDesktop />
 
         <main className="max-w-7xl mx-auto px-container-margin py-section-gap">
           {/* Category tabs */}

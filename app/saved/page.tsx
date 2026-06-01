@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { articleHref } from "@/lib/utils";
@@ -128,17 +125,14 @@ export default function SavedPage() {
     <div className="cyber-grid">
       {/* Mobile */}
       <div className="md:hidden">
-        <TopBarMobile />
         <main className="pb-4 px-container-margin pt-6">
           {content}
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* Desktop */}
       <div className="hidden md:block">
-        <TopBarDesktop />
         <main className="max-w-2xl mx-auto px-container-margin py-10">
           {content}
         </main>

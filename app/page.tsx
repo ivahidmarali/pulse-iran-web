@@ -1,8 +1,4 @@
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
-import BreakingTicker from "@/components/layout/BreakingTicker";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
@@ -61,7 +57,6 @@ export default async function HomePage({
   }
   const hero = news.find((a) => a.image_url && a.image_url.trim() !== "") ?? news[0];
   const rest = news.filter((a) => a.item_id !== hero?.item_id);
-  const breakingTitles = breaking.slice(0, 5).map((b) => b.title);
   const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const HOME_PRICE_KEYS = ["price_dollar_rl", "price_eur", "geram18", "sekeb"];
   const currencyPrices = HOME_PRICE_KEYS.map((k) => priceMap[k]).filter(Boolean);
@@ -72,9 +67,6 @@ export default async function HomePage({
     <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
-        <TopBarMobile />
-        {breakingTitles.length > 0 && <BreakingTicker items={breakingTitles} />}
-
         {/* Sticky category tabs */}
         <div className="sticky top-[104px] z-30 bg-background border-b border-white/5 px-container-margin py-2">
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
@@ -168,13 +160,10 @@ export default async function HomePage({
           )}
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
-        {breakingTitles.length > 0 && <BreakingTicker items={breakingTitles} topOffset="top-0" />}
-        <TopBarDesktop stickyTop={breakingTitles.length > 0 ? "top-10" : "top-0"} />
 
         <main className="max-w-[1600px] mx-auto grid grid-cols-12 gap-gutter px-container-margin pt-gutter pb-section-gap">
           {/* Left: 6 cols */}

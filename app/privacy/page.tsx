@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
-import BottomNav from "@/components/layout/BottomNav";
 
 export const metadata: Metadata = {
   title: "حریم خصوصی",
@@ -14,9 +11,6 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="cyber-grid" dir="rtl">
-      <div className="md:hidden"><TopBarMobile /></div>
-      <div className="hidden md:block"><TopBarDesktop /></div>
-
       <main className="max-w-3xl mx-auto px-container-margin py-section-gap">
         <h1 className="text-headline-lg font-headline-lg text-on-surface mb-8">سیاست حریم خصوصی</h1>
         <div className="prose-invert space-y-6 text-on-surface-variant leading-relaxed text-sm">
@@ -48,7 +42,7 @@ export default function PrivacyPage() {
         </div>
       </main>
 
-      <div className="md:hidden"><MobileFooter /><BottomNav /></div>
+      <div className="md:hidden"><MobileFooter /></div>
       <div className="hidden md:block"><Footer /></div>
     </div>
   );

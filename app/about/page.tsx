@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
@@ -47,13 +44,6 @@ export default async function AboutPage() {
 
   return (
     <div className="cyber-grid">
-      <div className="md:hidden">
-        <TopBarMobile />
-      </div>
-      <div className="hidden md:block">
-        <TopBarDesktop />
-      </div>
-
       <main className="pb-4 md:pb-0">
         {/* Hero / Mission */}
         <section className="relative py-section-gap px-container-margin overflow-hidden">
@@ -203,7 +193,6 @@ export default async function AboutPage() {
 
       <div className="md:hidden">
         <MobileFooter />
-        <BottomNav />
       </div>
       <div className="hidden md:block">
         <Footer />

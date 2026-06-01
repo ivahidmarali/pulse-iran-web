@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
@@ -43,7 +40,6 @@ export default async function ArchivePage({
     <div className="cyber-grid">
       {/* Mobile */}
       <div className="md:hidden">
-        <TopBarMobile />
         <main className="pb-4 px-container-margin py-4">
           {/* Filters */}
           <div className="flex flex-col gap-3 mb-section-gap">
@@ -86,12 +82,10 @@ export default async function ArchivePage({
           </div>
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* Desktop — bento layout from _6 */}
       <div className="hidden md:block">
-        <TopBarDesktop />
         <main className="max-w-[1600px] mx-auto px-container-margin py-section-gap">
           {/* Filters bar */}
           <form method="get" action="/archive" className="flex flex-row-reverse gap-4 mb-section-gap items-end">

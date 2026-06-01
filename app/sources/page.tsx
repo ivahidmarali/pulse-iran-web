@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getSources } from "@/lib/api";
@@ -123,7 +120,6 @@ export default async function SourcesPage() {
     <div className="cyber-grid" dir="rtl">
       {/* ── Mobile ── */}
       <div className="md:hidden">
-        <TopBarMobile />
         <main className="pb-4 pt-4">
           {/* Page header */}
           <div className="flex items-center justify-between px-container-margin mb-5">
@@ -155,12 +151,10 @@ export default async function SourcesPage() {
           </div>
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
-        <TopBarDesktop />
         <main className="max-w-3xl mx-auto px-container-margin py-10">
           <div className="flex items-center justify-between mb-8">
             <span className="text-sm text-on-surface-variant">{toPersianNum(sources.length)} منبع فعال</span>

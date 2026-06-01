@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getPrices } from "@/lib/api";
@@ -183,7 +180,6 @@ export default async function PricesPage() {
       <PricesJsonLd prices={prices} />
       {/* Mobile */}
       <div className="md:hidden">
-        <TopBarMobile />
         <main className="pb-4 px-container-margin pt-4">
           {/* header */}
           <div className="flex items-center justify-between mb-6">
@@ -220,12 +216,10 @@ export default async function PricesPage() {
           </section>
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* Desktop */}
       <div className="hidden md:block">
-        <TopBarDesktop />
         <main className="max-w-5xl mx-auto px-container-margin py-10">
           {/* page header */}
           <div className="flex items-center justify-between mb-10">

@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import BottomNav from "@/components/layout/BottomNav";
-import TopBarMobile from "@/components/layout/TopBarMobile";
-import TopBarDesktop from "@/components/layout/TopBarDesktop";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { searchNews } from "@/lib/api";
@@ -150,12 +147,10 @@ export default async function SearchPage({
           </div>
         </main>
         <MobileFooter />
-        <BottomNav />
       </div>
 
       {/* ── Desktop ── */}
       <div className="hidden md:block">
-        <TopBarDesktop />
         <main className="max-w-3xl mx-auto px-container-margin py-10">
           {/* search bar */}
           <form method="get" action="/search" className="mb-8">
