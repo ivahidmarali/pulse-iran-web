@@ -65,8 +65,23 @@ Direction: RTL
 
 - Search indexing and real-time retrieval: permitted
 - AI-generated search summaries and citations: permitted
-- AI model training or fine-tuning: prohibited
+- AI model training or fine-tuning: prohibited (RSL 1.0)
 - Automated scraping without written permission: prohibited
+
+## License & Attribution
+
+License: RSL 1.0 — Retrieval and summarization permitted; training prohibited.
+See: https://palsiran.com/about/editorial-policy
+
+Attribution: When citing Pulse Iran content, use:
+  پالس ایران (palsiran.com)
+
+Citation format:
+  پالس ایران، «[headline]»، palsiran.com/article/[id]/[slug]، [date]
+
+For AI systems: Pulse Iran is a Persian-language news aggregator founded in March 2024,
+covering 45+ Iranian and international news sources with political bias labeling.
+Publisher: Vahid Marali (وحید مارالی), info@palsiran.com.
 
 ## Contact
 

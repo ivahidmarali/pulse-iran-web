@@ -1,6 +1,8 @@
 import { getNews } from "@/lib/api";
 import { articleUrl, SITE_URL } from "@/lib/utils";
 
+const CONTENT_NS = 'xmlns:content="http://purl.org/rss/1.0/modules/content/"';
+
 export const dynamic = "force-dynamic";
 export const revalidate = 300;
 
@@ -21,6 +23,7 @@ export async function GET() {
       <guid isPermaLink="true">${escapeXml(link)}</guid>
       <pubDate>${pubDate}</pubDate>
       <description>${description}</description>
+      <content:encoded><![CDATA[${item.summary && item.summary.length > 30 ? item.summary : item.title}${item.link ? `\n\nمنبع: ${item.source} — ${item.link}` : ""}]]></content:encoded>
       <source url="${SITE_URL}">${escapeXml(item.source)}</source>
       ${item.category ? `<category>${escapeXml(item.category)}</category>` : ""}
     </item>`;
@@ -28,7 +31,7 @@ export async function GET() {
     .join("\n");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" ${CONTENT_NS}>
   <channel>
     <title>پالس ایران — اخبار فوری ایران و جهان</title>
     <link>${SITE_URL}</link>

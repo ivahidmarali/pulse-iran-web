@@ -22,8 +22,9 @@ const nextConfig = {
       { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
       { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
       {
+        // Vazirmatn is fully self-hosted via next/font — no googleapis/gstatic needed
         key: "Content-Security-Policy",
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.indexnow.org; frame-src https://t.me https://telegram.org;",
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.indexnow.org; frame-src https://t.me https://telegram.org;",
       },
     ];
 

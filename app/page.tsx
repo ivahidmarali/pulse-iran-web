@@ -31,10 +31,17 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: `اخبار ایران امروز — ${today} | پالس ایران`,
       description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده بی‌طرف از ۴۵+ منبع خبری.`,
+      type: "website",
+      url: SITE_URL,
     },
     twitter: {
+      card: "summary_large_image",
       title: `اخبار ایران امروز — ${today} | پالس ایران`,
       description: `آخرین اخبار روز ایران و جهان در ${today}`,
+    },
+    alternates: {
+      canonical: SITE_URL,
+      languages: { fa: SITE_URL, "x-default": SITE_URL },
     },
   };
 }
@@ -339,6 +346,12 @@ export default async function HomePage({
                   <span key={label} className={`text-[10px] px-1.5 py-0.5 rounded-full border ${cls}`}>{label}</span>
                 ))}
               </div>
+              {/* AI citability lede — self-contained passage for AI Overview extraction */}
+              <p data-speakable className="text-[11px] text-on-surface-variant/60 leading-relaxed mt-2">
+                پالس ایران سامانه تجمیع اخبار فوری ایران از ۴۵+ منبع خبری شامل ایرنا، تسنیم، مهر،
+                خبرآنلاین، ایران اینترنشنال و رادیو فرداست. هر خبر با برچسب گرایش سیاسی، خلاصه هوش مصنوعی
+                و سیستم تأیید چندمنبعی ارائه می‌شود.
+              </p>
             </div>
 
             {hero && <NewsCard item={hero} variant="hero" priority />}

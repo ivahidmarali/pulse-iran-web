@@ -68,6 +68,36 @@ const SOURCE_URLS: Record<string, string> = {
   "Reuters": "https://www.reuters.com",
   "AP": "https://apnews.com",
   "Associated Press": "https://apnews.com",
+  // Extended coverage
+  "ایلنا": "https://www.ilna.news",
+  "ILNA": "https://www.ilna.news",
+  "خبرگزاری فارس": "https://www.farsnews.ir",
+  "فارس": "https://www.farsnews.ir",
+  "Fars News": "https://www.farsnews.ir",
+  "ایران آنلاین": "https://ion.ir",
+  "روزنامه شرق": "https://sharghdaily.com",
+  "شرق": "https://sharghdaily.com",
+  "روزنامه اعتماد": "https://www.etemadnewspaper.ir",
+  "اعتماد": "https://www.etemadnewspaper.ir",
+  "روزنامه همشهری": "https://www.hamshahri.net",
+  "همشهری": "https://www.hamshahri.net",
+  "روزنامه جمهوری اسلامی": "https://jomhourieslami.com",
+  "الف": "https://alef.ir",
+  "جماران": "https://www.jamaran.news",
+  "مشرق نیوز": "https://www.mashreghnews.ir",
+  "مشرق": "https://www.mashreghnews.ir",
+  "خبرگزاری دانشجویان ایران": "https://isna.ir",
+  "باشگاه خبرنگاران": "https://www.yjc.ir",
+  "YJC": "https://www.yjc.ir",
+  "Euronews فارسی": "https://fa.euronews.com",
+  "یورونیوز": "https://fa.euronews.com",
+  "VOA فارسی": "https://www.voanews.com/persian",
+  "صدای آمریکا": "https://www.voanews.com/persian",
+  "الجزیره": "https://www.aljazeera.com/persian",
+  "Al Jazeera": "https://www.aljazeera.com",
+  "AFP": "https://www.afp.com",
+  "DW فارسی": "https://www.dw.com/fa",
+  "Deutsche Welle": "https://www.dw.com/fa",
 };
 
 function toPersianNum(n: number): string {
@@ -295,7 +325,7 @@ export default async function ArticlePage({
                     <a
                       href={item.link}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="inline-block px-4 py-2 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 text-secondary-fixed-dim rounded-lg text-sm hover:bg-secondary-fixed-dim/30 transition-colors"
                     >
                       مطالعه در منبع اصلی 🔗
@@ -453,7 +483,7 @@ export default async function ArticlePage({
                     <a
                       href={item.link}
                       target="_blank"
-                      rel="noopener noreferrer"
+                      rel="nofollow noopener noreferrer"
                       className="inline-block px-4 py-2 bg-secondary-fixed-dim/20 border border-secondary-fixed-dim/40 text-secondary-fixed-dim rounded-lg text-sm hover:bg-secondary-fixed-dim/30 transition-colors"
                     >
                       مطالعه در منبع اصلی 🔗
@@ -467,7 +497,7 @@ export default async function ArticlePage({
                   <a
                     href={item.link}
                     target="_blank"
-                    rel="noopener noreferrer"
+                    rel="nofollow noopener noreferrer"
                     className="text-secondary-fixed-dim hover:underline"
                   >
                     {item.source} 🔗

@@ -136,7 +136,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
           {emoji && !item.is_breaking && item.importance !== "high" && (
             <span className="bg-surface-container/80 px-3 py-1 rounded-full text-xs font-bold">{item.category}</span>
           )}
-          <h1 className="font-bold text-[20px] leading-snug text-on-surface line-clamp-3">{item.title}</h1>
+          <h2 className="font-bold text-[20px] leading-snug text-on-surface line-clamp-3">{item.title}</h2>
           <div className="flex items-center gap-2 text-on-surface-variant text-label-sm flex-wrap">
             <span className="font-medium">{item.source}</span>
             {item.political_lean && (

@@ -66,10 +66,6 @@ export const metadata: Metadata = {
   other: {
     "linkedin:owner": "palsiran",
   },
-  alternates: {
-    canonical: SITE_URL,
-    languages: { fa: SITE_URL, "x-default": SITE_URL },
-  },
   robots: {
     index: true,
     follow: true,
@@ -153,9 +149,6 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
-        <meta charSet="utf-8" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn1.khabaronline.ir" />
         <link rel="preconnect" href="https://media.mehrnews.com" />
