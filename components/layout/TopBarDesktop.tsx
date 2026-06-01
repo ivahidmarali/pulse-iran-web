@@ -67,6 +67,15 @@ export default function TopBarDesktop({ stickyTop = "top-0" }: { stickyTop?: str
       {/* LEFT — clock + search + about */}
       <div className="flex items-center gap-4 justify-start flex-row-reverse">
         <TehranClock />
+        <a
+          href="/feed.xml"
+          title="خوراک RSS پالس ایران"
+          className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
+            <path d="M6.18 15.64a2.18 2.18 0 010 4.36 2.18 2.18 0 010-4.36M4 4.44A15.56 15.56 0 0119.56 20h-2.83A12.73 12.73 0 006.18 7.27V4.44m0 5.66a9.9 9.9 0 019.9 9.9h-2.83A7.07 7.07 0 006.18 12.93V10.1z"/>
+          </svg>
+        </a>
         <Link
           href="/about"
           className="px-3 py-1.5 rounded-lg text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-200"

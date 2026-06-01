@@ -3,6 +3,15 @@ import Image from "next/image";
 import { NewsItem } from "@/lib/types";
 import { articleHref } from "@/lib/utils";
 
+const LEAN_BADGE: Record<string, string> = {
+  "اصولگرا": "text-green-400 bg-green-500/15 border-green-500/20",
+  "اصلاح‌طلب": "text-blue-400 bg-blue-500/15 border-blue-500/20",
+  "لیبرال غربی": "text-red-400 bg-red-500/15 border-red-500/20",
+  "مستقل": "text-gray-400 bg-gray-500/15 border-gray-500/20",
+  "رسمی دولتی": "text-yellow-400 bg-yellow-500/15 border-yellow-500/20",
+  "مخالف جمهوری اسلامی": "text-orange-400 bg-orange-500/15 border-orange-500/20",
+};
+
 interface Props {
   item: NewsItem;
   variant?: "default" | "horizontal" | "compact" | "hero";
@@ -111,6 +120,12 @@ export default function NewsCard({ item, variant = "default", priority = false }
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-10" />
+        {item.video_url && (
+          <div className="absolute top-3 left-3 z-20 flex items-center gap-1 bg-black/50 backdrop-blur-sm rounded-full px-2 py-1">
+            <svg viewBox="0 0 24 24" className="w-3 h-3 text-white fill-current"><path d="M8 5v14l11-7z"/></svg>
+            <span className="text-[10px] text-white font-bold">ویدئو</span>
+          </div>
+        )}
         <div className="absolute bottom-0 p-6 z-20 space-y-3">
           {item.is_breaking && (
             <span className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold">🚨 فوری</span>
@@ -122,9 +137,13 @@ export default function NewsCard({ item, variant = "default", priority = false }
             <span className="bg-surface-container/80 px-3 py-1 rounded-full text-xs font-bold">{item.category}</span>
           )}
           <h1 className="font-bold text-[20px] leading-snug text-on-surface line-clamp-3">{item.title}</h1>
-          <div className="flex items-center gap-3 text-on-surface-variant text-label-sm">
-            <span>{item.source}</span>
-            {item.political_lean && <span className="text-outline/70 text-[10px]">{item.political_lean}</span>}
+          <div className="flex items-center gap-2 text-on-surface-variant text-label-sm flex-wrap">
+            <span className="font-medium">{item.source}</span>
+            {item.political_lean && (
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+                {item.political_lean}
+              </span>
+            )}
             <span>•</span>
             <span>{ago}</span>
             {vBadge && (
@@ -152,6 +171,11 @@ export default function NewsCard({ item, variant = "default", priority = false }
             {!item.is_breaking && item.importance === "high" && (
               <span className="bg-red-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">مهم</span>
             )}
+            {item.video_url && (
+              <span className="text-[10px] text-secondary-fixed-dim/80 font-bold flex items-center gap-0.5">
+                <svg viewBox="0 0 24 24" className="w-3 h-3 fill-current inline"><path d="M8 5v14l11-7z"/></svg>ویدئو
+              </span>
+            )}
             {emoji && !item.is_breaking && item.importance !== "high" && (
               <span className="text-[11px] text-secondary-fixed-dim/70 font-medium">{emoji}</span>
             )}
@@ -160,13 +184,12 @@ export default function NewsCard({ item, variant = "default", priority = false }
           {item.summary && (
             <p className="text-[12px] text-on-surface-variant/80 line-clamp-2 leading-relaxed">{item.summary}</p>
           )}
-          <div className="flex items-center gap-2 text-on-surface-variant text-[12px]">
-            <span>{item.source}</span>
+          <div className="flex items-center gap-2 text-on-surface-variant text-[12px] flex-wrap">
+            <span className="font-medium text-on-surface-variant/90">منبع: {item.source}</span>
             {item.political_lean && (
-              <>
-                <span>·</span>
-                <span className="text-on-surface-variant">{item.political_lean}</span>
-              </>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+                {item.political_lean}
+              </span>
             )}
             <span>·</span>
             <span>{ago}</span>
@@ -187,13 +210,12 @@ export default function NewsCard({ item, variant = "default", priority = false }
         <div className="flex-1">
           {emoji && <span className="text-[11px] text-outline mr-1">{emoji}</span>}
           <p className="text-[16px] font-semibold leading-relaxed group-hover:text-secondary-fixed-dim transition-colors line-clamp-2">{item.title}</p>
-          <div className="flex items-center gap-2 text-outline text-[11px] mt-1">
+          <div className="flex items-center gap-2 text-outline text-[11px] mt-1 flex-wrap">
             <span>{item.source}</span>
             {item.political_lean && (
-              <>
-                <span>·</span>
-                <span>{item.political_lean}</span>
-              </>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+                {item.political_lean}
+              </span>
             )}
             <span>·</span>
             <span>{ago}</span>
@@ -225,13 +247,12 @@ export default function NewsCard({ item, variant = "default", priority = false }
         {item.summary && (
           <p className="text-[12px] text-on-surface-variant/80 line-clamp-2 leading-relaxed">{item.summary}</p>
         )}
-        <div className="flex items-center gap-2 text-[11px] text-outline">
-          <span>{item.source}</span>
+        <div className="flex items-center gap-2 text-[11px] text-outline flex-wrap">
+          <span className="font-medium text-on-surface-variant/80">منبع: {item.source}</span>
           {item.political_lean && (
-            <>
-              <span>·</span>
-              <span className="text-on-surface-variant">{item.political_lean}</span>
-            </>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+              {item.political_lean}
+            </span>
           )}
           {vBadge && (
             <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>

@@ -40,11 +40,13 @@ const editorPersonJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   "@id": `${SITE_URL}/#editor`,
-  name: "واحد تحریریه پالس ایران",
-  jobTitle: "سردبیر",
+  name: "وحید مارالی",
+  alternateName: "Vahid Marali",
+  jobTitle: "بنیان‌گذار و سردبیر",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about`,
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
 };
 
 const LEAN_COLOR: Record<string, string> = {
@@ -205,8 +207,8 @@ export default async function AboutPage() {
                   📰
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-on-surface">واحد تحریریه پالس ایران</p>
-                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">سردبیر — مسئول محتوا</p>
+                  <p className="text-sm font-bold text-on-surface">وحید مارالی</p>
+                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">بنیان‌گذار و سردبیر پالس ایران</p>
                   <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
                     نظارت بر سیاست انتشار، ارزیابی منابع و کنترل کیفیت محتوا. پایبند به اصول بی‌طرفی و شفافیت در تمام تصمیمات تحریریه.
                   </p>

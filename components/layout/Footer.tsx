@@ -21,6 +21,8 @@ export default function Footer() {
               ["قیمت ارز", "/prices"],
               ["آرشیو", "/archive"],
               ["درباره ما", "/about"],
+              ["سیاست تحریریه", "/about/editorial-policy"],
+              ["خوراک RSS", "/feed.xml"],
               ["حریم خصوصی", "/privacy"],
               ["شرایط استفاده", "/terms"],
             ].map(([label, href]) => (

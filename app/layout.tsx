@@ -104,6 +104,10 @@ const websiteJsonLd = {
     target: `${SITE_URL}/search?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1"],
+  },
 };
 
 const organizationJsonLd = {
@@ -124,6 +128,7 @@ const organizationJsonLd = {
   sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
   publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
   editor: { "@id": `${SITE_URL}/#editor` },
+  founder: { "@id": `${SITE_URL}/#editor` },
   contactPoint: {
     "@type": "ContactPoint",
     email: "info@palsiran.com",

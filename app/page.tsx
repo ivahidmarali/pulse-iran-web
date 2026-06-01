@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
@@ -105,6 +106,16 @@ export default async function HomePage({
       }).format(new Date(/[Zz]|[+-]\d{2}:\d{2}$/.test(rawUpdatedAt) ? rawUpdatedAt : rawUpdatedAt + "Z"))
     : null;
 
+  // Server render time — Story 3: Breaking News Tracker (shows when page was last regenerated)
+  const renderTime = new Intl.DateTimeFormat("fa-IR", {
+    timeZone: "Asia/Tehran",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date());
+
+  // Video items — Story 2 & Media Richness improvement
+  const videoItems = news.filter((item) => item.video_url && item.video_url.trim() !== "").slice(0, 4);
+
   // LiveBlogPosting schema — signals to Google this is a live breaking-news feed
   const liveBlogJsonLd = breaking.length > 0 ? {
     "@context": "https://schema.org",
@@ -119,6 +130,10 @@ export default async function HomePage({
     publisher: { "@id": `${SITE_URL}/#organization` },
     coverageStartTime: new Date(breaking[breaking.length - 1]?.posted_at ?? nowIso).toISOString(),
     coverageEndTime: nowIso,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: ["h1", ".breaking-news-headline"],
+    },
     liveBlogUpdate: breaking.slice(0, 5).map((item) => ({
       "@type": "BlogPosting",
       "@id": articleUrl(item.item_id, item.title),
@@ -167,11 +182,26 @@ export default async function HomePage({
         </div>
 
         <main className="pb-4 pt-3">
-          {/* Page h1 — visible to crawlers, styled as section label */}
+          {/* Page h1 + transparency strip — Stories 1 & 3 */}
           <div className="px-container-margin mb-3">
-            <h1 className="text-xs font-bold text-secondary-fixed-dim/70 tracking-widest">
-              اخبار ایران امروز — {today}
-            </h1>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-on-surface-variant/40 tabular-nums">به‌روز: {renderTime}</span>
+              <h1 className="text-xs font-bold text-secondary-fixed-dim/70 tracking-widest">
+                اخبار ایران امروز — {today}
+              </h1>
+            </div>
+            {/* Story 1 — Political diversity: reassure diaspora readers of impartiality */}
+            <div className="flex items-center gap-1 mt-1.5 flex-row-reverse flex-wrap justify-end">
+              <span className="text-[10px] text-on-surface-variant/40">پوشش از:</span>
+              {[
+                { label: "اصولگرا", cls: "text-green-400/70 border-green-500/20" },
+                { label: "اصلاح‌طلب", cls: "text-blue-400/70 border-blue-500/20" },
+                { label: "مستقل", cls: "text-gray-400/70 border-gray-500/20" },
+                { label: "لیبرال غربی", cls: "text-red-400/70 border-red-500/20" },
+              ].map(({ label, cls }) => (
+                <span key={label} className={`text-[10px] px-1.5 py-0.5 rounded-full border ${cls}`}>{label}</span>
+              ))}
+            </div>
           </div>
 
           {/* Hero */}
@@ -234,6 +264,38 @@ export default async function HomePage({
             </div>
           )}
 
+          {/* Mobile video section — Media Richness improvement */}
+          {videoItems.length > 0 && (
+            <div className="mb-5">
+              <div className="flex items-center justify-between px-container-margin mb-2">
+                <span className="text-[11px] text-secondary-fixed-dim font-medium">مشاهده همه ←</span>
+                <span className="text-xs font-bold text-on-surface-variant">📹 ویدئوها</span>
+              </div>
+              <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin">
+                {videoItems.map((item) => (
+                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)}
+                    className="shrink-0 w-36 rounded-xl overflow-hidden bg-surface-container border border-white/5">
+                    <div className="relative w-36 h-24">
+                      {item.image_url ? (
+                        <Image src={item.image_url} alt={item.title} fill className="object-cover" sizes="144px" />
+                      ) : (
+                        <div className="absolute inset-0 bg-surface-container-high flex items-center justify-center">
+                          <span className="text-3xl opacity-20">📹</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                        <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                          <svg viewBox="0 0 24 24" className="w-4 h-4 text-white fill-current ml-0.5"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-[11px] font-medium p-2 line-clamp-2 leading-relaxed">{item.title}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* News feed with load-more */}
           <LoadMoreFeed
             initialItems={rest}
@@ -257,10 +319,27 @@ export default async function HomePage({
               <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
             </div>
 
-            {/* Page h1 — keyword + live date signal for Google */}
-            <h1 className="text-sm font-bold text-secondary-fixed-dim/70 tracking-widest -mb-2">
-              اخبار ایران امروز — {today}
-            </h1>
+            {/* Page h1 + transparency strip — Stories 1 & 3 */}
+            <div className="-mb-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-on-surface-variant/40 tabular-nums">به‌روز: {renderTime}</span>
+                <h1 className="text-sm font-bold text-secondary-fixed-dim/70 tracking-widest">
+                  اخبار ایران امروز — {today}
+                </h1>
+              </div>
+              {/* Story 1 — Political diversity strip */}
+              <div className="flex items-center gap-1.5 mt-1 flex-row-reverse flex-wrap">
+                <span className="text-[10px] text-on-surface-variant/40">پوشش از:</span>
+                {[
+                  { label: "اصولگرا", cls: "text-green-400/70 border-green-500/20" },
+                  { label: "اصلاح‌طلب", cls: "text-blue-400/70 border-blue-500/20" },
+                  { label: "مستقل", cls: "text-gray-400/70 border-gray-500/20" },
+                  { label: "لیبرال غربی", cls: "text-red-400/70 border-red-500/20" },
+                ].map(({ label, cls }) => (
+                  <span key={label} className={`text-[10px] px-1.5 py-0.5 rounded-full border ${cls}`}>{label}</span>
+                ))}
+              </div>
+            </div>
 
             {hero && <NewsCard item={hero} variant="hero" priority />}
 
@@ -322,7 +401,7 @@ export default async function HomePage({
               </div>
               <div className="space-y-4">
                 {breaking.slice(0, 5).map((item, i) => (
-                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group cursor-pointer">
+                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group cursor-pointer breaking-news-headline">
                     <span className="text-2xl font-black text-secondary-fixed-dim/20 group-hover:text-secondary-fixed-dim transition-colors shrink-0">
                       {(i + 1).toLocaleString("fa-IR")}
                     </span>
@@ -331,6 +410,36 @@ export default async function HomePage({
                 ))}
               </div>
             </section>
+
+            {/* Video section — Story 2 & Media Richness */}
+            {videoItems.length > 0 && (
+              <section className="bg-surface-container-low p-gutter rounded-xl">
+                <div className="flex items-center gap-2 mb-4">
+                  <h2 className="font-title-md text-title-md">📹 ویدئوهای امروز</h2>
+                </div>
+                <div className="space-y-3">
+                  {videoItems.map((item) => (
+                    <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group">
+                      <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-container-highest">
+                        {item.image_url ? (
+                          <Image src={item.image_url} alt={item.title} fill className="object-cover" sizes="80px" />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-2xl opacity-20">📹</span>
+                          </div>
+                        )}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
+                            <svg viewBox="0 0 24 24" className="w-3 h-3 text-white fill-current ml-0.5"><path d="M8 5v14l11-7z"/></svg>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm font-medium leading-relaxed group-hover:text-secondary-fixed-dim transition-colors line-clamp-2">{item.title}</p>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            )}
           </aside>
         </main>
 

@@ -7,6 +7,7 @@ export default function MobileFooter() {
         <div className="flex items-center gap-3">
           <a href="https://t.me/palsiran" target="_blank" rel="noopener noreferrer" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">تلگرام</a>
           <a href="https://x.com/palsiran_news" target="_blank" rel="noopener noreferrer" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">𝕏</a>
+          <a href="/feed.xml" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">RSS</a>
         </div>
         <span className="text-sm font-bold text-secondary-fixed-dim">پالس ایران</span>
       </div>
