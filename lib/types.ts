@@ -16,6 +16,7 @@ export interface NewsItem {
   source_count?: number;
   confirming_sources?: string;
   verification_status?: "verified" | "reviewing" | "unverified";
+  telegram_url?: string;
 }
 
 export interface PriceItem {

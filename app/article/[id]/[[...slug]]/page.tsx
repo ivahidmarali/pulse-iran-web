@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import ArticleActions from "@/components/article/ArticleActions";
 import TelegramEmbed from "@/components/article/TelegramEmbed";
+import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, SITE_URL } from "@/lib/utils";
@@ -216,7 +217,9 @@ export default async function ArticlePage({
               );
             })()}
 
-            {item.video_url ? (
+            {item.telegram_url ? (
+              <TelegramPostWidget url={item.telegram_url} />
+            ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
               <ArticleImage src={item.image_url} alt={item.title} className="mb-6" />
@@ -373,7 +376,9 @@ export default async function ArticlePage({
               </div>
             </header>
 
-            {item.video_url ? (
+            {item.telegram_url ? (
+              <TelegramPostWidget url={item.telegram_url} />
+            ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
               <ArticleImage src={item.image_url} alt={item.title} />
