@@ -1,18 +1,36 @@
 # Pulse Iran (palsiran.com)
 
-> Persian-language news aggregator covering Iran and world news from 45+ sources — unbiased, real-time.
+> Persian-language news aggregator covering Iran and world news from 45+ sources — unbiased, real-time, with political bias labeling.
 
 ## Sections
 
 - / — Homepage: latest breaking news, currency prices, category filters
-- /prices — Live exchange rates: USD, EUR, GBP, AED, TRY, gold, coins
+- /prices — Live exchange rates: USD, EUR, GBP, AED, TRY, gold, coins (updated every 5 minutes)
 - /categories — Browse news by category: politics, economy, international, sports, society
 - /archive — Full news archive with date and source filters
 - /search — Full-text search across all articles
-- /sources — List of all monitored news sources with political lean indicators
+- /sources — Directory of all monitored news sources with political lean indicators
+- /source/[slug] — Individual source profile: description, political lean, credibility score, article feed
+- /lean/[slug] — Articles and sources grouped by political lean (11 categories)
 - /about — About Pulse Iran, methodology, and editorial principles
-- /article/[id]/[slug] — Individual news articles with source attribution
+- /about/editorial-policy — Editorial methodology: source selection, political lean classification, AI summarization policy
+- /article/[id]/[slug] — Individual news articles with source attribution and AI summary
 - /feed.xml — RSS feed with latest 30 articles
+
+## Political Lean Categories
+
+Pulse Iran classifies sources into 11 political lean categories:
+- /lean/rasmi-dolati — رسمی دولتی (Official state media)
+- /lean/osoulgarayan — اصولگرا (Conservative/Principlist)
+- /lean/mohafezeh-kar-mianeh — محافظه‌کار میانه (Moderate Conservative)
+- /lean/eslah-talab — اصلاح‌طلب (Reformist)
+- /lean/eslah-talab-mianeh — اصلاح‌طلب میانه (Centrist Reformist)
+- /lean/mostaghel — مستقل (Independent)
+- /lean/liberal-gharbi — لیبرال غربی (Western Liberal)
+- /lean/liberal-amrikai — لیبرال آمریکایی (American Liberal)
+- /lean/chap-liberal — چپ لیبرال (Liberal Left)
+- /lean/mokhalef-jomhouri-eslami — مخالف جمهوری اسلامی (Anti-IRI)
+- /lean/mohafezeh-kar-arabi — محافظه‌کار عربی (Arab Conservative)
 
 ## Language
 
@@ -24,8 +42,9 @@ Direction: RTL
 - News articles are aggregated from Telegram channels and verified Iranian/international news agencies
 - Each article links back to the original source
 - Prices are updated every 5 minutes from live market data
-- Content is summarized using AI with source attribution preserved
+- Content is summarized using AI (150+ words) with source attribution preserved
 - Sources are classified by political lean across 11 categories
+- Multi-source verification: articles confirmed by 3+ independent sources are marked as verified
 
 ## Usage Restrictions
 
@@ -39,3 +58,4 @@ Direction: RTL
 Website: https://palsiran.com
 Email: info@palsiran.com
 Telegram: https://t.me/palsiran
+X/Twitter: https://x.com/palsiran_news

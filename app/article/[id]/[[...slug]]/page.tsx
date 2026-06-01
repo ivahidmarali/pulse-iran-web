@@ -9,7 +9,7 @@ import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
-import { articleHref, articleUrl, SITE_URL } from "@/lib/utils";
+import { articleHref, articleUrl, safeJsonLd, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
 
 // Cache article fetch so generateMetadata and the page share one request
@@ -479,14 +479,13 @@ export default async function ArticlePage({
   );
 }
 
-// Separate component to avoid inline dangerouslySetInnerHTML lint warnings
 function JsonLd({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
-      // Content is built from trusted API response data — no user input
+      // safeJsonLd escapes <, >, & to prevent </script> injection
       // eslint-disable-next-line react/no-danger
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   );
 }

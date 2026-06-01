@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Vazirmatn } from "next/font/google";
 import Script from "next/script";
-import { SITE_URL } from "@/lib/utils";
+import { SITE_URL, safeJsonLd } from "@/lib/utils";
 import Header from "@/components/layout/Header";
 import BottomNav from "@/components/layout/BottomNav";
 import NonAdminOnly from "@/components/layout/NonAdminOnly";
@@ -99,8 +99,7 @@ export const metadata: Metadata = {
     : {}),
 };
 
-// WebSite JSON-LD — content is static trusted data, not user input
-const websiteJsonLd = JSON.stringify({
+const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
@@ -114,14 +113,17 @@ const websiteJsonLd = JSON.stringify({
     target: `${SITE_URL}/search?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
-});
+};
 
-const organizationJsonLd = JSON.stringify({
+const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "NewsMediaOrganization",
   "@id": `${SITE_URL}/#organization`,
   name: "پالس ایران",
+  alternateName: "Pals Iran",
   url: SITE_URL,
+  foundingDate: "2024",
+  email: "info@palsiran.com",
   logo: {
     "@type": "ImageObject",
     url: `${SITE_URL}/android-chrome-512x512.png`,
@@ -129,7 +131,7 @@ const organizationJsonLd = JSON.stringify({
     height: 512,
   },
   sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
-  publishingPrinciples: `${SITE_URL}/about`,
+  publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
   knowsAbout: [
     "Iran news",
     "Persian politics",
@@ -138,7 +140,7 @@ const organizationJsonLd = JSON.stringify({
     "Currency exchange rates",
     "Tehran Stock Exchange",
   ],
-});
+};
 
 export default function RootLayout({
   children,
@@ -158,16 +160,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://newsmedia.tasnimnews.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         <link rel="alternate" type="application/rss+xml" title="پالس ایران" href={`${SITE_URL}/feed.xml`} />
-        {/* JSON-LD content is static trusted server data — no XSS risk */}
+        {/* safeJsonLd escapes <, >, & — prevents </script> injection from data values */}
         {/* eslint-disable-next-line react/no-danger */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: websiteJsonLd }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: organizationJsonLd }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }} />
+        {/* eslint-disable-next-line react/no-danger */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }} />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PMJG9DYRN3"
           strategy="afterInteractive"

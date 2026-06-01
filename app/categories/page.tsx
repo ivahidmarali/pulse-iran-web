@@ -75,9 +75,10 @@ async function fetchData(categories?: string[], source?: string, page = 1) {
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; group?: string; source?: string }>;
+  searchParams: Promise<{ cat?: string; group?: string; source?: string; page?: string }>;
 }): Promise<Metadata> {
-  const { cat, group, source } = await searchParams;
+  const { cat, group, source, page: pageStr } = await searchParams;
+  const page = parseInt(pageStr ?? "1", 10) || 1;
   const label = cat || group || source || "دسته‌بندی اخبار";
   const q = new URLSearchParams();
   if (cat) q.set("cat", cat);
@@ -90,6 +91,7 @@ export async function generateMetadata({
     description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label} — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر`,
     keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
+    ...(page > 3 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 

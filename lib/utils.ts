@@ -31,3 +31,24 @@ export function articleHref(itemId: string, title?: string): string {
 export function articleUrl(itemId: string, title?: string): string {
   return `${SITE_URL}${articleHref(itemId, title)}`;
 }
+
+/** URL-safe slug for a source name (Persian-safe, mirrors generateSlug) */
+export function sourceSlug(name: string): string {
+  return generateSlug(name);
+}
+
+/** Internal href for a source profile page */
+export function sourceHref(name: string): string {
+  return `/source/${generateSlug(name)}`;
+}
+
+/**
+ * Serialize an object to a JSON-LD string safe for inline <script> embedding.
+ * JSON.stringify alone does not escape < > &, which can allow </script> injection.
+ */
+export function safeJsonLd(data: object): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
+}

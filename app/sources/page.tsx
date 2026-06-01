@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
-import { SITE_URL, toPersianNum } from "@/lib/utils";
+import { SITE_URL, sourceHref, toPersianNum } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "منابع خبری",
@@ -46,7 +46,7 @@ function SourceRow({ src }: { src: SourceInfo }) {
   const meta = LEAN_META[src.political_lean ?? ""];
   return (
     <Link
-      href={`/categories?source=${encodeURIComponent(src.name)}`}
+      href={sourceHref(src.name)}
       className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
     >
       <div className={`w-1.5 h-8 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"}`} />
@@ -81,7 +81,7 @@ function SourceCard({ src }: { src: SourceInfo }) {
   const meta = LEAN_META[src.political_lean ?? ""];
   return (
     <Link
-      href={`/categories?source=${encodeURIComponent(src.name)}`}
+      href={sourceHref(src.name)}
       className="flex items-center gap-3 p-4 bg-surface-container rounded-2xl border border-white/5 hover:border-secondary-fixed-dim/30 transition-all"
     >
       <div className={`w-1 h-10 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"} opacity-70`} />
@@ -135,7 +135,7 @@ export default async function SourcesPage() {
               return (
                 <Link
                   key={src.name}
-                  href={`/categories?source=${encodeURIComponent(src.name)}`}
+                  href={sourceHref(src.name)}
                   className="flex items-center gap-3 p-4 bg-surface-container rounded-lg border border-white/5 hover:border-secondary-fixed-dim/30 transition-all"
                 >
                   <div className={`w-1.5 h-8 rounded-full shrink-0 ${meta?.bar ?? "bg-white/10"}`} />

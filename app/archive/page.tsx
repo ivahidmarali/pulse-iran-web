@@ -27,6 +27,17 @@ async function fetchData(date?: string, source?: string, page = 1) {
   }
 }
 
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ date?: string; source?: string; page?: string }>;
+}) {
+  const { page: pageStr } = await searchParams;
+  const page = parseInt(pageStr ?? "1", 10) || 1;
+  if (page > 3) return { robots: { index: false, follow: true } };
+  return {};
+}
+
 export default async function ArchivePage({
   searchParams,
 }: {
