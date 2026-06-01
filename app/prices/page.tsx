@@ -3,7 +3,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getPrices } from "@/lib/api";
 import { PriceItem } from "@/lib/types";
-import { SITE_URL } from "@/lib/utils";
+import { SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -166,7 +166,7 @@ function PricesJsonLd({ prices }: { prices: PriceItem[] }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
     />
   );
 }

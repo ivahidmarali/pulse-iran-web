@@ -158,6 +158,14 @@ export default function EditorialPolicyPage() {
           <p className="text-xs text-on-surface-variant/60 pt-4">
             آخرین به‌روزرسانی: خرداد ۱۴۰۵ — برای سؤال یا بازخورد: <a href="mailto:info@palsiran.com" className="text-secondary-fixed-dim hover:underline">info@palsiran.com</a>
           </p>
+          <div className="pt-4 flex gap-6 flex-wrap">
+            <Link href="/corrections" className="text-sm text-secondary-fixed-dim hover:underline">
+              سیاست تصحیح اخبار ←
+            </Link>
+            <Link href="/about" className="text-sm text-on-surface-variant hover:underline">
+              درباره پالس ایران ←
+            </Link>
+          </div>
         </div>
       </main>
 

@@ -12,8 +12,12 @@
 - /sources — Directory of all monitored news sources with political lean indicators
 - /source/[slug] — Individual source profile: description, political lean, credibility score, article feed
 - /lean/[slug] — Articles and sources grouped by political lean (11 categories)
+- /tag/[slug] — News by topic group: siasi, beinolmelal, eqtesadi, ejtemai, varzeshi, technology, hashiye
+- /editorial — Editorial analysis and commentary by the Pulse Iran team
+- /editorial/[slug] — Individual editorial articles
 - /about — About Pulse Iran, methodology, and editorial principles
 - /about/editorial-policy — Editorial methodology: source selection, political lean classification, AI summarization policy
+- /corrections — Correction policy: how errors in summaries and categorization are reported and fixed
 - /article/[id]/[slug] — Individual news articles with source attribution and AI summary
 - /feed.xml — RSS feed with latest 30 articles
 
@@ -32,6 +36,16 @@ Pulse Iran classifies sources into 11 political lean categories:
 - /lean/mokhalef-jomhouri-eslami — مخالف جمهوری اسلامی (Anti-IRI)
 - /lean/mohafezeh-kar-arabi — محافظه‌کار عربی (Arab Conservative)
 
+## Topic Categories
+
+- /tag/siasi — سیاسی (Politics)
+- /tag/beinolmelal — بین‌الملل (International)
+- /tag/eqtesadi — اقتصادی (Economy)
+- /tag/ejtemai — اجتماعی (Society)
+- /tag/varzeshi — ورزشی (Sports)
+- /tag/technology — تکنولوژی (Technology)
+- /tag/hashiye — حاشیه (Culture & Entertainment)
+
 ## Language
 
 Primary language: Persian (fa)
@@ -45,6 +59,7 @@ Direction: RTL
 - Content is summarized using AI (150+ words) with source attribution preserved
 - Sources are classified by political lean across 11 categories
 - Multi-source verification: articles confirmed by 3+ independent sources are marked as verified
+- Errors in summaries or categorization can be reported via /corrections
 
 ## Usage Restrictions
 

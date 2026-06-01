@@ -1,140 +1,122 @@
-# Content Calendar — palsiran.com
+# Content Calendar — پالس ایران
 
-**Date:** June 2026  
-**Phase:** Post-launch, building from zero indexation
-
----
-
-## Content Strategy Overview
-
-palsiran.com is a news aggregator — it does not produce original news. This creates an HCU (Helpful Content Update) risk because Google may classify aggregated summaries as thin content.
-
-**The mitigation strategy has two pillars:**
-
-1. **Strengthen aggregated content** — ensure every article page has 150+ word summaries, source context, and structured metadata (already partially done)
-2. **Create original editorial content** — evergreen explainers, source guides, and analysis pieces that demonstrate E-E-A-T and build topical authority
+**Last updated:** June 1, 2026  
+**Tier 1 (automated):** 50–200 articles/day — running ✅  
+**Tier 2 (manual editorial):** Target 2–3 pieces/week — not yet started ❌
 
 ---
 
-## Content Types
+## Priority Queue: Write These First
 
-### Type A: Aggregated News (Automated — Daily)
-- Source: Bot pipeline from 45+ Telegram channels
-- Volume: 50–200 articles/day
-- SEO requirement: 150-word minimum summaries, NewsArticle schema, canonical URL
-- **No calendar needed** — fully automated
+These are ranked by: (search volume × low competition × no existing Persian content).
 
-### Type B: Source Profile Pages (Manual — One-time per source)
-- 45+ source pages to create
-- Each page: 300–500 words describing the source, its history, political lean, credibility
-- Timeline: 2–3 per week = complete in 4–5 months
-- **High SEO value** — these pages rank for "[source name] + اخبار"
+### Batch 1 — Political Media Literacy (June–July 2026)
 
-### Type C: Editorial Explainers (Manual — Weekly)
-- Long-form Persian content (800–1500 words)
-- Evergreen — not time-sensitive
-- Builds E-E-A-T and topical authority
-- **Highest SEO value per piece**
+| Article | Target Keyword | Est. Volume | URL Target | Status |
+|---------|---------------|-------------|-----------|--------|
+| تفاوت رسانه اصولگرا و اصلاح‌طلب | رسانه اصولگرا | 4K–16K/mo | /editorial/taafovot-resane-osoulgarayan | ❌ |
+| بهترین منبع خبری فارسی برای ایرانیان خارج از کشور | منبع خبری فارسی | 2K–8K/mo | /editorial/behtarin-manba-khabari | ❌ |
+| راهنمای خواندن انتقادی اخبار ایران | اخبار انتقادی | 1K–3K/mo | /editorial/rahnamaye-khandane-enteghadi | ❌ |
+| چرا رسانه‌های مختلف یک رویداد را فرق می‌گویند | تفاوت اخبار رسانه‌ها | 500–2K/mo | /editorial/chera-resanehaye-mokhtalef | ❌ |
 
-### Type D: Political Lean Pages (Automated + Manual)
-- 11 lean category pages
-- Auto-generated article feeds + 200-word editorial intro per lean type
-- Timeline: Build all 11 in month 1
+**Format:** 800–1,200 words. Persian prose. Include comparison table. Internal links to lean pages. Human-authored voice.
 
 ---
 
-## Editorial Content Calendar (12 Months)
+### Batch 2 — Source Deep-Dives (July–August 2026)
 
-### Month 1–2: Foundation (June–July 2026)
-**Theme: Establish topical authority on source transparency**
+Pick the 5 sources with highest monthly article count:
 
-| Week | Article | Target Keyword | Type | Word Count |
-|------|---------|----------------|------|-----------|
-| W1 | راهنمای جامع منابع خبری ایران | منابع خبری ایران | C | 2000 |
-| W1 | درباره گرایش سیاسی در رسانه‌ها | گرایش سیاسی رسانه | C | 1200 |
-| W2 | آشنایی با رسانه‌های رسمی دولتی | رسانه رسمی دولتی ایران | C | 1000 |
-| W2 | رسانه‌های اصولگرا چه می‌گویند؟ | رسانه اصولگرا | C | 1000 |
-| W3 | رسانه‌های اصلاح‌طلب و دیدگاه‌هایشان | رسانه اصلاح‌طلب | C | 1000 |
-| W3 | رسانه‌های مخالف جمهوری اسلامی | رسانه مخالف ایران | C | 1000 |
-| W4 | چطور اخبار ایران را تحلیل کنیم | تحلیل اخبار ایران | C | 1500 |
-| W4 | ۱۰ رسانه برتر فارسی‌زبان برای دنبال کردن | رسانه فارسی معتبر | C | 1200 |
+| Source | Target Keyword | URL |
+|--------|---------------|-----|
+| ایرنا | اخبار ایرنا گرایش | /editorial/irna-profile |
+| تسنیم | اخبار تسنیم سیاسی | /editorial/tasnim-profile |
+| بی‌بی‌سی فارسی | بی‌بی‌سی فارسی | /editorial/bbc-farsi-profile |
+| رادیو فردا | رادیو فردا اخبار | /editorial/radio-farda-profile |
+| ایران اینترنشنال | ایران اینترنشنال | /editorial/iran-international-profile |
 
-**Source profiles to build (Months 1–2):**
-BBC فارسی, ایران اینترناشنال, ایرنا, تسنیم, مهر, خبرگزاری فارس, صدای آمریکا فارسی, یورونیوز فارسی, الجزیره فارسی, العربیه فارسی
+**Format:** 1,000–1,500 words. Cover: founding, ownership, editorial stance, credibility. Link to `/source/[slug]` dynamic page.
 
 ---
 
-### Month 3–4: Expansion (August–September 2026)
-**Theme: Financial data + election/political content depth**
+### Batch 3 — Financial Data Explainers (August–September 2026)
 
-| Week | Article | Target Keyword | Type | Word Count |
-|------|---------|----------------|------|-----------|
-| W9 | تاریخچه نرخ دلار در ایران | تاریخچه دلار ایران | C | 1500 |
-| W10 | چرا قیمت دلار بالا می‌رود؟ | دلیل گرانی دلار | C | 1200 |
-| W11 | راهنمای سرمایه‌گذاری در طلا و سکه | سرمایه‌گذاری طلا | C | 1800 |
-| W12 | تفاوت نرخ رسمی و آزاد دلار | نرخ رسمی و بازار آزاد | C | 1000 |
-| W13 | احزاب سیاسی ایران و رسانه‌هایشان | احزاب سیاسی ایران | C | 2000 |
-| W14 | جریان‌های سیاسی ایران: راهنمای جامع | جریان سیاسی ایران | C | 2500 |
-| W15 | انتخابات در ایران: چه رسانه‌ای را بخوانیم؟ | انتخابات ایران | C | 1500 |
-| W16 | تحریم‌های ایران: پوشش خبری از زوایای مختلف | تحریم ایران | C | 1200 |
+| Article | Target Keyword | Est. Volume | URL |
+|---------|---------------|-------------|-----|
+| تاریخچه نرخ دلار در ایران | تاریخچه دلار ایران | 5K–15K/mo | /editorial/tarikhe-narkhe-dollar |
+| چرا قیمت دلار در ایران بالاست؟ | دلیل گرانی دلار | 3K–10K/mo | /editorial/dalile-gerani-dollar |
+| راهنمای خرید طلا در ایران ۱۴۰۵ | راهنمای خرید طلا | 2K–8K/mo | /editorial/rahnamaye-kharide-tala |
+| تفاوت سکه امامی و بهار آزادی | سکه امامی vs بهار آزادی | 2K–5K/mo | /editorial/taafovot-sekke |
 
-**Source profiles (Months 3–4):** 
-روزنامه شرق, روزنامه کیهان, روزنامه اعتماد, دیده‌بان ایران, رادیو فردا, کمپین حقوق بشر, اقتصاد آنلاین, تجارت‌نیوز + remaining 7 sources
+**Format:** 600–900 words. Data tables. Internal link to `/prices`. FAQ section × 3 questions.
 
 ---
 
-### Month 5–6: Authority (October–November 2026)
-**Theme: Analysis pieces that attract external links**
+### Batch 4 — Quarterly Data Reports (Every 3 Months)
 
-| Week | Article | Target Keyword | Word Count |
-|------|---------|----------------|-----------|
-| W17 | گزارش سالانه: پالس رسانه‌های ایران ۱۴۰۵ | گزارش رسانه ایران | 3000 |
-| W18 | مقایسه پوشش خبری برجام در رسانه‌های مختلف | برجام رسانه | 2000 |
-| W19 | رسانه‌های فارسی‌زبان خارج از ایران | رسانه فارسی خارج ایران | 2000 |
-| W20 | نقش تلگرام در انتشار اخبار ایران | تلگرام اخبار ایران | 1500 |
-| W21 | تاریخچه اینترنت و رسانه در ایران | تاریخچه رسانه ایران | 2500 |
-| W22 | اقتصاد ایران ۱۴۰۵: تحلیل جریان‌های خبری | اقتصاد ایران | 2000 |
+**"گزارش فصلی پالس: رسانه‌های ایران"** — the primary linkbait and AI citation asset.
 
----
+| Report | Publish Target | Content |
+|--------|---------------|---------|
+| Q2 2026 | September 2026 | Sources with most articles; lean distribution; top topics |
+| Q3 2026 | December 2026 | Trending keywords in Persian news; credibility changes |
+| Year in Review | March 2027 | Annual wrap — heavily citable by AI |
 
-### Month 7–12: Scale (December 2026 – May 2027)
-**Theme: Data journalism + unique reports**
-
-- **Monthly:** "پالس ماهانه رسانه‌ها" — which stories each political lean covered most/least
-- **Quarterly:** "گزارش فصلی" — data analysis from the aggregated article database
-- **Annual:** "رویدادهای ۱۴۰۵ از نگاه رسانه‌های مختلف" — compare how different leans covered major events
-
-These data reports are **first-party data** — impossible to replicate and highly citable by AI systems (Google AI Overviews, Perplexity).
+**Format:** Data-heavy. Charts/tables. Cite palsiran.com first-party data. Outreach to diaspora journalists after each publish.
 
 ---
 
-## Content Production Requirements
+## Editorial Article Format Guide
 
-### For Type C (Editorial) articles:
-- Minimum 800 words
-- Persian headings (H2, H3)
-- At least 1 table or list (helps AI Overviews extract structured info)
-- `datePublished` + `dateModified` visible on page
-- Author entity (even if "تیم پالس ایران" with Organization schema)
-- Internal links: minimum 3 relevant links per article
+Every editorial article should include:
 
-### For Type B (Source profiles):
-- Source name + history
-- Political lean + explanation of why this classification
-- Credibility score + methodology note
-- Last 10 articles (live feed from API)
-- `Organization` schema with `sameAs` pointing to source's Telegram / website
+```
+1. H1: Target keyword in Persian
+2. Opening: Key fact/answer in first 2 sentences (for AI citation)
+3. Summary box: 3 bullet points
+4. H2 subheadings (3–5 sections)
+5. At least 1 comparison table
+6. Internal links: lean pages, source profiles, prices (where relevant)
+7. Author: "تیم پالس ایران" with Organization schema
+8. datePublished + dateModified visible on page
+9. Footer link to editorial policy
+```
 
 ---
 
 ## Publishing Cadence
 
-| Content Type | Frequency | Owner |
-|-------------|-----------|-------|
-| Aggregated news | Auto (50–200/day) | Bot pipeline |
-| Source profiles | 2–3/week | Manual |
-| Editorial explainers | 1/week | Manual |
-| Political lean analysis | 1/month | Manual |
-| Data reports | 1/quarter | Manual |
+| Month | Articles Target | Priority Focus |
+|-------|----------------|---------------|
+| June 2026 | 2 | Batch 1 × 2 |
+| July 2026 | 4 | Batch 1 complete + Batch 2 × 2 |
+| August 2026 | 4 | Batch 2 complete |
+| September 2026 | 4 + Q2 report | Batch 3 × 2 + quarterly report |
+| October 2026 | 4 | Batch 3 complete |
+| November 2026 | 4 | New based on GSC impression data |
+| December 2026 | 4 + Q3 report | Top impressions + quarterly report |
 
-**Year 1 total editorial output:** ~75 editorial pieces + 45 source profiles = **120 original pages**
+**Year 1 total target:** 40 editorial articles + 4 quarterly data reports
+
+---
+
+## Internal Linking Map
+
+| Content references... | Should link to... |
+|----------------------|-------------------|
+| Any news source name | `/source/[slug]` |
+| Political lean category | `/lean/[slug]` |
+| Dollar/gold/coin prices | `/prices` |
+| All sources | `/sources` |
+| Editorial standards | `/about/editorial-policy` |
+| Other editorial pieces | `/editorial/[slug]` |
+
+---
+
+## Content We Will NOT Publish
+
+- ❌ Sponsored / branded content
+- ❌ Coupon / affiliate content
+- ❌ Thin pieces under 400 words
+- ❌ Duplicate summaries of aggregated news articles
+- ❌ Content written entirely by AI without human editorial review and voice

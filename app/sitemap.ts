@@ -13,6 +13,10 @@ const LEAN_SLUGS = [
   "mokhalef-jomhouri-eslami", "mohafezeh-kar-arabi", "mostaghel",
 ];
 
+const TAG_SLUGS = [
+  "siasi", "beinolmelal", "eqtesadi", "ejtemai", "varzeshi", "technology", "hashiye",
+];
+
 async function fetchAllArticles(): Promise<NewsItem[]> {
   const items: NewsItem[] = [];
   let page = 1;
@@ -67,6 +71,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/sources`, lastModified: now },
     { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01") },
     { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/editorial`, lastModified: now },
     { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29") },
     { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
   ];
@@ -75,6 +81,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${SITE_URL}/lean/${slug}`,
     lastModified: now,
     changeFrequency: "daily" as const,
+  }));
+
+  const tagRoutes: MetadataRoute.Sitemap = TAG_SLUGS.map((slug) => ({
+    url: `${SITE_URL}/tag/${slug}`,
+    lastModified: now,
+    changeFrequency: "hourly" as const,
   }));
 
   const sourceRoutes: MetadataRoute.Sitemap = sources.map((src) => ({
@@ -89,5 +101,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: item.posted_at ? new Date(item.posted_at) : now,
   }));
 
-  return [...staticRoutes, ...leanRoutes, ...sourceRoutes, ...articleRoutes];
+  return [...staticRoutes, ...leanRoutes, ...tagRoutes, ...sourceRoutes, ...articleRoutes];
 }

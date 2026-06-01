@@ -1,6 +1,6 @@
 # Competitor Analysis — پالس ایران (palsiran.com)
 
-**Date:** June 2026  
+**Last updated:** June 1, 2026  
 **Business type:** Persian-language news aggregator (Publisher)  
 **Target market:** Iranian diaspora + Persian-speaking global audience
 
@@ -147,7 +147,7 @@ Palsiran.com competes in Tier 2 and has a structural differentiator no competito
 | RTL optimized | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Dark mode | **✅** | ❌ | ❌ | ❌ | ❌ |
 | Google News sitemap | ✅ | Unknown | Unknown | Unknown | ✅ |
-| Schema markup | Partial | Minimal | None | Minimal | Partial |
+| Schema markup | **✅ Full** | Minimal | None | Minimal | Partial |
 
 ---
 

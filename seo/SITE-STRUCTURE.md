@@ -1,177 +1,139 @@
 # Site Structure & URL Architecture — palsiran.com
 
-**Date:** June 2026
+**Last updated:** June 1, 2026  
+**Legend:** ✅ Live | 🔧 Scaffold | ❌ Not built
 
 ---
 
-## Current Structure (Implemented)
+## Current URL Map
 
 ```
-/                          → Homepage (breaking news + bento layout)
-/article/[id]/[[slug]]     → Article detail
-/categories                → Category browser (filter: cat/group/source)
-/prices                    → Live exchange rates + gold prices
-/archive                   → Date/source filtered archive
-/sources                   → Source directory with political lean
-/search                    → Full-text search
-/saved                     → Client-side saved articles (noindex)
-/about                     → About page
-/privacy                   → Privacy policy
-/terms                     → Terms of use
-/admin                     → Admin panel (noindex)
-/sitemap.xml               → Standard sitemap
-/news-sitemap.xml          → Google News sitemap
+palsiran.com/
+├── /                         ✅ Homepage (dynamic, ISR)
+├── /article/[id]/[[...slug]] ✅ Article pages (NewsArticle schema)
+├── /categories               ✅ Category browser (CollectionPage schema)
+├── /sources                  ✅ Source directory (CollectionPage + ItemList schema)
+├── /source/[slug]            ✅ Source profile pages ×45+ (CollectionPage schema)
+├── /lean/[slug]              ✅ Political lean hub pages ×11 (CollectionPage schema)
+├── /prices                   ✅ Live financial data (prices schema partial)
+├── /archive                  ✅ Date-based archive browser
+├── /search                   ✅ Search (noindex)
+├── /saved                    ✅ Saved articles (noindex, client-side)
+├── /about                    ✅ About page (WebPage schema)
+│   └── /about/editorial-policy ✅ Editorial standards (WebPage + Breadcrumb schema)
+├── /editorial                🔧 Editorial hub (CollectionPage — scaffold, no articles yet)
+├── /editorial/[slug]         ❌ Individual editorial articles (not yet built)
+├── /tag/[tag]                ❌ Tag/topic pages (not yet built)
+├── /admin                    ✅ Admin panel (noindex, disallowed in robots)
+├── /sitemap.xml              ✅ Main sitemap (static + lean + source + article routes)
+├── /news-sitemap.xml         ✅ Google News sitemap (last 48h articles)
+├── /robots.txt               ✅ /admin + /api blocked; AI bots allowed
+└── /llms.txt                 ✅ AI crawler content guide
 ```
 
 ---
 
-## Recommended Structure Additions (Priority Order)
+## Schema Coverage
 
-### Priority 1 — Source Authority Pages (High SEO value)
-These pages transform the existing `/sources` directory into indexable, rankable topic hubs.
-
-```
-/source/[slug]             → Individual source profile page
-```
-
-**Example URLs:**
-- `/source/bbc-persian` → BBC فارسی — profile, political lean, credibility, recent articles
-- `/source/irna` → ایرنا — description, political lean (رسمی دولتی), article feed
-- `/source/iran-international` → ایران اینترناشنال — profile + article feed
-
-**Each page should contain:**
-- Source name, description, political lean badge
-- Credibility score visualization
-- When source was added / how many articles published
-- Paginated article feed from this source
-- `CollectionPage` + `Organization` schema
-- Canonical: `/source/[slug]`
-
-**Target keywords:** `[source name]` + `اخبار` (e.g., "اخبار بی‌بی‌سی فارسی")
+| URL Pattern | Schema Types | Status |
+|-------------|-------------|--------|
+| All pages (root layout) | WebSite, SearchAction, NewsMediaOrganization | ✅ |
+| `/article/[id]` | NewsArticle, BreadcrumbList | ✅ |
+| `/source/[slug]` | CollectionPage, BreadcrumbList | ✅ |
+| `/lean/[slug]` | CollectionPage, BreadcrumbList | ✅ |
+| `/sources` | CollectionPage, ItemList | ✅ |
+| `/categories` | CollectionPage | ✅ |
+| `/about/editorial-policy` | WebPage, BreadcrumbList | ✅ |
+| `/editorial` | CollectionPage, BreadcrumbList | ✅ |
+| `/editorial/[slug]` | NewsArticle (with author) | ❌ needs building |
+| `/prices` | Dataset, PropertyValue | ⚠️ partial |
+| `/tag/[tag]` | CollectionPage, ItemList | ❌ needs building |
 
 ---
 
-### Priority 2 — Political Lean Category Pages (Unique differentiator)
-
-```
-/lean/[slug]               → Articles grouped by political lean
-```
-
-**Example URLs:**
-- `/lean/osoulgarayan` → اخبار اصولگرایان
-- `/lean/eslahat-talab` → اخبار اصلاح‌طلبان
-- `/lean/mokhalf-jomhouri-eslami` → رسانه‌های مخالف
-- `/lean/rasmi-dolati` → رسانه‌های رسمی دولتی
-
-**Target keywords:** `رسانه‌های اصولگرا`, `اخبار اصلاح‌طلبان`, `رسانه مخالف ایران`
-
-These pages are **completely uncovered by competitors** and map directly to what makes palsiran.com unique.
-
----
-
-### Priority 3 — Topic/Tag Pages
-
-```
-/tag/[slug]                → Articles grouped by tag/keyword
-```
-
-**Example URLs:**
-- `/tag/barjam` → اخبار برجام
-- `/tag/dollar` → اخبار دلار
-- `/tag/entekhabat` → اخبار انتخابات
-
-**Rules:**
-- Only generate a tag page when 10+ articles exist for that tag
-- Use `CollectionPage` + `ItemList` schema
-- Canonical: self (not noindex)
-- These should be auto-generated from article tagging in the bot pipeline
-
----
-
-### Priority 4 — Editorial Content Section
-
-```
-/editorial/                → Editorial hub (future)
-/editorial/[slug]          → Individual analysis/explainer
-```
-
-**Examples:**
-- `/editorial/rahnamaye-rasaneh-ha` → راهنمای منابع خبری ایران (evergreen)
-- `/editorial/chetor-khabar-bekhanim` → چطور اخبار ایران را با دیده انتقادی بخوانیم
-
-These are long-form evergreen pieces that build E-E-A-T and rank for navigational queries.
-
----
-
-### Priority 5 — Enhanced Prices
-
-```
-/prices/dollar             → تاریخچه نرخ دلار (future)
-/prices/gold               → تاریخچه قیمت طلا (future)
-```
-
-Price history pages can rank for `نرخ دلار سال ۱۴۰۴` type long-tail queries with historical charts.
-
----
-
-## URL Design Rules
-
-| Rule | Rationale |
-|------|-----------|
-| Use Persian-transliterated slugs, not Arabic numerals | Better readability in share links |
-| Max 3 path segments | Keeps crawl depth shallow |
-| Never use query params in canonical URLs for indexable pages | Avoid duplicate content |
-| Categories page: canonical includes `?cat=` or `?group=` when filtered | Each filter = unique content |
-| Article slug: `[item_id]/[persian-title-slug]` | Already implemented |
-
----
-
-## Internal Linking Architecture
+## Internal Linking Structure
 
 ```
 Homepage
-  ├── → Breaking news articles (direct links in ticker)
-  ├── → Category sections (political, economic, social)
-  └── → /prices (live prices widget links)
+  ├── → /categories (nav)
+  ├── → /prices (nav)
+  ├── → /sources (nav)
+  ├── → /source/[slug] (per article source link ✅)
+  └── → /article/[id] (article cards)
 
-/categories
-  ├── → Individual articles
-  ├── → Source profile pages (sidebar sources → /source/[slug])
-  └── → Political lean pages (filter labels → /lean/[slug])
+Article page
+  ├── → /source/[slug] (source name ✅)
+  ├── → /categories?cat=[cat] (category badge)
+  └── → /about/editorial-policy (footer ✅)
 
 /sources
-  └── → /source/[slug] (each source card links to profile)
+  └── → /source/[slug] (all source cards ✅)
 
-Article pages
-  ├── → Source profile (/source/[slug])
-  ├── → Related articles (same source, same category)
-  └── → /categories?source=X (all articles from this source)
+/categories sidebar
+  └── → /source/[slug] (source filter links ✅)
 
-/prices
-  └── → /archive?date=today (news context for price moves)
+/source/[slug]
+  ├── → /sources (breadcrumb ✅)
+  └── → /article/[id] (article list ✅)
+
+/lean/[slug]
+  ├── → /sources (breadcrumb ✅)
+  ├── → /source/[slug] (source cards ✅)
+  └── → other /lean/[slug] (cross-links ✅)
+
+/about
+  ├── → /about/editorial-policy ✅
+  └── → /sources (source list ✅)
+
+/editorial (scaffold)
+  └── → /about/editorial-policy ✅
 ```
 
 ---
 
-## Sitemap Structure
+## Pages Needed (Next Priority Order)
 
-```
-/sitemap.xml (index)
-  ├── /sitemap-static.xml     → Static pages (about, prices, sources, etc.)
-  ├── /sitemap-articles.xml   → Latest articles (1000 most recent)
-  ├── /sitemap-sources.xml    → Source profile pages (when built)
-  └── /news-sitemap.xml       → Google News (last 48 hours)
-```
+### 1. `/editorial/[slug]` — Individual Editorial Articles
+**Why:** Tier 2 content requires a route. The `/editorial` hub exists as a scaffold.  
+**Schema:** `NewsArticle` with `Organization` author, `datePublished`, `dateModified`, `BreadcrumbList`  
+**Effort:** 4–6h (dynamic route + MDX or DB-backed content)
 
-**Implementation note:** Current `sitemap.ts` combines static + articles. Split into separate sitemaps when total article count exceeds 5,000 URLs.
+### 2. `/tag/[tag]` — Tag/Topic Hub Pages
+**Why:** 20+ new indexable pages for topical keywords (`اخبار سیاسی`, `اقتصادی`, etc.)  
+**Schema:** `CollectionPage`, `ItemList`, `BreadcrumbList`  
+**Effort:** 4–6h (already have category data in DB)
+
+### 3. `/prices/[currency]` — Individual Price History Pages
+**Why:** Long-tail financial keywords (`تاریخچه نرخ یورو`, `نمودار قیمت طلا`)  
+**Schema:** `Dataset`, `PropertyValue`  
+**Effort:** 6–8h
+
+### 4. `/corrections` — Correction Policy Page
+**Why:** E-E-A-T signal for publisher credibility (referenced in editorial policy but no dedicated page)  
+**Effort:** 1h (static page)
 
 ---
 
-## Crawl Budget Considerations
+## URL Conventions
 
-- `/saved` → `noindex` ✅ (already implemented)
-- `/admin` → `noindex` + blocked in robots.txt
-- `/archive?page=N` → `noindex` for pages > 3 (thin paginated content)
-- `/categories?page=N` → `noindex` for pages > 3
-- API routes (`/api/*`) → blocked in robots.txt
-- `/news-sitemap.xml` → submitted to GSC + listed in robots.txt ✅
+- All URLs: lowercase, hyphenated, Persian/English mix OK
+- Source slugs: `generateSlug(name)` — strips ZWNJ, replaces spaces with hyphens, caps at 60 chars
+- Lean slugs: 11 hardcoded Latin slugs (see `/app/lean/[slug]/page.tsx`)
+- Article URLs: `/article/[id]/[persian-title-slug]` — ID is canonical, slug is cosmetic
+- Editorial URLs: `/editorial/[persian-title-slug]`
+- No trailing slashes enforced by Next.js default
+
+---
+
+## Canonical Strategy
+
+| Scenario | Canonical |
+|---------|-----------|
+| Article page (with slug) | `/article/[id]/[slug]` (the full URL) |
+| Article page (without slug, redirect) | Redirects to version with slug |
+| Categories with query params | `/categories?cat=X` (params included) |
+| Search page | `/search` (noindex anyway) |
+| Source profile page 1 | `/source/[slug]` |
+| Source profile page N>1 | `/source/[slug]?page=N` (noindex if N>3) |
+| Lean page | `/lean/[slug]` |
+| All static pages | Self-referencing canonical set explicitly |
