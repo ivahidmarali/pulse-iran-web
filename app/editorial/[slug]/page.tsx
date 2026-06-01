@@ -18,8 +18,131 @@ export type EditorialArticle = {
   body: React.ReactNode;
 };
 
-// Empty registry — populated as articles are written
-const ARTICLES: EditorialArticle[] = [];
+const ARTICLES: EditorialArticle[] = [
+  {
+    slug: "taafovot-resane-osoulgarayan",
+    title: "تفاوت رسانه‌های اصولگرا و اصلاح‌طلب در ایران",
+    description:
+      "بررسی تفاوت‌های اساسی در رویکرد تحریریه‌ای، انتخاب رویداد، و قاب‌بندی خبر میان رسانه‌های اصولگرا و اصلاح‌طلب — راهنمایی برای خواندن هوشمندانه‌تر اخبار ایران",
+    datePublished: "2026-06-01T12:00:00Z",
+    dateModified: "2026-06-01T12:00:00Z",
+    keywords: [
+      "رسانه اصولگرا",
+      "رسانه اصلاح‌طلب",
+      "تحلیل رسانه",
+      "جریان خبری ایران",
+      "گرایش سیاسی",
+      "قاب‌بندی خبر",
+    ],
+    body: (
+      <div className="space-y-5">
+        <p>
+          وقتی یک رویداد مهم در ایران رخ می‌دهد — نتیجه یک انتخابات، تصمیم اقتصادی دولت، یا یک حادثه اجتماعی — خواندن صرفاً یک منبع خبری کافی نیست. رسانه‌های مختلف، با توجه به گرایش سیاسی‌شان، همان رویداد را به شکل‌های متفاوتی روایت می‌کنند. پالس ایران منابع خود را در ۱۱ دسته طبقه‌بندی می‌کند؛ دو دسته پررنگ در این طیف <strong className="text-on-surface">اصولگرایان</strong> و <strong className="text-on-surface">اصلاح‌طلبان</strong> هستند. درک تفاوت این دو جریان، کلید خواندن آگاهانه‌تر اخبار ایران است.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">رسانه‌های اصولگرا چه می‌گویند؟</h2>
+        <p>
+          رسانه‌های <Link href="/lean/osoulgarayan" className="text-secondary-fixed-dim hover:underline">اصولگرا</Link> عموماً نزدیک به جناح راست سیاسی ایران هستند و بر ارزش‌های انقلاب اسلامی، مقاومت در برابر فشار خارجی، و حفظ ساختارهای موجود تأکید می‌کنند. ویژگی‌های مشترک این رسانه‌ها:
+        </p>
+        <ul className="list-disc pr-6 space-y-1.5">
+          <li>سیاست‌های دولت را اغلب از زاویه «تهدیدات خارجی» توجیه می‌کنند</li>
+          <li>روابط با آمریکا و اسرائیل را از منظر تقابل بازنمایی می‌کنند</li>
+          <li>موفقیت‌های نظامی، موشکی، و دیپلماتیک منطقه‌ای را پررنگ می‌کنند</li>
+          <li>اعتراضات داخلی را اغلب به دخالت خارجی نسبت می‌دهند</li>
+          <li>دستاوردهای اقتصادی را در برابر تحریم‌ها برجسته می‌کنند</li>
+        </ul>
+        <p className="text-xs text-on-surface-variant/60">
+          نمونه‌هایی از این دسته: فارس نیوز، تسنیم، مشرق نیوز، رجانیوز
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">رسانه‌های اصلاح‌طلب چه می‌گویند؟</h2>
+        <p>
+          رسانه‌های <Link href="/lean/eslah-talab" className="text-secondary-fixed-dim hover:underline">اصلاح‌طلب</Link> تمایل به نقد ساختارهای قدرت از درون نظام دارند. این رسانه‌ها بیشتر به حقوق مدنی، تعامل با غرب، و آزادی‌های اجتماعی توجه می‌کنند:
+        </p>
+        <ul className="list-disc pr-6 space-y-1.5">
+          <li>مطالبات اجتماعی و اقتصادی مردم را برجسته‌تر می‌کنند</li>
+          <li>دیپلماسی و مذاکره با جهان را به عنوان راه‌حل اصلی می‌بینند</li>
+          <li>نقد سیاست‌های اقتصادی دولت را با صراحت بیشتری مطرح می‌کنند</li>
+          <li>صدای منتقدان درون‌نظامی را بیشتر منتقل می‌کنند</li>
+          <li>نتایج انتخابات را از زاویه مشارکت مردمی و رقابت واقعی تحلیل می‌کنند</li>
+        </ul>
+        <p className="text-xs text-on-surface-variant/60">
+          نمونه‌هایی از این دسته: اعتماد آنلاین، آرمان ملی، شرق
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">یک خبر، دو روایت</h2>
+        <p>
+          برای درک عملی این تفاوت، فرض کنید دولت تصمیم می‌گیرد قیمت بنزین را افزایش دهد:
+        </p>
+
+        <div className="overflow-x-auto -mx-1">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-right py-3 px-3 text-on-surface font-semibold">جنبه</th>
+                <th className="text-right py-3 px-3 text-secondary-fixed-dim font-semibold">رسانه اصولگرا</th>
+                <th className="text-right py-3 px-3 text-[#a2e7ff] font-semibold">رسانه اصلاح‌طلب</th>
+              </tr>
+            </thead>
+            <tbody className="text-on-surface-variant">
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-on-surface/60 text-xs">تیتر</td>
+                <td className="py-2.5 px-3">«گام مثبت دولت برای کنترل قاچاق سوخت»</td>
+                <td className="py-2.5 px-3">«فشار جدید بر معیشت خانوارهای کم‌درآمد»</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-on-surface/60 text-xs">منابع نقل‌قول</td>
+                <td className="py-2.5 px-3">مقامات دولتی و کارشناسان موافق</td>
+                <td className="py-2.5 px-3">اقتصاددانان منتقد و نهادهای مدنی</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-on-surface/60 text-xs">چارچوب تحلیل</td>
+                <td className="py-2.5 px-3">مصلحت اقتصاد کلان و مبارزه با رانت</td>
+                <td className="py-2.5 px-3">تبعات اجتماعی برای اقشار آسیب‌پذیر</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 text-on-surface/60 text-xs">واکنش پیش‌بینی‌شده</td>
+                <td className="py-2.5 px-3">تأکید بر آرامش و انتظار تطابق عمومی</td>
+                <td className="py-2.5 px-3">هشدار درباره نارضایتی اجتماعی</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">هیچ‌کدام لزوماً دروغ نمی‌گویند</h2>
+        <p>
+          نکته مهم اینجاست: هیچ‌کدام از این رسانه‌ها لزوماً «دروغ» نمی‌گویند — آن‌ها حقیقت را از زاویه دید خود روایت می‌کنند. هر دو ممکن است اطلاعات دقیق داشته باشند، اما در <em>انتخاب</em> اینکه کدام اطلاعات را برجسته کنند تفاوت اساسی دارند.
+        </p>
+        <p>
+          این پدیده را در علم رسانه «قاب‌بندی» (Framing) می‌نامند. خبرنگار انتخاب می‌کند با چه کلماتی، با نقل‌قول از چه کسی، و با تأکید بر کدام جنبه، خبر را روایت کند. این انتخاب‌ها بی‌طرفانه نیستند — آن‌ها محصول جهان‌بینی و سیاست تحریریه‌ای هر رسانه هستند.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">چطور هوشمندانه‌تر بخوانیم؟</h2>
+        <p>
+          پالس ایران این تفاوت‌ها را شفاف می‌کند: در کنار هر خبر، گرایش سیاسی منبع مشخص است و اخبار از طیف‌های مختلف کنار هم می‌آیند. چند راهکار عملی:
+        </p>
+        <ul className="list-disc pr-6 space-y-2">
+          <li>
+            <strong className="text-on-surface">برای رویدادهای مهم:</strong> هر دو جناح را بخوانید. جایی که روایت‌ها همپوشانی دارند، احتمالاً به واقعیت نزدیک‌تر است.
+          </li>
+          <li>
+            <strong className="text-on-surface">به «سکوت» توجه کنید:</strong> هر رسانه چه چیزی را <em>نمی‌گوید</em>؟ اغلب حذف‌ها آموزنده‌تر از آن چیزی هستند که گفته می‌شود.
+          </li>
+          <li>
+            <strong className="text-on-surface">منبع نقل‌قول‌ها را بررسی کنید:</strong> «کارشناس مستقل» چه سابقه‌ای دارد؟ آیا همیشه در یک جهت اظهارنظر می‌کند؟
+          </li>
+          <li>
+            <strong className="text-on-surface">اعداد را جدا دنبال کنید:</strong> آمارهای اقتصادی و اجتماعی از منابع رسمی مثل مرکز آمار ایران را مستقیم بخوانید و با روایت رسانه‌ها مقایسه کنید.
+          </li>
+        </ul>
+
+        <p>
+          در صفحه هر منبع در پالس ایران، گرایش سیاسی آن را می‌بینید. این برچسب‌ها قضاوت درباره کیفیت یا صداقت آن رسانه نیستند — ابزاری برای خواندن آگاهانه‌تر هستند. هدف ما کمک به شما برای ساختن تصویری کامل‌تر از واقعیت است، نه اینکه به جای شما تصمیم بگیریم کدام رسانه «خوب» است.
+        </p>
+      </div>
+    ),
+  },
+];
 
 function getArticle(slug: string): EditorialArticle | null {
   return ARTICLES.find((a) => a.slug === slug) ?? null;

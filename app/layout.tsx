@@ -44,14 +44,6 @@ export const metadata: Metadata = {
     siteName: "پالس ایران",
     locale: "fa_IR",
     type: "website",
-    images: [
-      {
-        url: "/og-default.jpg",
-        width: 1200,
-        height: 630,
-        alt: "پالس ایران — اخبار فوری ایران و جهان",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -60,7 +52,6 @@ export const metadata: Metadata = {
     title: "پالس ایران | اخبار فوری ایران و جهان",
     description:
       "اخبار فوری ایران و جهان، پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس.",
-    images: ["/og-default.jpg"],
   },
   icons: {
     icon: [
