@@ -8,16 +8,25 @@ export default function robots(): MetadataRoute.Robots {
         allow: '/',
         disallow: ['/admin/', '/api/'],
       },
-      // Search bots explicitly allowed
-      {
-        userAgent: 'OAI-SearchBot',
-        allow: '/',
-      },
-      {
-        userAgent: 'PerplexityBot',
-        allow: '/',
-      },
-      // Training bots managed by Cloudflare (GPTBot, ClaudeBot, CCBot, Google-Extended)
+      // AI search & retrieval bots — allowed for live citations and AI Overviews
+      { userAgent: 'GPTBot', allow: '/' },
+      { userAgent: 'OAI-SearchBot', allow: '/' },
+      { userAgent: 'ChatGPT-User', allow: '/' },
+      { userAgent: 'PerplexityBot', allow: '/' },
+      { userAgent: 'ClaudeBot', allow: '/' },
+      { userAgent: 'anthropic-ai', allow: '/' },
+      { userAgent: 'Google-Extended', allow: '/' },
+      { userAgent: 'Googlebot', allow: '/' },
+      { userAgent: 'Bingbot', allow: '/' },
+      { userAgent: 'Applebot', allow: '/' },
+      { userAgent: 'cohere-ai', allow: '/' },
+      { userAgent: 'AI2Bot', allow: '/' },
+      { userAgent: 'YouBot', allow: '/' },
+      // Training-only scrapers — blocked (no real-time citation value)
+      { userAgent: 'CCBot', disallow: '/' },
+      { userAgent: 'Bytespider', disallow: '/' },
+      { userAgent: 'Amazonbot', disallow: '/' },
+      { userAgent: 'meta-externalagent', disallow: '/' },
     ],
     sitemap: [
       'https://palsiran.com/sitemap.xml',

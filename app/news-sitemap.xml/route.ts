@@ -1,10 +1,31 @@
-import { articleUrl } from "@/lib/utils";
+import { articleUrl, SITE_URL } from "@/lib/utils";
 
 export const revalidate = 300; // regenerate every 5 minutes
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
 const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 const MAX_PER_PAGE = 100; // API hard limit (le=100)
+const INDEXNOW_KEY = "palsiran2026indexnow";
+
+// Keywords that indicate spam/ad content — exclude from news sitemap
+const SPAM_PATTERNS = [
+  /رایگان.{0,10}گیگ/,
+  /شرط.بندی/,
+  /کازینو/,
+  /بت\.ایران/,
+  /آدرس جدید/,
+  /ثبت.نام.{0,10}بونوس/,
+  /هزار تومن.{0,20}تست/,
+];
+
+function isSpam(title: string): boolean {
+  return SPAM_PATTERNS.some((re) => re.test(title));
+}
+
+// Strip Markdown link syntax [text](url) → text
+function cleanTitle(title: string): string {
+  return title.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").trim();
+}
 
 interface Item {
   item_id: string;
@@ -22,35 +43,44 @@ export async function GET() {
       const data = await res.json();
       const cutoff = Date.now() - THREE_DAYS_MS;
       items = (data.items ?? []).filter(
-        (i: Item) => i.title && new Date(i.posted_at).getTime() > cutoff
+        (i: Item) => i.title && new Date(i.posted_at).getTime() > cutoff && !isSpam(i.title)
       );
     }
   } catch {
     // return empty sitemap on error rather than 500
   }
 
-  // Deduplicate by item_id
-  const seen = new Set<string>();
+  // Deduplicate by item_id, then by normalized title (keep first occurrence)
+  const seenIds = new Set<string>();
+  const seenTitles = new Set<string>();
   const unique = items.filter((i) => {
-    if (seen.has(i.item_id)) return false;
-    seen.add(i.item_id);
+    if (seenIds.has(i.item_id)) return false;
+    seenIds.add(i.item_id);
+    const normalizedTitle = cleanTitle(i.title).slice(0, 40);
+    if (seenTitles.has(normalizedTitle)) return false;
+    seenTitles.add(normalizedTitle);
     return true;
   });
 
+  const articleUrls = unique.map((item) => articleUrl(item.item_id, item.title));
+
   const urls = unique
     .map(
-      (item) => `
+      (item, i) => {
+        const cleanedTitle = cleanTitle(item.title).replace(/]]>/g, "]]]]><![CDATA[>");
+        return `
   <url>
-    <loc>${articleUrl(item.item_id, item.title)}</loc>
+    <loc>${articleUrls[i]}</loc>
     <news:news>
       <news:publication>
         <news:name>پالس ایران</news:name>
         <news:language>fa</news:language>
       </news:publication>
       <news:publication_date>${new Date(item.posted_at).toISOString()}</news:publication_date>
-      <news:title><![CDATA[${item.title.replace(/]]>/g, "]]]]><![CDATA[>")}]]></news:title>
+      <news:title><![CDATA[${cleanedTitle}]]></news:title>
     </news:news>
-  </url>`
+  </url>`;
+      }
     )
     .join("");
 
@@ -59,6 +89,20 @@ export async function GET() {
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${urls}
 </urlset>`;
+
+  // Ping IndexNow with new article URLs (fire-and-forget, don't block response)
+  if (articleUrls.length > 0) {
+    fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        host: "palsiran.com",
+        key: INDEXNOW_KEY,
+        keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
+        urlList: articleUrls.slice(0, 10000),
+      }),
+    }).catch(() => { /* ignore indexnow errors */ });
+  }
 
   return new Response(xml, {
     headers: {

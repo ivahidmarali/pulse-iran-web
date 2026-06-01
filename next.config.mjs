@@ -15,20 +15,42 @@ const nextConfig = {
     ],
   },
   async headers() {
+    const securityHeaders = [
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+      { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+      {
+        key: "Content-Security-Policy",
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com https://api.indexnow.org; frame-src https://t.me https://telegram.org;",
+      },
+    ];
+
     return [
       {
         source: "/(.*)",
-        headers: [
-          { key: "X-Frame-Options", value: "SAMEORIGIN" },
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
-          {
-            key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data:; font-src 'self' https://fonts.gstatic.com data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; frame-src https://t.me https://telegram.org;",
-          },
-        ],
+        headers: securityHeaders,
+      },
+      // Homepage: short CDN cache (30s) with stale-while-revalidate for edge serving
+      {
+        source: "/",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=30, stale-while-revalidate=60" }],
+      },
+      // Article pages: longer CDN cache (5 min) — content rarely changes after publish
+      {
+        source: "/article/:path*",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=600" }],
+      },
+      // Static asset pages (prices, categories, lean, tag): 60s CDN cache
+      {
+        source: "/(prices|categories|archive|search|sources|lean/:path*|tag/:path*|editorial/:path*|about/:path*)",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=60, stale-while-revalidate=120" }],
+      },
+      // Sitemaps: 5 min cache (matches revalidate interval)
+      {
+        source: "/(sitemap.xml|news-sitemap.xml)",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=300" }],
       },
     ];
   },

@@ -60,39 +60,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return true;
   });
 
-  const now = new Date();
-
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, lastModified: now },
-    { url: `${SITE_URL}/prices`, lastModified: now },
-    { url: `${SITE_URL}/categories`, lastModified: now },
-    { url: `${SITE_URL}/archive`, lastModified: now },
-    { url: `${SITE_URL}/search`, lastModified: now },
-    { url: `${SITE_URL}/sources`, lastModified: now },
-    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01") },
-    { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
-    { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01") },
-    { url: `${SITE_URL}/editorial`, lastModified: now },
-    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29") },
-    { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
+    // Dynamic feed pages — omit lastmod so Google uses its own crawl signal
+    { url: SITE_URL, changeFrequency: "always" as const, priority: 1.0 },
+    { url: `${SITE_URL}/prices`, changeFrequency: "always" as const, priority: 0.9 },
+    { url: `${SITE_URL}/categories`, changeFrequency: "hourly" as const, priority: 0.8 },
+    { url: `${SITE_URL}/archive`, changeFrequency: "hourly" as const, priority: 0.7 },
+    { url: `${SITE_URL}/search`, changeFrequency: "daily" as const, priority: 0.6 },
+    { url: `${SITE_URL}/sources`, changeFrequency: "weekly" as const, priority: 0.6 },
+    // Static content pages — use real last-edited dates
+    { url: `${SITE_URL}/editorial`, changeFrequency: "daily" as const, priority: 0.7 },
+    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.5 },
+    { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.4 },
+    { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.4 },
+    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29"), changeFrequency: "yearly" as const, priority: 0.3 },
+    { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29"), changeFrequency: "yearly" as const, priority: 0.3 },
   ];
 
   const leanRoutes: MetadataRoute.Sitemap = LEAN_SLUGS.map((slug) => ({
     url: `${SITE_URL}/lean/${slug}`,
-    lastModified: now,
     changeFrequency: "daily" as const,
+    priority: 0.6,
   }));
 
   const tagRoutes: MetadataRoute.Sitemap = TAG_SLUGS.map((slug) => ({
     url: `${SITE_URL}/tag/${slug}`,
-    lastModified: now,
     changeFrequency: "hourly" as const,
+    priority: 0.7,
   }));
 
   const sourceRoutes: MetadataRoute.Sitemap = sources.map((src) => ({
     url: `${SITE_URL}/source/${encodeURIComponent(generateSlug(src.name))}`,
-    lastModified: now,
     changeFrequency: "hourly" as const,
+    priority: 0.5,
   }));
 
   // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata

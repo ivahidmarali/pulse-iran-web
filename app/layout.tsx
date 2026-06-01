@@ -113,7 +113,7 @@ const organizationJsonLd = {
   name: "پالس ایران",
   alternateName: "Pals Iran",
   url: SITE_URL,
-  foundingDate: "2024",
+  foundingDate: "2024-03-01",
   email: "info@palsiran.com",
   logo: {
     "@type": "ImageObject",
@@ -144,7 +144,6 @@ export default function RootLayout({
         <meta charSet="utf-8" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://cdn1.khabaronline.ir" />
         <link rel="preconnect" href="https://media.mehrnews.com" />

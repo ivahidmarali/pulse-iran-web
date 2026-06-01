@@ -5,13 +5,35 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
-import { SITE_URL } from "@/lib/utils";
+import { SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "درباره پالس ایران",
   description:
     "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی — روش‌شناسی، اصول تحریریه و نحوه دسته‌بندی گرایش سیاسی منابع",
+  openGraph: {
+    title: "درباره پالس ایران",
+    description: "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی",
+    url: `${SITE_URL}/about`,
+    type: "website",
+  },
+  twitter: {
+    title: "درباره پالس ایران",
+    description: "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی",
+  },
   alternates: { canonical: `${SITE_URL}/about`, languages: { fa: `${SITE_URL}/about`, "x-default": `${SITE_URL}/about` } },
+};
+
+const aboutPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": `${SITE_URL}/about/#webpage`,
+  name: "درباره پالس ایران",
+  description: "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی — روش‌شناسی، اصول تحریریه و نحوه دسته‌بندی گرایش سیاسی منابع",
+  url: `${SITE_URL}/about`,
+  inLanguage: "fa",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  mainEntity: { "@id": `${SITE_URL}/#organization` },
 };
 
 const LEAN_COLOR: Record<string, string> = {
@@ -47,6 +69,9 @@ export default async function AboutPage() {
 
   return (
     <div className="cyber-grid">
+      {/* safeJsonLd escapes <, >, & — prevents </script> injection */}
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutPageJsonLd) }} />
       <main className="pb-4 md:pb-0">
         {/* Hero / Mission */}
         <section className="relative py-section-gap px-container-margin overflow-hidden">

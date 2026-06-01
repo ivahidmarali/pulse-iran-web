@@ -33,12 +33,42 @@ async function fetchRelated(excludeId: string, category?: string): Promise<NewsI
 
 function categoryName(category?: string): string {
   if (!category) return "اخبار";
-  // Strip leading emoji/symbols — use a simple space split since categories
-  // are in the format "EMOJI text"
-  const spaceIdx = category.indexOf(" ");
-  if (spaceIdx > 0) return category.slice(spaceIdx + 1).trim();
-  return category;
+  // Strip all leading emoji/non-Persian characters regardless of spacing
+  const stripped = category.replace(/^[^؀-ۿݐ-ݿ\w]*/, "").trim();
+  return stripped || "اخبار";
 }
+
+// Map known source names to their canonical homepage URL for schema author.url
+const SOURCE_URLS: Record<string, string> = {
+  "ایرنا": "https://www.irna.ir",
+  "IRNA": "https://www.irna.ir",
+  "خبرگزاری تسنیم": "https://tasnimnews.ir",
+  "تسنیم": "https://tasnimnews.ir",
+  "خبرگزاری مهر": "https://mehrnews.com",
+  "مهر": "https://mehrnews.com",
+  "خبرآنلاین": "https://www.khabaronline.ir",
+  "ایران اینترنشنال": "https://www.iranintl.com",
+  "Iran International": "https://www.iranintl.com",
+  "بی‌بی‌سی فارسی": "https://www.bbc.com/persian",
+  "BBC فارسی": "https://www.bbc.com/persian",
+  "رادیو فردا": "https://www.radiofarda.com",
+  "زومیت": "https://www.zoomit.ir",
+  "فردانیوز": "https://www.fardanews.com",
+  "ایسنا": "https://www.isna.ir",
+  "ISNA": "https://www.isna.ir",
+  "آفتاب‌نیوز": "https://aftabnews.ir",
+  "دیپلماسی ایرانی": "https://irdiplomacy.ir",
+  "اقتصاد آنلاین": "https://eghtesadonline.com",
+  "دنیای اقتصاد": "https://www.donya-e-eqtesad.com",
+  "شبکه خبر": "https://www.irinn.ir",
+  "پایگاه اطلاع‌رسانی دولت": "https://dolat.ir",
+  "انتخاب": "https://www.entekhab.ir",
+  "ایران": "https://www.ion.ir",
+  "رویترز": "https://www.reuters.com",
+  "Reuters": "https://www.reuters.com",
+  "AP": "https://apnews.com",
+  "Associated Press": "https://apnews.com",
+};
 
 function toPersianNum(n: number): string {
   return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
@@ -152,28 +182,39 @@ export default async function ArticlePage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: "اخبار", item: `${SITE_URL}/categories` },
-      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60) },
+      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60), item: canonical },
     ],
   };
+
+  // Resolve author URL: use known source URL, fall back to palsiran organization
+  const authorUrl = SOURCE_URLS[item.source];
+  const authorNode = item.source.startsWith("@")
+    ? { "@id": `${SITE_URL}/#organization` }
+    : {
+        "@type": "Organization",
+        name: item.source,
+        ...(authorUrl ? { url: authorUrl } : { "@id": `${SITE_URL}/#organization` }),
+      };
+
+  // Image: use real dimensions only for og-default fallback; skip dimensions for external images
+  const imageNode = imageUrl === `${SITE_URL}/og-default.jpg`
+    ? { "@type": "ImageObject", url: imageUrl, width: 1200, height: 630 }
+    : { "@type": "ImageObject", url: imageUrl };
 
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "@id": canonical,
+    url: canonical,
     headline: item.title,
     description:
       item.summary && item.summary.length > 30
         ? item.summary.slice(0, 160)
         : item.title.slice(0, 160),
-    image: {
-      "@type": "ImageObject",
-      url: imageUrl,
-      width: 1200,
-      height: 630,
-    },
+    image: imageNode,
     datePublished: new Date(item.posted_at).toISOString(),
     dateModified: new Date(item.posted_at).toISOString(),
-    author: { "@type": "Organization", name: item.source },
+    author: authorNode,
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     speakable: {
@@ -182,7 +223,7 @@ export default async function ArticlePage({
     },
     inLanguage: "fa",
     ...(catName !== "اخبار" ? { articleSection: catName } : {}),
-    ...(item.link ? { url: item.link } : {}),
+    ...(item.link ? { sameAs: item.link } : {}),
   };
 
   return (
