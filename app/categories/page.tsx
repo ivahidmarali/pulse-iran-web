@@ -7,7 +7,7 @@ import NewsCard from "@/components/news/NewsCard";
 import { getNews, getSources, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
-import { toPersianNum } from "@/lib/utils";
+import { toPersianNum, SITE_URL } from "@/lib/utils";
 
 const PAGE_SIZE = 33;
 
@@ -79,10 +79,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { cat, group, source } = await searchParams;
   const label = cat || group || source || "دسته‌بندی اخبار";
+  const q = new URLSearchParams();
+  if (cat) q.set("cat", cat);
+  if (group) q.set("group", group);
+  if (source) q.set("source", source);
+  const qs = q.toString();
+  const canonical = `${SITE_URL}/categories${qs ? `?${qs}` : ""}`;
   return {
     title: label,
     description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label} — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر`,
     keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
+    alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
   };
 }
 

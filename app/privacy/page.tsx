@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
+import { SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "حریم خصوصی",
   description: "سیاست حریم خصوصی پالس ایران — نحوه جمع‌آوری، استفاده و حفاظت از داده‌های کاربران",
+  alternates: { canonical: `${SITE_URL}/privacy`, languages: { fa: `${SITE_URL}/privacy`, "x-default": `${SITE_URL}/privacy` } },
 };
 
 export default function PrivacyPage() {

@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
+import { SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "شرایط استفاده",
   description: "شرایط و قوانین استفاده از سایت پالس ایران — حقوق و مسئولیت‌های کاربران",
+  alternates: { canonical: `${SITE_URL}/terms`, languages: { fa: `${SITE_URL}/terms`, "x-default": `${SITE_URL}/terms` } },
 };
 
 export default function TermsPage() {

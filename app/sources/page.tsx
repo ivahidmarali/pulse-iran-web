@@ -4,11 +4,12 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
-import { toPersianNum } from "@/lib/utils";
+import { SITE_URL, toPersianNum } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "منابع خبری",
   description: "فهرست منابع خبری پالس ایران — رسانه‌های داخلی و خارجی با گرایش سیاسی",
+  alternates: { canonical: `${SITE_URL}/sources`, languages: { fa: `${SITE_URL}/sources`, "x-default": `${SITE_URL}/sources` } },
 };
 
 const LEAN_META: Record<string, { bar: string; text: string; bg: string }> = {

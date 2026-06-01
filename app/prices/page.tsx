@@ -3,6 +3,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getPrices } from "@/lib/api";
 import { PriceItem } from "@/lib/types";
+import { SITE_URL } from "@/lib/utils";
 
 export const revalidate = 300;
 
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   title: "نرخ ارز و طلا",
   description: "نرخ زنده دلار، یورو، طلا، سکه و ارزهای دیجیتال در ایران — به‌روزرسانی لحظه‌ای",
   keywords: ["نرخ دلار", "قیمت طلا", "قیمت سکه", "نرخ ارز", "بیت کوین", "ایران"],
-  openGraph: { type: "website" },
+  openGraph: { type: "website", url: `${SITE_URL}/prices` },
+  alternates: { canonical: `${SITE_URL}/prices`, languages: { fa: `${SITE_URL}/prices`, "x-default": `${SITE_URL}/prices` } },
 };
 
 async function fetchPrices(): Promise<PriceItem[]> {

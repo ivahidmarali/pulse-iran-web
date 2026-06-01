@@ -4,11 +4,13 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
+import { SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "درباره پالس ایران",
   description:
     "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی — روش‌شناسی، اصول تحریریه و نحوه دسته‌بندی گرایش سیاسی منابع",
+  alternates: { canonical: `${SITE_URL}/about`, languages: { fa: `${SITE_URL}/about`, "x-default": `${SITE_URL}/about` } },
 };
 
 const LEAN_COLOR: Record<string, string> = {

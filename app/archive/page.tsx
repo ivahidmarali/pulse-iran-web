@@ -3,6 +3,7 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
+import { SITE_URL } from "@/lib/utils";
 import { getArchive, getSources } from "@/lib/api";
 import { NewsItem, SourceInfo } from "@/lib/types";
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   description:
     "مرور آرشیو کامل اخبار ایران و جهان از بیش از ۴۵ منبع خبری — فیلتر بر اساس تاریخ، منبع و موضوع",
   keywords: ["آرشیو اخبار", "اخبار قدیمی", "بایگانی اخبار", "اخبار ایران"],
+  alternates: { canonical: `${SITE_URL}/archive`, languages: { fa: `${SITE_URL}/archive`, "x-default": `${SITE_URL}/archive` } },
 };
 
 async function fetchData(date?: string, source?: string, page = 1) {
