@@ -19,6 +19,9 @@ export default function robots(): MetadataRoute.Robots {
       },
       // Training bots managed by Cloudflare (GPTBot, ClaudeBot, CCBot, Google-Extended)
     ],
-    sitemap: 'https://palsiran.com/sitemap.xml',
+    sitemap: [
+      'https://palsiran.com/sitemap.xml',
+      'https://palsiran.com/news-sitemap.xml',
+    ],
   }
 }

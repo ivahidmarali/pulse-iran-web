@@ -105,7 +105,7 @@ export async function generateMetadata({
       description,
       images: [imageUrl],
     },
-    alternates: { canonical },
+    alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     other: {
       news_keywords: `${catName}, اخبار ایران, ${item.source}`,
       ...(item.link

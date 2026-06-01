@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
-    languages: { fa: SITE_URL },
+    languages: { fa: SITE_URL, "x-default": SITE_URL },
   },
   robots: {
     index: true,
