@@ -57,13 +57,13 @@ export async function generateMetadata({
   const canonical = `${SITE_URL}/tag/${slug}`;
 
   return {
-    title: `اخبار ${tag.name}`,
-    description: tag.description,
-    keywords: [`اخبار ${tag.name}`, `${tag.name} ایران`, "اخبار روز ایران"],
+    title: `اخبار ${tag.name} ایران امروز | پالس ایران`,
+    description: `آخرین اخبار ${tag.name} ایران امروز. ${tag.description}`,
+    keywords: [`اخبار ${tag.name} امروز`, `اخبار ${tag.name} ایران`, `${tag.name} ایران`, "اخبار روز ایران"],
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     openGraph: {
-      title: `اخبار ${tag.name} | پالس ایران`,
-      description: tag.description,
+      title: `اخبار ${tag.name} ایران امروز | پالس ایران`,
+      description: `آخرین اخبار ${tag.name} ایران امروز. ${tag.description}`,
       url: canonical,
       siteName: "پالس ایران",
       locale: "fa_IR",
@@ -102,7 +102,7 @@ export default async function TagPage({
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "@id": canonical,
-    name: `اخبار ${tag.name}`,
+    name: `اخبار ${tag.name} ایران امروز`,
     description: tag.description,
     url: canonical,
     inLanguage: "fa",
@@ -154,7 +154,7 @@ export default async function TagPage({
           <div className="flex items-center gap-3 mb-5">
             <span className="text-3xl">{tag.emoji}</span>
             <div>
-              <h1 className="text-lg font-bold text-on-surface">اخبار {tag.name}</h1>
+              <h1 className="text-lg font-bold text-on-surface">اخبار {tag.name} ایران امروز</h1>
               <p className="text-xs text-on-surface-variant mt-0.5">{tag.description}</p>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default async function TagPage({
           <div className="flex items-center gap-4 mb-8">
             <span className="text-4xl">{tag.emoji}</span>
             <div>
-              <h1 className="text-2xl font-black text-on-surface">اخبار {tag.name}</h1>
+              <h1 className="text-2xl font-black text-on-surface">اخبار {tag.name} ایران امروز</h1>
               <p className="text-sm text-on-surface-variant mt-1">{tag.description}</p>
             </div>
           </div>

@@ -7,13 +7,23 @@ import { SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "نرخ ارز و طلا",
-  description: "نرخ زنده دلار، یورو، طلا، سکه و ارزهای دیجیتال در ایران — به‌روزرسانی لحظه‌ای",
-  keywords: ["نرخ دلار", "قیمت طلا", "قیمت سکه", "نرخ ارز", "بیت کوین", "ایران"],
-  openGraph: { type: "website", url: `${SITE_URL}/prices` },
-  alternates: { canonical: `${SITE_URL}/prices`, languages: { fa: `${SITE_URL}/prices`, "x-default": `${SITE_URL}/prices` } },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const today = new Intl.DateTimeFormat("fa-IR", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  }).format(new Date());
+  return {
+    title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,
+    description: `نرخ زنده دلار، یورو، طلا، سکه در ایران امروز (${today}) — نرخ بازار آزاد، به‌روزرسانی هر ۵ دقیقه`,
+    keywords: ["قیمت دلار امروز", "نرخ دلار", "قیمت طلا امروز", "قیمت سکه", "نرخ ارز", "بازار آزاد", "ایران"],
+    openGraph: {
+      title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,
+      description: `نرخ زنده دلار، یورو، طلا، سکه در ایران امروز — بازار آزاد`,
+      type: "website",
+      url: `${SITE_URL}/prices`,
+    },
+    alternates: { canonical: `${SITE_URL}/prices`, languages: { fa: `${SITE_URL}/prices`, "x-default": `${SITE_URL}/prices` } },
+  };
+}
 
 async function fetchPrices(): Promise<PriceItem[]> {
   try {
@@ -150,16 +160,18 @@ function PricesJsonLd({ prices }: { prices: PriceItem[] }) {
     name: "نرخ زنده ارز و طلا در ایران",
     description: "نرخ لحظه‌ای دلار، یورو، طلا، سکه و ارزهای دیجیتال در بازار ایران",
     url: "https://palsiran.com/prices",
-    temporalCoverage: new Date().toISOString().split("T")[0],
+    temporalCoverage: new Date().toISOString(),
     dateModified: new Date().toISOString(),
     publisher: { "@id": "https://palsiran.com/#organization" },
+    measurementMethod: "نرخ بازار آزاد ایران",
     variableMeasured: prices.map((p) => {
       const meta = PRICE_META[p.key];
       return {
         "@type": "PropertyValue",
         name: meta?.name ?? p.key,
         value: p.price,
-        unitText: "IRR",
+        unitText: "تومان",
+        unitCode: "IRR",
       };
     }),
   };
@@ -184,16 +196,17 @@ export default async function PricesPage() {
       <div className="md:hidden">
         <main className="pb-4 px-container-margin pt-4">
           {/* header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] text-on-surface-variant">هر ۵ دقیقه به‌روز می‌شود</span>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-on-surface">نرخ ارز و طلا</h1>
+              <h1 className="text-lg font-bold text-on-surface">قیمت دلار و طلا امروز</h1>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
               </span>
             </div>
           </div>
+          <p className="text-[10px] text-on-surface-variant/60 mb-6 text-right">منبع: نرخ بازار آزاد ایران</p>
 
           {/* currencies */}
           <section className="mb-8">
@@ -224,10 +237,10 @@ export default async function PricesPage() {
       <div className="hidden md:block">
         <main className="max-w-5xl mx-auto px-container-margin py-10">
           {/* page header */}
-          <div className="flex items-center justify-between mb-10">
-            <span className="text-xs text-on-surface-variant">هر ۵ دقیقه به‌روز می‌شود</span>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs text-on-surface-variant">منبع: نرخ بازار آزاد — هر ۵ دقیقه</span>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-black text-on-surface">نرخ ارز و طلا</h1>
+              <h1 className="text-2xl font-black text-on-surface">قیمت دلار و طلا امروز</h1>
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />

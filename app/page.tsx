@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
@@ -8,7 +9,34 @@ import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, PriceItem } from "@/lib/types";
-import { articleHref, toPersianNum } from "@/lib/utils";
+import { articleHref, articleUrl, toPersianNum, SITE_URL, safeJsonLd } from "@/lib/utils";
+
+export const revalidate = 120; // regenerate every 2 min for dynamic date + fresh schema
+
+function getPersianDate(): string {
+  return new Intl.DateTimeFormat("fa-IR", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date());
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const today = getPersianDate();
+  return {
+    title: `اخبار ایران امروز — ${today} | پالس ایران`,
+    description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس — بی‌طرف از ۴۵+ منبع.`,
+    openGraph: {
+      title: `اخبار ایران امروز — ${today} | پالس ایران`,
+      description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده بی‌طرف از ۴۵+ منبع خبری.`,
+    },
+    twitter: {
+      title: `اخبار ایران امروز — ${today} | پالس ایران`,
+      description: `آخرین اخبار روز ایران و جهان در ${today}`,
+    },
+  };
+}
 
 const PAGE_SIZE = 33;
 
@@ -64,8 +92,60 @@ export default async function HomePage({
   const CURRENCY_KEYS = ["price_dollar_rl", "price_eur", "price_gbp"];
   const widgetPrices = CURRENCY_KEYS.map((k) => priceMap[k]).filter(Boolean);
 
+  const today = getPersianDate();
+  const nowIso = new Date().toISOString();
+
+  // LiveBlogPosting schema — signals to Google this is a live breaking-news feed
+  const liveBlogJsonLd = breaking.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "LiveBlogPosting",
+    "@id": `${SITE_URL}/#liveblog`,
+    headline: `اخبار فوری ایران امروز — ${today}`,
+    name: "پالس ایران — اخبار لحظه به لحظه",
+    url: SITE_URL,
+    datePublished: new Date(breaking[breaking.length - 1]?.posted_at ?? nowIso).toISOString(),
+    dateModified: new Date(breaking[0]?.posted_at ?? nowIso).toISOString(),
+    inLanguage: "fa",
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    coverageStartTime: new Date(breaking[breaking.length - 1]?.posted_at ?? nowIso).toISOString(),
+    coverageEndTime: nowIso,
+    liveBlogUpdate: breaking.slice(0, 5).map((item) => ({
+      "@type": "BlogPosting",
+      "@id": articleUrl(item.item_id, item.title),
+      headline: item.title,
+      url: articleUrl(item.item_id, item.title),
+      datePublished: new Date(item.posted_at).toISOString(),
+      author: { "@id": `${SITE_URL}/#organization` },
+    })),
+  } : null;
+
+  // ItemList schema — structured list of top articles for AI/Google indexing
+  const itemListJsonLd = news.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `آخرین اخبار ایران — ${today}`,
+    url: SITE_URL,
+    numberOfItems: Math.min(news.length, 10),
+    itemListElement: news.slice(0, 10).map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: articleUrl(item.item_id, item.title),
+      name: item.title,
+    })),
+  } : null;
+
   return (
     <div className="cyber-grid" dir="rtl">
+      {/* Structured data — LiveBlogPosting + ItemList */}
+      {liveBlogJsonLd && (
+        // eslint-disable-next-line react/no-danger
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(liveBlogJsonLd) }} />
+      )}
+      {itemListJsonLd && (
+        // eslint-disable-next-line react/no-danger
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(itemListJsonLd) }} />
+      )}
+
       {/* ── Mobile ── */}
       <div className="md:hidden">
         {/* Sticky category tabs */}
@@ -77,6 +157,13 @@ export default async function HomePage({
         </div>
 
         <main className="pb-4 pt-3">
+          {/* Page h1 — visible to crawlers, styled as section label */}
+          <div className="px-container-margin mb-3">
+            <h1 className="text-xs font-bold text-secondary-fixed-dim/70 tracking-widest">
+              اخبار ایران امروز — {today}
+            </h1>
+          </div>
+
           {/* Hero */}
           {hero && (
             <div className="px-container-margin mb-4">
@@ -155,6 +242,11 @@ export default async function HomePage({
               <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
             </div>
 
+            {/* Page h1 — keyword + live date signal for Google */}
+            <h1 className="text-sm font-bold text-secondary-fixed-dim/70 tracking-widest -mb-2">
+              اخبار ایران امروز — {today}
+            </h1>
+
             {hero && <NewsCard item={hero} variant="hero" priority />}
 
             <div className="grid grid-cols-2 gap-gutter">
@@ -187,10 +279,13 @@ export default async function HomePage({
           {/* Right sidebar: 3 cols */}
           <aside className="col-span-3 flex flex-col gap-gutter">
             <section className="bg-surface-container-low border-l border-white/5 shadow-md p-gutter rounded-xl">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-1">
                 <h2 className="font-title-md text-title-md text-secondary-fixed-dim">مانیتورینگ زنده</h2>
                 <span className="text-secondary-fixed-dim text-xl">💰</span>
               </div>
+              <p className="text-[10px] text-on-surface-variant/60 mb-3 text-right">
+                نرخ بازار آزاد — هر ۵ دقیقه به‌روز
+              </p>
               <div className="space-y-3 min-h-[200px]">
                 {widgetPrices.map((p) => (
                   <CurrencyRow key={p.key} item={p} />

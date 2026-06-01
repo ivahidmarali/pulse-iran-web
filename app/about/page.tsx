@@ -83,10 +83,10 @@ export default async function AboutPage() {
               <span className="w-2 h-2 rounded-full bg-secondary-fixed-dim animate-pulse" />
               <span className="text-label-sm font-label-sm text-secondary-fixed-dim">درباره پالس ایران</span>
             </div>
-            <h2 className="text-display-lg font-display-lg text-on-surface mb-8 leading-tight">
+            <h1 className="text-display-lg font-display-lg text-on-surface mb-8 leading-tight">
               بی‌طرف، از همه منابع،{" "}
               <span className="text-secondary-fixed-dim">بدون سانسور</span>
-            </h2>
+            </h1>
             <p className="text-body-lg font-body-lg text-on-surface-variant mb-12 leading-relaxed">
               پالس ایران به عنوان یک مرکز پایش داده و اخبار، مأموریت دارد تا بدون پیش‌فرض‌های سیاسی، تمامی جریان‌های خبری را در یک قاب واحد به نمایش بگذارد. ما معتقدیم آگاهی کامل تنها از طریق دسترسی به تنوع آرا میسر است.
             </p>
@@ -109,7 +109,7 @@ export default async function AboutPage() {
         <section className="px-container-margin mb-section-gap">
           <div className="max-w-4xl mx-auto space-y-8">
             <div className="border-r-4 border-secondary-fixed-dim pr-4">
-              <h3 className="text-title-md font-title-md text-on-surface">روش‌شناسی تحریریه</h3>
+              <h2 className="text-title-md font-title-md text-on-surface">روش‌شناسی تحریریه</h2>
               <p className="text-label-sm font-label-sm text-on-surface-variant">نحوه جمع‌آوری، پردازش و نمایش اخبار</p>
             </div>
             <div className="mt-4 mb-6">
@@ -138,6 +138,45 @@ export default async function AboutPage() {
                 <p>پالس ایران هیچ فیلتر سیاسی بر محتوا اعمال نمی‌کند. اخبار از تمام طیف‌های سیاسی منتشر می‌شود تا خوانندگان خود بتوانند با دسترسی به تنوع آرا، قضاوت مستقل داشته باشند.</p>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Credibility Badge System — E-E-A-T signal, explains differentiator */}
+        <section className="px-container-margin mb-section-gap">
+          <div className="max-w-4xl mx-auto">
+            <div className="border-r-4 border-secondary-fixed-dim pr-4 mb-8">
+              <h2 className="text-title-md font-title-md text-on-surface">سیستم تأیید چندمنبعی</h2>
+              <p className="text-label-sm font-label-sm text-on-surface-variant">چگونه صحت خبر را ارزیابی می‌کنیم</p>
+            </div>
+            <p className="text-sm text-on-surface-variant leading-relaxed mb-6">
+              پالس ایران یک سیستم خودکار تأیید خبر بر اساس پوشش چندمنبعی دارد. هر خبر پس از انتشار، با منابع دیگر مقایسه می‌شود و بر اساس تعداد منابع مستقل تأییدکننده، یکی از سه نشان دریافت می‌کند:
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">✅</span>
+                  <h3 className="font-bold text-green-400 text-sm">تأیید شده</h3>
+                </div>
+                <p className="text-xs text-on-surface-variant leading-relaxed">خبر توسط ۳ یا بیشتر منبع مستقل پوشش داده شده است. بالاترین درجه اطمینان. منابع تأییدکننده به نمایش درمی‌آیند.</p>
+              </div>
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">🔄</span>
+                  <h3 className="font-bold text-yellow-400 text-sm">در حال بررسی</h3>
+                </div>
+                <p className="text-xs text-on-surface-variant leading-relaxed">خبر توسط ۲ منبع مستقل پوشش داده شده اما هنوز در انتظار تأیید بیشتر است. احتیاط در اشتراک‌گذاری توصیه می‌شود.</p>
+              </div>
+              <div className="bg-gray-500/10 border border-gray-500/20 rounded-xl p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">⚠️</span>
+                  <h3 className="font-bold text-gray-400 text-sm">تأیید نشده</h3>
+                </div>
+                <p className="text-xs text-on-surface-variant leading-relaxed">خبر تنها از یک منبع دریافت شده است. ممکن است اطلاعات اولیه یا ادعای تأییدنشده باشد. با احتیاط بخوانید.</p>
+              </div>
+            </div>
+            <p className="text-xs text-on-surface-variant/60 leading-relaxed">
+              این سیستم کاملاً خودکار است و هیچ دخالت دستی در امتیازدهی وجود ندارد. «منابع مستقل» به معنای منابعی است که در طبقه‌بندی گرایش سیاسی ما در دسته‌های متفاوت قرار دارند — تأیید توسط چند رسانه هم‌گرایش، به عنوان چندمنبعه محاسبه نمی‌شود.
+            </p>
           </div>
         </section>
 
