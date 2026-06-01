@@ -1,9 +1,9 @@
-import { SITE_URL } from "@/lib/utils";
+import { articleUrl } from "@/lib/utils";
 
 export const revalidate = 300; // regenerate every 5 minutes
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
-const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
+const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 
 interface Item {
   item_id: string;
@@ -19,7 +19,7 @@ export async function GET() {
     });
     if (res.ok) {
       const data = await res.json();
-      const cutoff = Date.now() - TWO_DAYS_MS;
+      const cutoff = Date.now() - THREE_DAYS_MS;
       items = (data.items ?? []).filter(
         (i: Item) => i.title && new Date(i.posted_at).getTime() > cutoff
       );
@@ -40,7 +40,7 @@ export async function GET() {
     .map(
       (item) => `
   <url>
-    <loc>${SITE_URL}/article/${encodeURIComponent(item.item_id)}</loc>
+    <loc>${articleUrl(item.item_id, item.title)}</loc>
     <news:news>
       <news:publication>
         <news:name>پالس ایران</news:name>
