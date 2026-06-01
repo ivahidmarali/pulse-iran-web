@@ -47,13 +47,11 @@ const navItems = [
     ),
   },
   {
-    href: "/sources",
-    label: "منابع",
+    href: "/saved",
+    label: "ذخیره‌ها",
     icon: (active: boolean) => (
       <svg viewBox="0 0 24 24" className="w-6 h-6" fill={active ? "currentColor" : "none"} stroke="currentColor" strokeWidth={2}>
-        <path d="M4 22h14a2 2 0 002-2V7l-5-5H6a2 2 0 00-2 2v4"/>
-        <path d="M14 2v4a2 2 0 002 2h4"/>
-        <path d="M2 15h10M2 19h6"/>
+        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>
       </svg>
     ),
   },

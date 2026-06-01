@@ -4,6 +4,7 @@ import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import ArticleActions from "@/components/article/ArticleActions";
+import ArticleNavBar from "@/components/article/ArticleNavBar";
 import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
@@ -58,6 +59,10 @@ function timeAgo(dateStr: string): string {
   const days = Math.floor(hrs / 24);
   if (days === 1) return "دیروز";
   return `${days} روز پیش`;
+}
+
+function readingTime(text: string): number {
+  return Math.max(1, Math.ceil(text.trim().split(/\s+/).length / 200));
 }
 
 export async function generateMetadata({
@@ -184,11 +189,17 @@ export default async function ArticlePage({
     <div className="cyber-grid" dir="rtl">
       {/* Mobile */}
       <div className="md:hidden">
+        <ArticleNavBar title={item.title} />
         <main className="pb-4">
           <article className="px-container-margin py-section-gap">
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
               <span className="text-secondary-fixed-dim font-bold">{item.source}</span>
-              <span>🕐 {ago}</span>
+              <div className="flex items-center gap-3">
+                {item.summary && item.summary.length > 30 && (
+                  <span>{toPersianNum(readingTime(item.summary))} دقیقه</span>
+                )}
+                <span>🕐 {ago}</span>
+              </div>
             </div>
 
             {item.is_breaking && (
@@ -371,6 +382,9 @@ export default async function ArticlePage({
                 <div className="flex items-center gap-4 text-sm">
                   <span>📰 منبع: <span className="text-secondary-fixed-dim">{item.source}</span></span>
                   <span>🕐 {ago}</span>
+                  {item.summary && item.summary.length > 30 && (
+                    <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>
+                  )}
                 </div>
                 <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
               </div>

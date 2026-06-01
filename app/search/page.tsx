@@ -79,7 +79,7 @@ export default async function SearchPage({
       <div className="md:hidden">
         <main className="pb-4">
           {/* sticky search bar */}
-          <div className="sticky top-0 z-50 bg-surface border-b border-white/5 px-4 py-3">
+          <div className="sticky top-[104px] z-40 bg-surface border-b border-white/5 px-4 py-3">
             <form method="get" action="/search">
               <div className="relative flex items-center">
                 <input

@@ -3,6 +3,7 @@ import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
+import LoadMoreFeed from "@/components/news/LoadMoreFeed";
 import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
@@ -69,7 +70,10 @@ export default async function HomePage({
       <div className="md:hidden">
         {/* Sticky category tabs */}
         <div className="sticky top-[104px] z-30 bg-background border-b border-white/5 px-container-margin py-2">
-          <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
+          <div className="relative">
+            <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
+            <div className="absolute left-0 top-0 h-full w-8 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+          </div>
         </div>
 
         <main className="pb-4 pt-3">
@@ -112,12 +116,12 @@ export default async function HomePage({
                       className="shrink-0 bg-surface-container rounded-xl px-3 py-2.5 flex flex-col gap-1 min-w-[90px] border border-white/5"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className={`text-[10px] font-bold tabular-nums ${up ? "text-emerald-400" : down ? "text-red-400" : "text-on-surface-variant"}`}>
+                        <span className={`text-xs font-bold tabular-nums ${up ? "text-emerald-400" : down ? "text-red-400" : "text-on-surface-variant"}`}>
                           {p.change_pct && p.change_pct !== 0 ? `${up ? "▲" : "▼"}${Math.abs(p.change_pct).toFixed(1)}٪` : "—"}
                         </span>
                         <span className="text-xs font-black text-secondary-fixed-dim">{meta.symbol}</span>
                       </div>
-                      <span className="text-[11px] text-on-surface-variant text-right">{meta.name}</span>
+                      <span className="text-xs text-on-surface-variant text-right">{meta.name}</span>
                       <span className="text-sm font-bold text-on-surface tabular-nums text-right">
                         {p.price.toLocaleString("fa-IR")}
                       </span>
@@ -128,36 +132,14 @@ export default async function HomePage({
             </div>
           )}
 
-          {/* News feed */}
-          <div className="px-container-margin space-y-2.5">
-            {rest.length === 0 && (
-              <div className="text-center py-16 text-on-surface-variant text-sm">
-                خبری در این دسته‌بندی یافت نشد
-              </div>
-            )}
-            {rest.map((item) => (
-              <NewsCard key={item.item_id} item={item} variant="horizontal" />
-            ))}
-          </div>
-
-          {/* Mobile pagination */}
-          {pages > 1 && (
-            <div className="px-container-margin flex justify-center items-center gap-3 mt-6 mb-2">
-              {page > 1 && (
-                <Link href={pageUrl(page - 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
-                  ← قبلی
-                </Link>
-              )}
-              <span className="text-sm text-on-surface-variant">
-                {toPersianNum(page)} / {toPersianNum(pages)}
-              </span>
-              {page < pages && (
-                <Link href={pageUrl(page + 1)} className="px-4 py-2 bg-surface-container rounded-lg text-sm text-on-surface-variant">
-                  بعدی →
-                </Link>
-              )}
-            </div>
-          )}
+          {/* News feed with load-more */}
+          <LoadMoreFeed
+            initialItems={rest}
+            initialPage={page}
+            initialPages={pages}
+            cat={cat}
+            group={group}
+          />
         </main>
         <MobileFooter />
       </div>
