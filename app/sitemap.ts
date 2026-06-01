@@ -98,7 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata
   const articleRoutes: MetadataRoute.Sitemap = uniqueItems.map((item) => ({
     url: articleUrl(item.item_id, item.title),
-    lastModified: item.posted_at ? new Date(item.posted_at) : now,
+    lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
   }));
 
   return [...staticRoutes, ...leanRoutes, ...tagRoutes, ...sourceRoutes, ...articleRoutes];

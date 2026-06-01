@@ -123,6 +123,13 @@ const organizationJsonLd = {
   },
   sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
   publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
+  editor: { "@id": `${SITE_URL}/#editor` },
+  contactPoint: {
+    "@type": "ContactPoint",
+    email: "info@palsiran.com",
+    contactType: "editorial",
+    availableLanguage: "Persian",
+  },
   knowsAbout: [
     "Iran news",
     "Persian politics",

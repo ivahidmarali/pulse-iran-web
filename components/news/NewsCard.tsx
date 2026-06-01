@@ -157,6 +157,9 @@ export default function NewsCard({ item, variant = "default", priority = false }
             )}
           </div>
           <h4 className="font-bold text-[18px] leading-snug line-clamp-2">{item.title}</h4>
+          {item.summary && (
+            <p className="text-[12px] text-on-surface-variant/80 line-clamp-2 leading-relaxed">{item.summary}</p>
+          )}
           <div className="flex items-center gap-2 text-on-surface-variant text-[12px]">
             <span>{item.source}</span>
             {item.political_lean && (
@@ -219,6 +222,9 @@ export default function NewsCard({ item, variant = "default", priority = false }
           )}
         </div>
         <h3 className="font-bold text-[17px] text-on-surface leading-snug line-clamp-3 group-hover:text-secondary-fixed-dim transition-colors">{item.title}</h3>
+        {item.summary && (
+          <p className="text-[12px] text-on-surface-variant/80 line-clamp-2 leading-relaxed">{item.summary}</p>
+        )}
         <div className="flex items-center gap-2 text-[11px] text-outline">
           <span>{item.source}</span>
           {item.political_lean && (

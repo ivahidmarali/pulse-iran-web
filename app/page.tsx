@@ -95,6 +95,16 @@ export default async function HomePage({
   const today = getPersianDate();
   const nowIso = new Date().toISOString();
 
+  // Format price last-update time in Tehran timezone
+  const rawUpdatedAt = widgetPrices[0]?.updated_at ?? prices[0]?.updated_at;
+  const priceTimeStr = rawUpdatedAt
+    ? new Intl.DateTimeFormat("fa-IR", {
+        timeZone: "Asia/Tehran",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date(/[Zz]|[+-]\d{2}:\d{2}$/.test(rawUpdatedAt) ? rawUpdatedAt : rawUpdatedAt + "Z"))
+    : null;
+
   // LiveBlogPosting schema — signals to Google this is a live breaking-news feed
   const liveBlogJsonLd = breaking.length > 0 ? {
     "@context": "https://schema.org",
@@ -176,7 +186,12 @@ export default async function HomePage({
             <div className="mb-5">
               <div className="flex items-center justify-between px-container-margin mb-2">
                 <Link href="/prices" className="text-[11px] text-secondary-fixed-dim font-medium">مشاهده همه ←</Link>
-                <span className="text-xs font-bold text-on-surface-variant">قیمت‌ها</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-bold text-on-surface-variant">قیمت‌ها</span>
+                  {priceTimeStr && (
+                    <span className="text-[10px] text-on-surface-variant/50 tabular-nums">· {priceTimeStr}</span>
+                  )}
+                </div>
               </div>
               <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin">
                 {currencyPrices.map((p) => {
@@ -284,7 +299,12 @@ export default async function HomePage({
                 <span className="text-secondary-fixed-dim text-xl">💰</span>
               </div>
               <p className="text-[10px] text-on-surface-variant/60 mb-3 text-right">
-                نرخ بازار آزاد — هر ۵ دقیقه به‌روز
+                نرخ بازار آزاد
+                {priceTimeStr ? (
+                  <> · <span className="tabular-nums">به‌روز {priceTimeStr}</span></>
+                ) : (
+                  " — هر ۵ دقیقه"
+                )}
               </p>
               <div className="space-y-3 min-h-[200px]">
                 {widgetPrices.map((p) => (

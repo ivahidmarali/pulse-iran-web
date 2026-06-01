@@ -11,9 +11,15 @@ export default function TopBarMobile() {
         </span>
       </Link>
 
-      {/* Left: Tehran clock + bookmark */}
+      {/* Left: Tehran clock + search + bookmark */}
       <div className="flex items-center gap-3">
         <TehranClock />
+        <Link href="/search" aria-label="جستجو" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">
+          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
+            <circle cx="11" cy="11" r="8"/>
+            <path d="M21 21l-4.35-4.35"/>
+          </svg>
+        </Link>
         <Link href="/saved" aria-label="اخبار ذخیره‌شده" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">
           <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2}>
             <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>

@@ -36,6 +36,17 @@ const aboutPageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#organization` },
 };
 
+const editorPersonJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE_URL}/#editor`,
+  name: "واحد تحریریه پالس ایران",
+  jobTitle: "سردبیر",
+  worksFor: { "@id": `${SITE_URL}/#organization` },
+  email: "info@palsiran.com",
+  url: `${SITE_URL}/about`,
+};
+
 const LEAN_COLOR: Record<string, string> = {
   "اصول‌گرا": "bg-green-500/50",
   "اصلاح‌طلب": "bg-blue-500/50",
@@ -69,9 +80,10 @@ export default async function AboutPage() {
 
   return (
     <div className="cyber-grid">
-      {/* safeJsonLd escapes <, >, & — prevents </script> injection */}
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutPageJsonLd) }} />
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(editorPersonJsonLd) }} />
       <main className="pb-4 md:pb-0">
         {/* Hero / Mission */}
         <section className="relative py-section-gap px-container-margin overflow-hidden">
@@ -177,6 +189,48 @@ export default async function AboutPage() {
             <p className="text-xs text-on-surface-variant/60 leading-relaxed">
               این سیستم کاملاً خودکار است و هیچ دخالت دستی در امتیازدهی وجود ندارد. «منابع مستقل» به معنای منابعی است که در طبقه‌بندی گرایش سیاسی ما در دسته‌های متفاوت قرار دارند — تأیید توسط چند رسانه هم‌گرایش، به عنوان چندمنبعه محاسبه نمی‌شود.
             </p>
+          </div>
+        </section>
+
+        {/* Editorial Team — E-E-A-T signal for Google News */}
+        <section className="px-container-margin mb-section-gap">
+          <div className="max-w-4xl mx-auto">
+            <div className="border-r-4 border-secondary-fixed-dim pr-4 mb-8">
+              <h2 className="text-title-md font-title-md text-on-surface">تیم تحریریه</h2>
+              <p className="text-label-sm font-label-sm text-on-surface-variant">مسئولان محتوا و سیاست‌گذاری خبری</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-surface-container rounded-xl p-5 flex items-start gap-4 border border-white/5">
+                <div className="w-12 h-12 rounded-full bg-secondary-fixed-dim/10 flex items-center justify-center shrink-0 text-xl">
+                  📰
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-on-surface">واحد تحریریه پالس ایران</p>
+                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">سردبیر — مسئول محتوا</p>
+                  <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
+                    نظارت بر سیاست انتشار، ارزیابی منابع و کنترل کیفیت محتوا. پایبند به اصول بی‌طرفی و شفافیت در تمام تصمیمات تحریریه.
+                  </p>
+                  <a href="mailto:info@palsiran.com" className="text-xs text-secondary-fixed-dim hover:underline mt-1 inline-block">
+                    info@palsiran.com
+                  </a>
+                </div>
+              </div>
+              <div className="bg-surface-container rounded-xl p-5 flex items-start gap-4 border border-white/5">
+                <div className="w-12 h-12 rounded-full bg-secondary-fixed-dim/10 flex items-center justify-center shrink-0 text-xl">
+                  🤖
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-on-surface">سیستم پردازش خودکار</p>
+                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">تجمیع و خلاصه‌سازی هوشمند</p>
+                  <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
+                    جمع‌آوری لحظه‌ای اخبار از ۴۵+ منبع، دسته‌بندی خودکار و تولید خلاصه با هوش مصنوعی — زیر نظر مستقیم تیم تحریریه.
+                  </p>
+                  <Link href="/about/editorial-policy" className="text-xs text-secondary-fixed-dim hover:underline mt-1 inline-block">
+                    مشاهده سیاست تحریریه ←
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
