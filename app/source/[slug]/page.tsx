@@ -44,13 +44,17 @@ async function fetchArticles(sourceName: string, page = 1): Promise<{ items: New
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ page?: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
   const src = await getSourceBySlug(decodeURIComponent(slug));
   if (!src) return { title: "منبع یافت نشد" };
 
+  const { page: pageStr } = await searchParams;
+  const page = parseInt(pageStr ?? "1", 10) || 1;
   const lean = src.political_lean ?? "منبع خبری";
   const canonical = `${SITE_URL}/source/${encodeURIComponent(slug)}`;
   return {
@@ -68,6 +72,7 @@ export async function generateMetadata({
       locale: "fa_IR",
       type: "website",
     },
+    ...(page > 3 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 

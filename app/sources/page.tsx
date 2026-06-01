@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
-import { SITE_URL, sourceHref, toPersianNum } from "@/lib/utils";
+import { SITE_URL, safeJsonLd, sourceHref, toPersianNum } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "منابع خبری",
@@ -102,6 +102,27 @@ function SourceCard({ src }: { src: SourceInfo }) {
 export default async function SourcesPage() {
   const sources = await fetchSources();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${SITE_URL}/sources`,
+    name: "منابع خبری پالس ایران",
+    description: "فهرست منابع خبری پالس ایران با گرایش سیاسی مشخص",
+    url: `${SITE_URL}/sources`,
+    inLanguage: "fa",
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: sources.length,
+      itemListElement: sources.map((src, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${SITE_URL}${sourceHref(src.name)}`,
+        name: src.name,
+      })),
+    },
+  };
+
   // Group by political lean
   const grouped: Record<string, SourceInfo[]> = {};
   for (const src of sources) {
@@ -119,6 +140,8 @@ export default async function SourcesPage() {
 
   return (
     <div className="cyber-grid" dir="rtl">
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {/* ── Mobile ── */}
       <div className="md:hidden">
         <main className="pb-4 pt-4">

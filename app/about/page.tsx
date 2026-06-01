@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import GlassCard from "@/components/ui/GlassCard";
@@ -85,6 +86,14 @@ export default async function AboutPage() {
             <div className="border-r-4 border-secondary-fixed-dim pr-4">
               <h3 className="text-title-md font-title-md text-on-surface">روش‌شناسی تحریریه</h3>
               <p className="text-label-sm font-label-sm text-on-surface-variant">نحوه جمع‌آوری، پردازش و نمایش اخبار</p>
+            </div>
+            <div className="mt-4 mb-6">
+              <Link
+                href="/about/editorial-policy"
+                className="inline-flex items-center gap-2 text-sm text-secondary-fixed-dim hover:underline"
+              >
+                مشاهده سیاست تحریریه کامل ←
+              </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-on-surface-variant leading-relaxed">
               <div className="space-y-3">

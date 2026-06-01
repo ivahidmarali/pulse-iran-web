@@ -7,7 +7,7 @@ import NewsCard from "@/components/news/NewsCard";
 import { getNews, getSources, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
-import { toPersianNum, SITE_URL } from "@/lib/utils";
+import { toPersianNum, SITE_URL, safeJsonLd, sourceHref } from "@/lib/utils";
 
 const PAGE_SIZE = 33;
 
@@ -124,8 +124,21 @@ export default async function CategoriesPage({
     ? [cat]
     : group ? (CATEGORY_GROUPS[group]?.categories ?? []) : [];
 
+  const label = cat || group || "دسته‌بندی اخبار";
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: label,
+    description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label}`,
+    url: `${SITE_URL}/categories`,
+    inLanguage: "fa",
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+
   return (
     <div className="cyber-grid" dir="rtl">
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {/* ── Mobile ── */}
       <div className="md:hidden">
         {/* Sticky category tabs */}
@@ -221,7 +234,7 @@ export default async function CategoriesPage({
                       key={src.name}
                       href={isActive
                         ? `/categories${cat ? `?cat=${encodeURIComponent(cat)}` : group ? `?group=${encodeURIComponent(group)}` : ""}`
-                        : `/categories?source=${encodeURIComponent(src.name)}`
+                        : sourceHref(src.name)
                       }
                       className={`glass-card rounded-xl p-3 flex items-center justify-between transition-all hover:ring-1 hover:ring-secondary-fixed-dim/40 ${
                         isActive ? "ring-1 ring-secondary-fixed-dim" : ""

@@ -9,7 +9,7 @@ import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
-import { articleHref, articleUrl, safeJsonLd, SITE_URL } from "@/lib/utils";
+import { articleHref, articleUrl, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
 
 // Cache article fetch so generateMetadata and the page share one request
@@ -193,7 +193,7 @@ export default async function ArticlePage({
         <main className="pb-4">
           <article className="px-container-margin py-section-gap">
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
-              <span className="text-secondary-fixed-dim font-bold">{item.source}</span>
+              <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
               <div className="flex items-center gap-3">
                 {item.summary && item.summary.length > 30 && (
                   <span>{toPersianNum(readingTime(item.summary))} دقیقه</span>
@@ -264,7 +264,7 @@ export default async function ArticlePage({
               )}
               <div className="flex items-center gap-3 mt-4 text-label-sm text-on-surface-variant">
                 <span>منبع:</span>
-                <span className="text-secondary-fixed-dim">{item.source}</span>
+                <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
               </div>
             </div>
           </article>
@@ -345,7 +345,7 @@ export default async function ArticlePage({
               <span>/</span>
               <Link href="/categories" className="hover:text-secondary-fixed-dim">اخبار</Link>
               <span>/</span>
-              <span className="text-secondary-fixed-dim">{item.source}</span>
+              <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
             </nav>
 
             <header>
@@ -380,7 +380,7 @@ export default async function ArticlePage({
 
               <div className="flex items-center justify-between py-4 border-y border-white/5 text-on-surface-variant">
                 <div className="flex items-center gap-4 text-sm">
-                  <span>📰 منبع: <span className="text-secondary-fixed-dim">{item.source}</span></span>
+                  <span>📰 منبع: <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link></span>
                   <span>🕐 {ago}</span>
                   {item.summary && item.summary.length > 30 && (
                     <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>
@@ -432,7 +432,7 @@ export default async function ArticlePage({
                     {item.source} 🔗
                   </a>
                 ) : (
-                  <span className="text-secondary-fixed-dim">{item.source}</span>
+                  <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
                 )}
               </div>
             </div>

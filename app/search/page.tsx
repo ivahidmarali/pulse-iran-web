@@ -4,7 +4,14 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { searchNews } from "@/lib/api";
 import { NewsItem } from "@/lib/types";
-import { articleHref } from "@/lib/utils";
+import { articleHref, SITE_URL } from "@/lib/utils";
+
+export const metadata: Metadata = {
+  title: "جستجو",
+  description: "جستجو در اخبار ایران و جهان — پالس ایران",
+  robots: { index: false, follow: true },
+  alternates: { canonical: `${SITE_URL}/search` },
+};
 
 const SUGGESTIONS = [
   "دلار", "مجلس", "بورس", "روحانی", "پزشکیان",
@@ -57,12 +64,6 @@ function SearchResultRow({ item }: { item: NewsItem }) {
     </Link>
   );
 }
-
-export const metadata: Metadata = {
-  title: "جستجو در اخبار",
-  description: "جستجو در میان هزاران خبر ایران و جهان از منابع مختلف",
-  robots: { index: false, follow: true },
-};
 
 export default async function SearchPage({
   searchParams,
