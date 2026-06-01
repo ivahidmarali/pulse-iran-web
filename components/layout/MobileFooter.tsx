@@ -18,7 +18,7 @@ export default function MobileFooter() {
         <Link href="/privacy" className="hover:text-on-surface transition-colors">حریم خصوصی</Link>
         <Link href="/terms" className="hover:text-on-surface transition-colors">شرایط</Link>
       </div>
-      <p className="text-[10px] text-outline/60 mt-3 text-center">تمامی حقوق محفوظ است | info@palsiran.com</p>
+      <p className="text-[10px] text-on-surface-variant mt-3 text-center">تمامی حقوق محفوظ است | info@palsiran.com</p>
     </footer>
   );
 }

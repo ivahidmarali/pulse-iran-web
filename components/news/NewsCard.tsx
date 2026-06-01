@@ -162,7 +162,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
             {item.political_lean && (
               <>
                 <span>·</span>
-                <span className="text-outline/60">{item.political_lean}</span>
+                <span className="text-on-surface-variant">{item.political_lean}</span>
               </>
             )}
             <span>·</span>
@@ -224,7 +224,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
           {item.political_lean && (
             <>
               <span>·</span>
-              <span className="text-outline/60">{item.political_lean}</span>
+              <span className="text-on-surface-variant">{item.political_lean}</span>
             </>
           )}
           {vBadge && (
