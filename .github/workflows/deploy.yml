@@ -53,19 +53,14 @@ jobs:
             pm2 reload pulse-iran-web --update-env || pm2 start npm --name pulse-iran-web -- start
             pm2 save
 
-            # Nginx config (Cloudflare handles SSL — server only needs HTTP)
+            # Nginx config (Cloudflare handles SSL — server only needs HTTP).
+            # Security headers are set by Next.js (next.config.mjs -> headers()).
+            # Do NOT add them here too — duplicates intersect with Cloudflare and
+            # drop telegram.org / api.indexnow.org from the effective CSP.
             cat > /etc/nginx/sites-available/palsiran << 'NGINX'
             server {
                 listen 80;
                 server_name palsiran.com www.palsiran.com;
-
-                # Security headers
-                add_header X-Frame-Options "SAMEORIGIN" always;
-                add_header X-Content-Type-Options "nosniff" always;
-                add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-                add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-                add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
-                add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; frame-src https://t.me;" always;
 
                 location / {
                     proxy_pass         http://localhost:3000;
@@ -98,7 +93,11 @@ jobs:
 
             ln -sf /etc/nginx/sites-available/palsiran /etc/nginx/sites-enabled/palsiran
             rm -f /etc/nginx/sites-enabled/palsiran.com /etc/nginx/sites-enabled/pulse-iran 2>/dev/null || true
-            nginx -t && systemctl reload nginx
+            # Reload nginx: try systemd first, fall back to direct signal
+            # (works regardless of how nginx is supervised). Validates config
+            # first; aborts if syntax is bad.
+            nginx -t
+            systemctl reload nginx 2>/dev/null || nginx -s reload
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}
