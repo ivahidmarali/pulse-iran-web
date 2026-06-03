@@ -3,8 +3,10 @@ import { articleUrl, SITE_URL } from "@/lib/utils";
 export const revalidate = 300; // regenerate every 5 minutes
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
-const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
+const TWO_DAYS_MS = 2 * 24 * 60 * 60 * 1000;
 const MAX_PER_PAGE = 100; // API hard limit (le=100)
+const MAX_NEWS_ARTICLES = 1000; // Google News sitemap cap
+const MAX_PAGES = Math.ceil(MAX_NEWS_ARTICLES / MAX_PER_PAGE);
 const INDEXNOW_KEY = "palsiran2026indexnow";
 
 // Keywords that indicate spam/ad content — exclude from news sitemap
@@ -46,24 +48,40 @@ interface Item {
 const EXCLUDED_SOURCES = new Set(["chekhabarre"]);
 
 export async function GET() {
-  let items: Item[] = [];
+  const items: Item[] = [];
+  const cutoff = Date.now() - TWO_DAYS_MS;
   try {
-    const res = await fetch(`${INTERNAL_API}/news?page=1&per_page=${MAX_PER_PAGE}`, {
-      cache: "no-store",
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const cutoff = Date.now() - THREE_DAYS_MS;
-      items = (data.items ?? []).filter(
-        (i: Item) =>
-          i.title &&
-          new Date(i.posted_at).getTime() > cutoff &&
-          !isSpam(i.title) &&
-          !EXCLUDED_SOURCES.has(i.source ?? "")
+    // Paginate until we hit MAX_NEWS_ARTICLES, run out of items, or cross the
+    // 2-day cutoff (API returns newest first, so an old item ends the scan).
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const res = await fetch(
+        `${INTERNAL_API}/news?page=${page}&per_page=${MAX_PER_PAGE}`,
+        { cache: "no-store" }
       );
+      if (!res.ok) break;
+      const data = await res.json();
+      const batch: Item[] = data.items ?? [];
+      if (batch.length === 0) break;
+
+      let oldestSeenAcrossCutoff = false;
+      for (const i of batch) {
+        const ts = new Date(i.posted_at).getTime();
+        if (ts <= cutoff) {
+          oldestSeenAcrossCutoff = true;
+          continue;
+        }
+        if (!i.title) continue;
+        if (isSpam(i.title)) continue;
+        if (EXCLUDED_SOURCES.has(i.source ?? "")) continue;
+        items.push(i);
+        if (items.length >= MAX_NEWS_ARTICLES) break;
+      }
+      if (items.length >= MAX_NEWS_ARTICLES) break;
+      if (oldestSeenAcrossCutoff) break;
+      if (!data.has_more || batch.length < MAX_PER_PAGE) break;
     }
   } catch {
-    // return empty sitemap on error rather than 500
+    // return whatever we have on error rather than 500
   }
 
   // Deduplicate by item_id, then by normalized title (keep first occurrence)

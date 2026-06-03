@@ -173,7 +173,7 @@ export default async function LeanPage({
           <div className={`p-4 rounded-2xl border border-white/5 mb-6 ${lean.bg}`}>
             <div className="flex items-center gap-3 mb-3">
               <div className={`w-1.5 h-10 rounded-full ${lean.bar}`} />
-              <h1 className="text-lg font-bold text-on-surface">رسانه‌های {lean.name}</h1>
+              <div role="heading" aria-level={1} className="text-lg font-bold text-on-surface">رسانه‌های {lean.name}</div>
             </div>
             <p className="text-sm text-on-surface-variant leading-relaxed">{lean.description}</p>
             <div className="flex items-center gap-4 mt-3 pt-3 border-t border-white/5 text-xs text-on-surface-variant">

@@ -61,35 +61,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const now = new Date();
+  // Google ignores <changefreq> and <priority> since ~2017 — omit them entirely.
   const staticRoutes: MetadataRoute.Sitemap = [
-    // Dynamic feed pages — use current time as lastmod (content always fresh)
-    { url: SITE_URL, lastModified: now, changeFrequency: "always" as const, priority: 1.0 },
-    { url: `${SITE_URL}/prices`, lastModified: now, changeFrequency: "always" as const, priority: 0.9 },
-    { url: `${SITE_URL}/categories`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.8 },
-    { url: `${SITE_URL}/archive`, lastModified: now, changeFrequency: "hourly" as const, priority: 0.7 },
+    { url: SITE_URL, lastModified: now },
+    { url: `${SITE_URL}/prices`, lastModified: now },
+    { url: `${SITE_URL}/categories`, lastModified: now },
+    { url: `${SITE_URL}/archive`, lastModified: now },
     // /search is noindex — exclude from sitemap to avoid contradiction
-    { url: `${SITE_URL}/sources`, lastModified: now, changeFrequency: "weekly" as const, priority: 0.6 },
-    // Static content pages — use real last-edited dates
-    { url: `${SITE_URL}/editorial`, lastModified: now, changeFrequency: "daily" as const, priority: 0.7 },
-    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.5 },
-    { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.4 },
-    { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01"), changeFrequency: "monthly" as const, priority: 0.4 },
-    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29"), changeFrequency: "yearly" as const, priority: 0.3 },
-    { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29"), changeFrequency: "yearly" as const, priority: 0.3 },
+    { url: `${SITE_URL}/sources`, lastModified: now },
+    { url: `${SITE_URL}/editorial`, lastModified: now },
+    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29") },
+    { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
   ];
 
   const leanRoutes: MetadataRoute.Sitemap = LEAN_SLUGS.map((slug) => ({
     url: `${SITE_URL}/lean/${slug}`,
     lastModified: now,
-    changeFrequency: "daily" as const,
-    priority: 0.6,
   }));
 
   const tagRoutes: MetadataRoute.Sitemap = TAG_SLUGS.map((slug) => ({
     url: `${SITE_URL}/tag/${slug}`,
     lastModified: now,
-    changeFrequency: "hourly" as const,
-    priority: 0.7,
   }));
 
   // Exclude removed/inappropriate sources (chekhabarre) from sitemap
@@ -99,8 +94,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .map((src) => ({
       url: `${SITE_URL}/source/${encodeURIComponent(generateSlug(src.name))}`,
       lastModified: now,
-      changeFrequency: "hourly" as const,
-      priority: 0.5,
     }));
 
   // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata

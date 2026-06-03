@@ -29,7 +29,6 @@ export async function generateMetadata({
   const base: Metadata = {
     title: "آرشیو اخبار",
     description: "مرور آرشیو کامل اخبار ایران و جهان از بیش از ۴۵ منبع خبری — فیلتر بر اساس تاریخ، منبع و موضوع",
-    keywords: ["آرشیو اخبار", "اخبار قدیمی", "بایگانی اخبار", "اخبار ایران"],
     alternates: { canonical: `${SITE_URL}/archive`, languages: { fa: `${SITE_URL}/archive`, "x-default": `${SITE_URL}/archive` } },
   };
   if (page > 3) return { ...base, robots: { index: false, follow: true } };

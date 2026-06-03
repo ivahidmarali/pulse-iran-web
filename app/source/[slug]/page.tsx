@@ -164,7 +164,7 @@ export default async function SourceProfilePage({
           <div className={`flex items-center gap-3 p-4 rounded-2xl border border-white/5 mb-6 ${meta?.bg ?? "bg-surface-container"}`}>
             <div className={`w-1.5 h-12 rounded-full shrink-0 ${meta?.bar ?? "bg-white/20"}`} />
             <div className="flex-1 min-w-0">
-              <h1 className="text-base font-bold text-on-surface">{src.name}</h1>
+              <div role="heading" aria-level={1} className="text-base font-bold text-on-surface">{src.name}</div>
               {src.political_lean && (
                 <p className={`text-xs mt-0.5 ${meta?.text ?? "text-on-surface-variant"}`}>{src.political_lean}</p>
               )}

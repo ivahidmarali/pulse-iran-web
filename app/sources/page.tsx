@@ -148,7 +148,7 @@ export default async function SourcesPage() {
           {/* Page header */}
           <div className="flex items-center justify-between px-container-margin mb-5">
             <span className="text-xs text-on-surface-variant">{toPersianNum(sources.length)} منبع</span>
-            <h1 className="text-base font-bold text-on-surface">منابع خبری</h1>
+            <div role="heading" aria-level={1} className="text-base font-bold text-on-surface">منابع خبری</div>
           </div>
 
           {/* Flat source list */}

@@ -141,11 +141,12 @@ export async function generateMetadata({
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const canonical = articleUrl(item.item_id, item.title);
   const catName = categoryName(item.category);
+  // OG spec requires ISO 8601; item.posted_at from the API may be space-separated.
+  const publishedIso = new Date(item.posted_at).toISOString();
 
   return {
     title: item.title,
     description,
-    keywords: [catName, "اخبار ایران", item.source, "پالس ایران"],
     openGraph: {
       title: item.title,
       description,
@@ -153,8 +154,8 @@ export async function generateMetadata({
       siteName: "پالس ایران",
       locale: "fa_IR",
       type: "article",
-      publishedTime: item.posted_at,
-      modifiedTime: item.posted_at,
+      publishedTime: publishedIso,
+      modifiedTime: publishedIso,
       authors: [item.source],
       section: catName,
       images: [{ url: imageUrl, width: 1200, height: 630, alt: item.title }],
@@ -166,12 +167,14 @@ export async function generateMetadata({
       images: [imageUrl],
     },
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
-    other: {
-      news_keywords: `${catName}, اخبار ایران, ${item.source}`,
-      ...(item.link
-        ? { "syndication-source": item.link, "original-source": item.link }
-        : {}),
-    },
+    ...(item.link
+      ? {
+          other: {
+            "syndication-source": item.link,
+            "original-source": item.link,
+          },
+        }
+      : {}),
   };
 }
 
@@ -253,7 +256,17 @@ export default async function ArticlePage({
     },
     inLanguage: "fa",
     ...(catName !== "اخبار" ? { articleSection: catName } : {}),
-    ...(item.link ? { sameAs: item.link } : {}),
+    // isBasedOn: signals to Google this is an aggregated summary of an upstream
+    // source — disambiguates aggregation from duplication.
+    ...(item.link
+      ? {
+          isBasedOn: {
+            "@type": "NewsArticle",
+            url: item.link,
+            ...(item.source ? { publisher: { "@type": "Organization", name: item.source } } : {}),
+          },
+        }
+      : {}),
   };
 
   return (
@@ -278,9 +291,15 @@ export default async function ArticlePage({
                 🚨 فوری
               </span>
             )}
-            <h1 className="text-headline-lg-mobile font-headline-lg-mobile text-on-surface leading-snug mb-6">
+            {/* Single-h1 SEO: the desktop layout owns the real <h1>. Mobile uses
+                role=heading so screen readers still announce heading level 1. */}
+            <div
+              role="heading"
+              aria-level={1}
+              className="text-headline-lg-mobile font-headline-lg-mobile text-on-surface leading-snug mb-6"
+            >
               {item.title}
-            </h1>
+            </div>
 
             {item.verification_status && item.verification_status !== "unverified" && item.source_count && item.source_count >= 2 && (() => {
               const vs = VERIFICATION_STATUS[item.verification_status];

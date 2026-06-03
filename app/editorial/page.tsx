@@ -45,7 +45,7 @@ export default function EditorialPage() {
       <div className="md:hidden">
         <main className="pb-4 px-container-margin pt-6">
           <div className="mb-6">
-            <h1 className="text-xl font-bold text-on-surface mb-1">تحریریه</h1>
+            <div role="heading" aria-level={1} className="text-xl font-bold text-on-surface mb-1">تحریریه</div>
             <p className="text-xs text-on-surface-variant">تحلیل و تفسیر رویدادهای ایران</p>
           </div>
 

@@ -190,12 +190,18 @@ export default async function HomePage({
 
         <main className="pb-4 pt-3">
           {/* Page h1 + transparency strip — Stories 1 & 3 */}
+          {/* Single-h1 SEO: desktop layout owns the real <h1>. Mobile uses
+              role=heading so screen readers still announce heading level 1. */}
           <div className="px-container-margin mb-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] text-on-surface-variant/40 tabular-nums">به‌روز: {renderTime}</span>
-              <h1 className="text-xs font-bold text-secondary-fixed-dim/70 tracking-widest">
+              <div
+                role="heading"
+                aria-level={1}
+                className="text-xs font-bold text-secondary-fixed-dim/70 tracking-widest"
+              >
                 اخبار ایران امروز — {today}
-              </h1>
+              </div>
             </div>
             {/* Story 1 — Political diversity: reassure diaspora readers of impartiality */}
             <div className="flex items-center gap-1 mt-1.5 flex-row-reverse flex-wrap justify-end">

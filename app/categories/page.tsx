@@ -89,7 +89,6 @@ export async function generateMetadata({
   return {
     title: label,
     description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label} — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر`,
-    keywords: ["دسته‌بندی اخبار", "اخبار سیاسی", "اخبار اقتصادی", "اخبار ورزشی", "اخبار ایران"],
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     ...(page > 3 ? { robots: { index: false, follow: true } } : {}),
   };

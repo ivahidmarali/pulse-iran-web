@@ -14,7 +14,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,
     description: `نرخ زنده دلار، یورو، طلا، سکه در ایران امروز (${today}) — نرخ بازار آزاد، به‌روزرسانی هر ۵ دقیقه`,
-    keywords: ["قیمت دلار امروز", "نرخ دلار", "قیمت طلا امروز", "قیمت سکه", "نرخ ارز", "بازار آزاد", "ایران"],
     openGraph: {
       title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,
       description: `نرخ زنده دلار، یورو، طلا، سکه در ایران امروز — بازار آزاد`,
@@ -199,7 +198,7 @@ export default async function PricesPage() {
           <div className="flex items-center justify-between mb-2">
             <span className="text-[11px] text-on-surface-variant">هر ۵ دقیقه به‌روز می‌شود</span>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-bold text-on-surface">قیمت دلار و طلا امروز</h1>
+              <div role="heading" aria-level={1} className="text-lg font-bold text-on-surface">قیمت دلار و طلا امروز</div>
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />

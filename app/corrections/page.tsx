@@ -49,7 +49,7 @@ export default function CorrectionsPage() {
             <span className="text-on-surface">تصحیح اخبار</span>
           </nav>
 
-          <h1 className="text-xl font-bold text-on-surface mb-1">سیاست تصحیح اخبار</h1>
+          <div role="heading" aria-level={1} className="text-xl font-bold text-on-surface mb-1">سیاست تصحیح اخبار</div>
           <p className="text-xs text-on-surface-variant mb-6">آخرین بروزرسانی: خرداد ۱۴۰۵</p>
 
           <div className="space-y-6 text-sm text-on-surface-variant leading-relaxed">

@@ -59,7 +59,6 @@ export async function generateMetadata({
   return {
     title: `اخبار ${tag.name} ایران امروز | پالس ایران`,
     description: `آخرین اخبار ${tag.name} ایران امروز. ${tag.description}`,
-    keywords: [`اخبار ${tag.name} امروز`, `اخبار ${tag.name} ایران`, `${tag.name} ایران`, "اخبار روز ایران"],
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     openGraph: {
       title: `اخبار ${tag.name} ایران امروز | پالس ایران`,
@@ -154,7 +153,7 @@ export default async function TagPage({
           <div className="flex items-center gap-3 mb-5">
             <span className="text-3xl">{tag.emoji}</span>
             <div>
-              <h1 className="text-lg font-bold text-on-surface">اخبار {tag.name} ایران امروز</h1>
+              <div role="heading" aria-level={1} className="text-lg font-bold text-on-surface">اخبار {tag.name} ایران امروز</div>
               <p className="text-xs text-on-surface-variant mt-0.5">{tag.description}</p>
             </div>
           </div>

@@ -165,7 +165,6 @@ export async function generateMetadata({
   return {
     title: article.title,
     description: article.description,
-    keywords: article.keywords,
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     openGraph: {
       title: `${article.title} | پالس ایران`,
@@ -238,7 +237,7 @@ export default async function EditorialArticlePage({
           </Link>
 
           <article>
-            <h1 className="text-xl font-bold text-on-surface leading-tight mb-3">{article.title}</h1>
+            <div role="heading" aria-level={1} className="text-xl font-bold text-on-surface leading-tight mb-3">{article.title}</div>
             <div className="flex items-center gap-3 text-xs text-on-surface-variant mb-6">
               <span>تیم پالس ایران</span>
               <span>·</span>

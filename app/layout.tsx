@@ -21,18 +21,6 @@ export const metadata: Metadata = {
   },
   description:
     "اخبار فوری ایران و جهان، پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس — بی‌طرف از همه منابع.",
-  keywords: [
-    "اخبار ایران",
-    "اخبار فوری",
-    "اخبار امروز",
-    "ایران",
-    "سیاست",
-    "اقتصاد",
-    "ارز",
-    "دلار",
-    "بورس",
-    "پالس ایران",
-  ],
   authors: [{ name: "پالس ایران", url: SITE_URL }],
   creator: "پالس ایران",
   publisher: "پالس ایران",
@@ -106,6 +94,19 @@ const websiteJsonLd = {
   },
 };
 
+const editorJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": `${SITE_URL}/#editor`,
+  name: "Vahid Marali",
+  alternateName: "وحید مارالی",
+  jobTitle: "Founder & Editor-in-Chief",
+  worksFor: { "@id": `${SITE_URL}/#organization` },
+  email: "info@palsiran.com",
+  url: `${SITE_URL}/about`,
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
+};
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "NewsMediaOrganization",
@@ -123,6 +124,9 @@ const organizationJsonLd = {
   },
   sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
   publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
+  correctionsPolicy: `${SITE_URL}/corrections`,
+  diversityPolicy: `${SITE_URL}/about/editorial-policy`,
+  ethicsPolicy: `${SITE_URL}/about/editorial-policy`,
   editor: { "@id": `${SITE_URL}/#editor` },
   founder: { "@id": `${SITE_URL}/#editor` },
   contactPoint: {
@@ -160,6 +164,8 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }} />
         {/* eslint-disable-next-line react/no-danger */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(organizationJsonLd) }} />
+        {/* eslint-disable-next-line react/no-danger */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(editorJsonLd) }} />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-PMJG9DYRN3"
           strategy="lazyOnload"
