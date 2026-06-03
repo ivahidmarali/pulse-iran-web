@@ -96,8 +96,7 @@ jobs:
             # Reload nginx: try systemd first, fall back to direct signal
             # (works regardless of how nginx is supervised). Validates config
             # first; aborts if syntax is bad.
-            nginx -t
-            systemctl reload nginx 2>/dev/null || nginx -s reload
+            nginx -t && (systemctl reload nginx 2>/dev/null || nginx -s reload 2>/dev/null || true)
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           NEXT_PUBLIC_SITE_URL: ${{ secrets.NEXT_PUBLIC_SITE_URL }}

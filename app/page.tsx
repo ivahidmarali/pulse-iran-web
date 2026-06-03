@@ -301,7 +301,7 @@ export default async function HomePage({
                 {videoItems.map((item) => (
                   <TelegramVideoCard
                     key={item.item_id}
-                    telegramUrl={item.video_url}
+                    telegramUrl={item.video_url!}
                     imageUrl={item.image_url || undefined}
                     title={item.title}
                     variant="card"
@@ -442,7 +442,7 @@ export default async function HomePage({
                   {videoItems.map((item) => (
                     <TelegramVideoCard
                       key={item.item_id}
-                      telegramUrl={item.video_url}
+                      telegramUrl={item.video_url!}
                       imageUrl={item.image_url || undefined}
                       title={item.title}
                       variant="list"
