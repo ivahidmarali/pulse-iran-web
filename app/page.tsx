@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import NewsCard from "@/components/news/NewsCard";
 import LoadMoreFeed from "@/components/news/LoadMoreFeed";
+import TelegramVideoCard from "@/components/news/TelegramVideoCard";
 import CurrencyRow from "@/components/prices/CurrencyRow";
 import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
@@ -92,9 +92,21 @@ export default async function HomePage({
     const qs = q.toString();
     return qs ? `/?${qs}` : "/";
   }
-  // Hero: latest news item that has a photo. No age constraint — always show
-  // the most recent photo'd article even during quiet news periods.
-  const hero = news.find((a) => a.image_url && a.image_url.trim() !== "");
+  // Hero priority:
+  //  1. Latest photo'd article within 24h (ideal — image + fresh)
+  //  2. Highest-importance article (no photo required — always shows something)
+  //  3. First article (last-resort so hero is never missing in any group)
+  const HERO_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  const heroCutoff = Date.now() - HERO_MAX_AGE_MS;
+  const hero =
+    news.find(
+      (a) =>
+        a.image_url &&
+        a.image_url.trim() !== "" &&
+        new Date(a.posted_at).getTime() > heroCutoff
+    ) ??
+    news.find((a) => a.importance === "high") ??
+    news[0];
   const rest = hero ? news.filter((a) => a.item_id !== hero.item_id) : news;
   const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const HOME_PRICE_KEYS = ["price_dollar_rl", "price_eur", "geram18", "sekeb"];
@@ -279,33 +291,21 @@ export default async function HomePage({
             </div>
           )}
 
-          {/* Mobile video section — Media Richness improvement */}
+          {/* Mobile video section — tap thumbnail to play inline via Telegram embed */}
           {videoItems.length > 0 && (
-            <div className="mb-5">
-              <div className="flex items-center justify-between px-container-margin mb-2">
-                <span className="text-[11px] text-secondary-fixed-dim font-medium">مشاهده همه ←</span>
+            <div className="mb-5 px-container-margin">
+              <div className="flex items-center justify-between mb-3">
                 <span className="text-xs font-bold text-on-surface-variant">📹 ویدئوها</span>
               </div>
-              <div className="flex gap-2 overflow-x-auto no-scrollbar px-container-margin">
+              <div className="flex flex-col gap-3">
                 {videoItems.map((item) => (
-                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)}
-                    className="shrink-0 w-36 rounded-xl overflow-hidden bg-surface-container border border-white/5">
-                    <div className="relative w-36 h-24">
-                      {item.image_url ? (
-                        <Image src={item.image_url} alt={item.title} fill className="object-cover" sizes="144px" />
-                      ) : (
-                        <div className="absolute inset-0 bg-surface-container-high flex items-center justify-center">
-                          <span className="text-3xl opacity-20">📹</span>
-                        </div>
-                      )}
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                          <svg viewBox="0 0 24 24" className="w-4 h-4 text-white fill-current ml-0.5"><path d="M8 5v14l11-7z"/></svg>
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-[11px] font-medium p-2 line-clamp-2 leading-relaxed">{item.title}</p>
-                  </Link>
+                  <TelegramVideoCard
+                    key={item.item_id}
+                    telegramUrl={item.video_url}
+                    imageUrl={item.image_url || undefined}
+                    title={item.title}
+                    variant="card"
+                  />
                 ))}
               </div>
             </div>
@@ -432,7 +432,7 @@ export default async function HomePage({
               </div>
             </section>
 
-            {/* Video section — Story 2 & Media Richness */}
+            {/* Video section — tap thumbnail to play inline via Telegram embed */}
             {videoItems.length > 0 && (
               <section className="bg-surface-container-low p-gutter rounded-xl">
                 <div className="flex items-center gap-2 mb-4">
@@ -440,23 +440,13 @@ export default async function HomePage({
                 </div>
                 <div className="space-y-3">
                   {videoItems.map((item) => (
-                    <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group">
-                      <div className="relative w-20 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-container-highest">
-                        {item.image_url ? (
-                          <Image src={item.image_url} alt={item.title} fill className="object-cover" sizes="80px" />
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-2xl opacity-20">📹</span>
-                          </div>
-                        )}
-                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                          <div className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center">
-                            <svg viewBox="0 0 24 24" className="w-3 h-3 text-white fill-current ml-0.5"><path d="M8 5v14l11-7z"/></svg>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm font-medium leading-relaxed group-hover:text-secondary-fixed-dim transition-colors line-clamp-2">{item.title}</p>
-                    </Link>
+                    <TelegramVideoCard
+                      key={item.item_id}
+                      telegramUrl={item.video_url}
+                      imageUrl={item.image_url || undefined}
+                      title={item.title}
+                      variant="list"
+                    />
                   ))}
                 </div>
               </section>
