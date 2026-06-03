@@ -92,21 +92,9 @@ export default async function HomePage({
     const qs = q.toString();
     return qs ? `/?${qs}` : "/";
   }
-  // Hero priority:
-  //  1. Latest photo'd article within 24h (ideal — image + fresh)
-  //  2. Highest-importance article (no photo required — always shows something)
-  //  3. First article (last-resort so hero is never missing in any group)
-  const HERO_MAX_AGE_MS = 24 * 60 * 60 * 1000;
-  const heroCutoff = Date.now() - HERO_MAX_AGE_MS;
-  const hero =
-    news.find(
-      (a) =>
-        a.image_url &&
-        a.image_url.trim() !== "" &&
-        new Date(a.posted_at).getTime() > heroCutoff
-    ) ??
-    news.find((a) => a.importance === "high") ??
-    news[0];
+  // Hero: most recent article with a photo; if none have photos fall back to
+  // the most recent article overall. Both are always fresh — news is newest-first.
+  const hero = news.find((a) => a.image_url && a.image_url.trim() !== "") ?? news[0];
   const rest = hero ? news.filter((a) => a.item_id !== hero.item_id) : news;
   const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const HOME_PRICE_KEYS = ["price_dollar_rl", "price_eur", "geram18", "sekeb"];
