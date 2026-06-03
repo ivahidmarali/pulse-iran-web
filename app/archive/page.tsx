@@ -43,8 +43,10 @@ export default async function ArchivePage({
   const { date, source, page: pageStr } = await searchParams;
   const page = parseInt(pageStr ?? "1", 10);
   const { items, total, sources } = await fetchData(date, source, page);
-  const hero = items[0];
-  const rest = items.slice(1);
+  // Hero must have a photo. Archive is date-scoped, so we don't enforce
+  // recency — but a hero without an image looks broken.
+  const hero = items.find((a) => a.image_url && a.image_url.trim() !== "");
+  const rest = hero ? items.filter((a) => a.item_id !== hero.item_id) : items;
 
   return (
     <div className="cyber-grid">

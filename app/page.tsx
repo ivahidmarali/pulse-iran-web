@@ -92,8 +92,17 @@ export default async function HomePage({
     const qs = q.toString();
     return qs ? `/?${qs}` : "/";
   }
-  const hero = news.find((a) => a.image_url && a.image_url.trim() !== "") ?? news[0];
-  const rest = news.filter((a) => a.item_id !== hero?.item_id);
+  // Hero: must have a photo AND be reasonably fresh. If no candidate matches,
+  // skip the hero entirely rather than showing a stale or imageless headline.
+  const HERO_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  const heroCutoff = Date.now() - HERO_MAX_AGE_MS;
+  const hero = news.find(
+    (a) =>
+      a.image_url &&
+      a.image_url.trim() !== "" &&
+      new Date(a.posted_at).getTime() > heroCutoff
+  );
+  const rest = hero ? news.filter((a) => a.item_id !== hero.item_id) : news;
   const priceMap = Object.fromEntries(prices.map((p) => [p.key, p]));
   const HOME_PRICE_KEYS = ["price_dollar_rl", "price_eur", "geram18", "sekeb"];
   const currencyPrices = HOME_PRICE_KEYS.map((k) => priceMap[k]).filter(Boolean);
