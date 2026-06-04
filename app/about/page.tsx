@@ -46,7 +46,7 @@ const editorPersonJsonLd = {
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about`,
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
 };
 
 const LEAN_COLOR: Record<string, string> = {

@@ -206,6 +206,7 @@ export default async function ArticlePage({
   }
 
   const ago = timeAgo(item.posted_at);
+  const publishedIso = new Date(item.posted_at).toISOString();
   const canonical = articleUrl(item.item_id, item.title);
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const catName = categoryName(item.category);
@@ -303,7 +304,7 @@ export default async function ArticlePage({
                 {item.summary && item.summary.length > 30 && (
                   <span>{toPersianNum(readingTime(item.summary))} دقیقه</span>
                 )}
-                <span>🕐 {ago}</span>
+                <time dateTime={publishedIso}>🕐 {ago}</time>
               </div>
             </div>
 
@@ -427,7 +428,7 @@ export default async function ArticlePage({
                   اطلاعات خبر
                 </h2>
                 <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">
-                  🕐 {ago}
+                  <time dateTime={publishedIso}>🕐 {ago}</time>
                 </p>
               </div>
 
@@ -472,7 +473,7 @@ export default async function ArticlePage({
                     🚨 فوری
                   </span>
                 )}
-                <span className="text-outline font-label-sm text-label-sm">🕐 {ago}</span>
+                <time dateTime={publishedIso} className="text-outline font-label-sm text-label-sm">🕐 {ago}</time>
               </div>
               <h1 className="font-headline-lg text-headline-lg text-on-surface leading-snug mb-6">
                 {item.title}
@@ -498,7 +499,7 @@ export default async function ArticlePage({
               <div className="flex items-center justify-between py-4 border-y border-white/5 text-on-surface-variant">
                 <div className="flex items-center gap-4 text-sm">
                   <span>📰 منبع: <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link></span>
-                  <span>🕐 {ago}</span>
+                  <time dateTime={publishedIso}>🕐 {ago}</time>
                   {item.summary && item.summary.length > 30 && (
                     <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>
                   )}
