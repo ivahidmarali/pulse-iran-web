@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+// ── Types ──────────────────────────────────────────────────────────────────
+
 interface Match {
   id: number;
   team1: string;
@@ -17,11 +19,12 @@ interface Match {
   is_final: boolean;
   match_time: string;
   start_utc: string;
+  has_details: boolean;
 }
 
 interface DateGroup {
-  jalali_key: string;   // "1405/03/14"
-  date_label: string;   // "14 خرداد 1405"
+  jalali_key: string;
+  date_label: string;
   matches: Match[];
 }
 
@@ -36,11 +39,34 @@ interface LiveScoreData {
   ok: boolean;
 }
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api";
-const TEHRAN_MS = (3 * 60 + 30) * 60 * 1000; // UTC+3:30
+interface MatchEvent {
+  type: "goal" | "card" | "sub" | "other";
+  time: string;
+  raw_time: number;
+  side: number;           // 0=home 1=away
+  scope: number;
+  scope_label: string;
+  // goal
+  goal_type?: number;     // 0=normal 1=own 2=penalty
+  player?: string;
+  score?: { host: number; guest: number } | null;
+  // card
+  card_type?: number;     // 1=yellow 2=red 3=yellow→red
+  // sub
+  player_in?: string;
+  player_out?: string;
+  // other
+  description?: string;
+}
+
+// ── Constants ──────────────────────────────────────────────────────────────
+
+const API_BASE   = process.env.NEXT_PUBLIC_API_URL ?? "/api";
+const TEHRAN_MS  = (3 * 60 + 30) * 60 * 1000;
+
+// ── Utilities ──────────────────────────────────────────────────────────────
 
 function tehranDateKey(utcIso: string): string {
-  // Returns "YYYY-MM-DD" in Tehran time
   if (!utcIso) return "";
   return new Date(new Date(utcIso).getTime() + TEHRAN_MS).toISOString().slice(0, 10);
 }
@@ -50,16 +76,10 @@ function todayTehranKey(): string {
 }
 
 function relativeLabel(gregorianKey: string): string {
-  const today = todayTehranKey();
   const diff = Math.round(
-    (new Date(gregorianKey).getTime() - new Date(today).getTime()) / 86_400_000
+    (new Date(gregorianKey).getTime() - new Date(todayTehranKey()).getTime()) / 86_400_000
   );
-  if (diff === -2) return "پریروز";
-  if (diff === -1) return "دیروز";
-  if (diff === 0) return "امروز";
-  if (diff === 1) return "فردا";
-  if (diff === 2) return "پس‌فردا";
-  return "";
+  return diff === -2 ? "پریروز" : diff === -1 ? "دیروز" : diff === 0 ? "امروز" : diff === 1 ? "فردا" : diff === 2 ? "پس‌فردا" : "";
 }
 
 function playGoalDing(ctx: AudioContext) {
@@ -80,81 +100,291 @@ function playGoalDing(ctx: AudioContext) {
   });
 }
 
+// ── Small shared components ────────────────────────────────────────────────
+
 function LiveDot({ sm }: { sm?: boolean }) {
   return (
-    <span
-      className={`inline-block ${sm ? "w-1.5 h-1.5" : "w-2 h-2"} rounded-full bg-green-400 animate-pulse`}
-    />
+    <span className={`inline-block ${sm ? "w-1.5 h-1.5" : "w-2 h-2"} rounded-full bg-green-400 animate-pulse`} />
   );
-}
-
-function MatchStatus({ match }: { match: Match }) {
-  if (match.is_live) {
-    return (
-      <span className="flex items-center justify-center gap-1 text-[10px] font-bold text-green-400">
-        <LiveDot sm />
-        {match.minute || "زنده"}
-      </span>
-    );
-  }
-  if (match.is_final) return <span className="text-[10px] text-on-surface-variant">پایان</span>;
-  if (match.match_time) {
-    return <span className="text-[10px] text-secondary-fixed-dim font-medium">{match.match_time}</span>;
-  }
-  if (match.status) return <span className="text-[10px] text-on-surface-variant">{match.status}</span>;
-  return null;
 }
 
 function TeamLogo({ src, alt }: { src?: string | null; alt: string }) {
   if (!src) return null;
   // eslint-disable-next-line @next/next/no-img-element
   return (
-    <img
-      src={src}
-      alt={alt}
-      className="w-6 h-6 object-contain shrink-0"
-      loading="lazy"
-      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
-    />
+    <img src={src} alt={alt} className="w-6 h-6 object-contain shrink-0" loading="lazy"
+      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
   );
 }
 
-function MatchRow({ match, isGoal }: { match: Match; isGoal: boolean }) {
-  const isUpcoming = !match.is_live && !match.is_final;
+function MatchStatus({ match }: { match: Match }) {
+  if (match.is_live)
+    return (
+      <span className="flex items-center justify-center gap-1 text-[10px] font-bold text-green-400">
+        <LiveDot sm />{match.minute || "زنده"}
+      </span>
+    );
+  if (match.is_final)   return <span className="text-[10px] text-on-surface-variant">پایان</span>;
+  if (match.match_time) return <span className="text-[10px] text-secondary-fixed-dim font-medium">{match.match_time}</span>;
+  if (match.status)     return <span className="text-[10px] text-on-surface-variant">{match.status}</span>;
+  return null;
+}
+
+// ── Event timeline ─────────────────────────────────────────────────────────
+
+function goalIcon(goalType?: number) {
+  if (goalType === 1) return "⚽"; // own goal — same icon, label below
+  if (goalType === 2) return "⚽"; // penalty
+  return "⚽";
+}
+
+function goalLabel(goalType?: number) {
+  if (goalType === 1) return <span className="text-[9px] text-red-400">به خودی</span>;
+  if (goalType === 2) return <span className="text-[9px] text-secondary-fixed-dim">پنالتی</span>;
+  return null;
+}
+
+function cardIcon(cardType?: number) {
+  if (cardType === 2) return "🟥";
+  if (cardType === 3) return "🟥";
+  return "🟨";
+}
+
+function EventRow({ event }: { event: MatchEvent }) {
+  const isHome = event.side === 0;
+
+  const homeContent =
+    isHome ? (
+      <div className="flex flex-col items-start gap-0.5">
+        {event.type === "goal" && (
+          <>
+            <span className="text-sm leading-tight">
+              {goalIcon(event.goal_type)} {event.player}
+            </span>
+            {goalLabel(event.goal_type)}
+            {event.score && (
+              <span className="text-[10px] text-secondary-fixed-dim font-bold tabular-nums">
+                {event.score.host} - {event.score.guest}
+              </span>
+            )}
+          </>
+        )}
+        {event.type === "card" && (
+          <span className="text-sm">{cardIcon(event.card_type)} {event.player}</span>
+        )}
+        {event.type === "sub" && (
+          <div className="text-[11px] leading-tight">
+            <span className="text-green-400">↑ {event.player_in}</span>
+            <br />
+            <span className="text-red-400/70">↓ {event.player_out}</span>
+          </div>
+        )}
+        {event.type === "other" && (
+          <span className="text-[11px] text-on-surface-variant">{event.description}</span>
+        )}
+      </div>
+    ) : null;
+
+  const awayContent =
+    !isHome ? (
+      <div className="flex flex-col items-end gap-0.5">
+        {event.type === "goal" && (
+          <>
+            <span className="text-sm leading-tight">
+              {event.player} {goalIcon(event.goal_type)}
+            </span>
+            {goalLabel(event.goal_type)}
+            {event.score && (
+              <span className="text-[10px] text-secondary-fixed-dim font-bold tabular-nums">
+                {event.score.host} - {event.score.guest}
+              </span>
+            )}
+          </>
+        )}
+        {event.type === "card" && (
+          <span className="text-sm">{event.player} {cardIcon(event.card_type)}</span>
+        )}
+        {event.type === "sub" && (
+          <div className="text-[11px] leading-tight text-right">
+            <span className="text-green-400">{event.player_in} ↑</span>
+            <br />
+            <span className="text-red-400/70">{event.player_out} ↓</span>
+          </div>
+        )}
+        {event.type === "other" && (
+          <span className="text-[11px] text-on-surface-variant">{event.description}</span>
+        )}
+      </div>
+    ) : null;
+
   return (
-    <div
-      className={`grid grid-cols-[1fr_76px_1fr] items-center px-3 py-3 border-b border-white/5 last:border-0 transition-colors duration-700 ${
-        isGoal ? "bg-green-500/15" : ""
-      }`}
-    >
-      <div className="flex items-center gap-2 min-w-0">
-        <TeamLogo src={match.team1_logo} alt={match.team1} />
-        <span className="text-sm font-medium text-on-surface truncate leading-tight">{match.team1}</span>
+    <div className="grid grid-cols-[1fr_36px_1fr] items-start gap-x-1 px-3 py-1.5">
+      <div className="min-w-0">{homeContent}</div>
+      <div className="text-center text-[10px] text-on-surface-variant/70 tabular-nums pt-0.5">
+        {event.time}&apos;
       </div>
-
-      <div className="flex flex-col items-center gap-0.5 px-1">
-        {isUpcoming ? (
-          <span className="text-sm font-bold text-secondary-fixed-dim tabular-nums">
-            {match.match_time || "—"}
-          </span>
-        ) : (
-          <span className={`text-base font-bold tabular-nums ${match.is_live ? "text-on-surface" : "text-on-surface-variant"}`}>
-            {match.score1} - {match.score2}
-          </span>
-        )}
-        <MatchStatus match={match} />
-        {isGoal && (
-          <span className="text-[10px] font-bold text-green-400 animate-bounce mt-0.5">⚽ گل!</span>
-        )}
-      </div>
-
-      <div className="flex items-center gap-2 justify-end min-w-0">
-        <span className="text-sm font-medium text-on-surface truncate leading-tight text-right">{match.team2}</span>
-        <TeamLogo src={match.team2_logo} alt={match.team2} />
-      </div>
+      <div className="min-w-0 flex justify-end">{awayContent}</div>
     </div>
   );
 }
+
+function ScopeDivider({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2 px-3 py-1">
+      <div className="flex-1 h-px bg-white/5" />
+      <span className="text-[9px] text-on-surface-variant/50 whitespace-nowrap">{label}</span>
+      <div className="flex-1 h-px bg-white/5" />
+    </div>
+  );
+}
+
+function EventTimeline({
+  events,
+  loading,
+}: {
+  events: MatchEvent[] | null;
+  loading: boolean;
+}) {
+  if (loading) {
+    return (
+      <div className="px-4 py-3 border-t border-white/5 space-y-2 animate-pulse">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex gap-2 items-center">
+            <div className="flex-1 h-3 bg-white/10 rounded" />
+            <div className="w-8 h-3 bg-white/10 rounded" />
+            <div className="flex-1 h-3 bg-white/10 rounded" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (!events || events.length === 0) {
+    return (
+      <div className="px-4 py-3 border-t border-white/5 text-center text-xs text-on-surface-variant">
+        جزئیاتی موجود نیست
+      </div>
+    );
+  }
+
+  // Inject scope dividers when scope changes
+  type Row = { kind: "event"; event: MatchEvent } | { kind: "divider"; label: string };
+  const rows: Row[] = [];
+  let currentScope = -1;
+  for (const event of events) {
+    if (event.scope !== currentScope && event.scope_label) {
+      rows.push({ kind: "divider", label: event.scope_label });
+      currentScope = event.scope;
+    }
+    rows.push({ kind: "event", event });
+  }
+
+  // Separate goals from other events for the summary header
+  const goals = events.filter((e) => e.type === "goal");
+
+  return (
+    <div className="border-t border-white/5">
+      {/* Goal scorers summary (if any goals) */}
+      {goals.length > 0 && (
+        <div className="flex gap-2 px-3 py-2 bg-white/[0.02] border-b border-white/5 flex-wrap">
+          {goals.map((g, i) => (
+            <span key={i} className="text-[11px] text-on-surface-variant">
+              ⚽ {g.player}{g.goal_type === 2 ? " (پ)" : g.goal_type === 1 ? " (خودی)" : ""} {g.time}&apos;
+            </span>
+          ))}
+        </div>
+      )}
+      {/* Timeline */}
+      {rows.map((row, i) =>
+        row.kind === "divider" ? (
+          <ScopeDivider key={`d-${i}`} label={row.label} />
+        ) : (
+          <EventRow key={row.event.time + row.event.side + row.event.type + i} event={row.event} />
+        )
+      )}
+    </div>
+  );
+}
+
+// ── Match card (row + expandable detail) ─────────────────────────────────
+
+function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
+  const [expanded, setExpanded]     = useState(false);
+  const [events, setEvents]         = useState<MatchEvent[] | null>(null);
+  const [loadingEvt, setLoadingEvt] = useState(false);
+
+  const toggle = async () => {
+    if (!match.has_details) return;
+    const next = !expanded;
+    setExpanded(next);
+    if (next && events === null) {
+      setLoadingEvt(true);
+      try {
+        const res = await fetch(`${API_BASE}/livescore/match/${match.id}/events`, { cache: "no-store" });
+        const data = await res.json();
+        setEvents(data.events ?? []);
+      } catch {
+        setEvents([]);
+      }
+      setLoadingEvt(false);
+    }
+  };
+
+  const isUpcoming = !match.is_live && !match.is_final;
+
+  return (
+    <div>
+      {/* Match row */}
+      <div
+        onClick={toggle}
+        className={`grid grid-cols-[1fr_76px_1fr] items-center px-3 py-3 border-b border-white/5 transition-colors duration-700 ${
+          isGoal ? "bg-green-500/15" : ""
+        } ${match.has_details ? "cursor-pointer hover:bg-white/[0.03] active:bg-white/[0.05]" : ""}`}
+      >
+        {/* Home team */}
+        <div className="flex items-center gap-2 min-w-0">
+          <TeamLogo src={match.team1_logo} alt={match.team1} />
+          <span className="text-sm font-medium text-on-surface truncate leading-tight">{match.team1}</span>
+        </div>
+
+        {/* Score / time */}
+        <div className="flex flex-col items-center gap-0.5 px-1">
+          {isUpcoming ? (
+            <span className="text-sm font-bold text-secondary-fixed-dim tabular-nums">
+              {match.match_time || "—"}
+            </span>
+          ) : (
+            <span className={`text-base font-bold tabular-nums ${match.is_live ? "text-on-surface" : "text-on-surface-variant"}`}>
+              {match.score1} - {match.score2}
+            </span>
+          )}
+          <MatchStatus match={match} />
+          {isGoal && (
+            <span className="text-[10px] font-bold text-green-400 animate-bounce mt-0.5">⚽ گل!</span>
+          )}
+        </div>
+
+        {/* Away team */}
+        <div className="flex items-center gap-2 justify-end min-w-0">
+          <span className="text-sm font-medium text-on-surface truncate leading-tight text-right">{match.team2}</span>
+          <TeamLogo src={match.team2_logo} alt={match.team2} />
+          {match.has_details && (
+            <svg viewBox="0 0 24 24" className={`w-3.5 h-3.5 shrink-0 text-on-surface-variant/40 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2}>
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          )}
+        </div>
+      </div>
+
+      {/* Expandable event timeline */}
+      {expanded && (
+        <EventTimeline events={events} loading={loadingEvt} />
+      )}
+    </div>
+  );
+}
+
+// ── Skeleton ──────────────────────────────────────────────────────────────
 
 function SkeletonCard() {
   return (
@@ -172,14 +402,14 @@ function SkeletonCard() {
   );
 }
 
+// ── Tehran clock hook ─────────────────────────────────────────────────────
+
 function useTehranClock() {
   const [clock, setClock] = useState("");
   useEffect(() => {
     const tick = () => {
       const t = new Date(Date.now() + TEHRAN_MS);
-      setClock(
-        `${t.getUTCHours().toString().padStart(2, "0")}:${t.getUTCMinutes().toString().padStart(2, "0")}`
-      );
+      setClock(`${t.getUTCHours().toString().padStart(2, "0")}:${t.getUTCMinutes().toString().padStart(2, "0")}`);
     };
     tick();
     const id = setInterval(tick, 10_000);
@@ -188,19 +418,21 @@ function useTehranClock() {
   return clock;
 }
 
-export default function LiveScoreClient() {
-  const [data, setData] = useState<LiveScoreData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedDay, setSelectedDay] = useState<string>(""); // gregorian key or ""=all
-  const [statusFilter, setStatusFilter] = useState<"all" | "live" | "finished">("all");
-  const [goalIds, setGoalIds] = useState<Set<number>>(new Set());
-  const [soundEnabled, setSoundEnabled] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState("");
+// ── Main component ─────────────────────────────────────────────────────────
 
-  const prevScores = useRef<Map<number, [number, number]>>(new Map());
+export default function LiveScoreClient() {
+  const [data, setData]             = useState<LiveScoreData | null>(null);
+  const [loading, setLoading]       = useState(true);
+  const [selectedDay, setSelectedDay] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "live" | "finished">("all");
+  const [goalIds, setGoalIds]       = useState<Set<number>>(new Set());
+  const [soundEnabled, setSoundEnabled] = useState(false);
+  const [lastUpdated, setLastUpdated]   = useState("");
+
+  const prevScores  = useRef<Map<number, [number, number]>>(new Map());
   const audioCtxRef = useRef<AudioContext | null>(null);
   const isFirstLoad = useRef(true);
-  const clock = useTehranClock();
+  const clock       = useTehranClock();
 
   const enableSound = useCallback(() => {
     try {
@@ -243,14 +475,11 @@ export default function LiveScoreClient() {
       setData(json);
       setLastUpdated(new Date().toLocaleTimeString("fa-IR"));
 
-      // Auto-select "today" on first load
       setSelectedDay((prev) => {
         if (prev !== "") return prev;
         const today = todayTehranKey();
         const hasToday = json.leagues.some((l) =>
-          l.date_groups.some((dg) =>
-            dg.matches.some((m) => tehranDateKey(m.start_utc) === today)
-          )
+          l.date_groups.some((dg) => dg.matches.some((m) => tehranDateKey(m.start_utc) === today))
         );
         return hasToday ? today : "";
       });
@@ -264,53 +493,58 @@ export default function LiveScoreClient() {
     return () => clearInterval(id);
   }, [fetchData]);
 
-  // Build sorted unique day list from data
+  const allMatches = data?.leagues.flatMap((l) => l.date_groups.flatMap((dg) => dg.matches)) ?? [];
+  const liveCount  = allMatches.filter((m) => m.is_live).length;
+
+  const todayLabel = useMemo(
+    () =>
+      data?.leagues
+        .flatMap((l) => l.date_groups)
+        .find((dg) => relativeLabel(tehranDateKey(dg.matches[0]?.start_utc ?? "")) === "امروز")
+        ?.date_label ?? "",
+    [data]
+  );
+
   const days = useMemo(() => {
     if (!data) return [];
-    const map = new Map<string, string>(); // gregorianKey → date_label
-    for (const league of data.leagues) {
-      for (const dg of league.date_groups) {
+    const map = new Map<string, string>();
+    for (const l of data.leagues)
+      for (const dg of l.date_groups)
         for (const m of dg.matches) {
           const key = tehranDateKey(m.start_utc);
           if (key && !map.has(key)) map.set(key, dg.date_label);
         }
-      }
-    }
     return Array.from(map.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, label]) => ({ key, label, rel: relativeLabel(key) }));
   }, [data]);
 
-  // Flatten for counts
-  const allMatches = data?.leagues.flatMap((l) => l.date_groups.flatMap((dg) => dg.matches)) ?? [];
-  const liveCount = allMatches.filter((m) => m.is_live).length;
-
-  // Today's Jalali label for the top banner
-  const todayLabel = days.find((d) => d.key === todayTehranKey())?.label ?? "";
-
-  // Apply both filters
-  const filteredLeagues = (data?.leagues ?? [])
-    .map((league) => ({
-      ...league,
-      date_groups: league.date_groups
-        .map((dg) => ({
-          ...dg,
-          matches: dg.matches.filter((m) => {
-            const dayMatch = !selectedDay || tehranDateKey(m.start_utc) === selectedDay;
-            const statusMatch =
-              statusFilter === "live" ? m.is_live :
-              statusFilter === "finished" ? m.is_final : true;
-            return dayMatch && statusMatch;
-          }),
+  const filteredLeagues = useMemo(
+    () =>
+      (data?.leagues ?? [])
+        .map((league) => ({
+          ...league,
+          date_groups: league.date_groups
+            .map((dg) => ({
+              ...dg,
+              matches: dg.matches.filter((m) => {
+                const dayOk    = !selectedDay || tehranDateKey(m.start_utc) === selectedDay;
+                const statusOk = statusFilter === "live"     ? m.is_live
+                               : statusFilter === "finished" ? m.is_final
+                               : true;
+                return dayOk && statusOk;
+              }),
+            }))
+            .filter((dg) => dg.matches.length > 0),
         }))
-        .filter((dg) => dg.matches.length > 0),
-    }))
-    .filter((l) => l.date_groups.length > 0);
+        .filter((l) => l.date_groups.length > 0),
+    [data, selectedDay, statusFilter]
+  );
 
   return (
     <div className="max-w-2xl mx-auto px-container-margin pt-4 pb-24 md:pb-10 md:pt-8">
 
-      {/* ── Tehran clock + date banner ── */}
+      {/* Tehran clock banner */}
       <div className="glass-card rounded-2xl px-4 py-3 mb-4 flex items-center justify-between">
         <div>
           <p className="text-[10px] text-on-surface-variant mb-0.5">ساعت تهران</p>
@@ -326,14 +560,13 @@ export default function LiveScoreClient() {
         )}
       </div>
 
-      {/* ── Title row ── */}
+      {/* Title + sound toggle */}
       <div className="flex items-center justify-between mb-2">
         <h1 className="text-xl font-bold text-on-surface flex items-center gap-2">
           نتایج زنده
           {liveCount > 0 && (
             <span className="flex items-center gap-1.5 text-xs font-normal text-green-400 bg-green-500/10 px-2.5 py-0.5 rounded-full">
-              <LiveDot sm />
-              {liveCount} زنده
+              <LiveDot sm />{liveCount} زنده
             </span>
           )}
         </h1>
@@ -356,7 +589,7 @@ export default function LiveScoreClient() {
         </p>
       )}
 
-      {/* ── Day selector tabs ── */}
+      {/* Day selector tabs */}
       {days.length > 0 && (
         <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
           <button
@@ -379,12 +612,10 @@ export default function LiveScoreClient() {
                   : "bg-surface-container text-on-surface-variant hover:text-on-surface"
               }`}
             >
-              {rel === "امروز" && selectedDay !== key && (
-                <LiveDot sm />
-              )}
-              {rel || label}
-              {rel && rel !== label && (
-                <span className={`text-[10px] opacity-70 ${selectedDay === key ? "" : ""}`}>
+              {rel === "امروز" && selectedDay !== key && <LiveDot sm />}
+              <span>{rel || label}</span>
+              {rel && (
+                <span className="text-[10px] opacity-60">
                   {label.split(" ").slice(0, 2).join(" ")}
                 </span>
               )}
@@ -393,44 +624,35 @@ export default function LiveScoreClient() {
         </div>
       )}
 
-      {/* ── Status chips ── */}
+      {/* Status chips */}
       <div className="flex gap-2 mb-5">
-        {([["all", "همه"], ["live", "زنده"], ["finished", "پایان‌یافته"]] as const).map(
-          ([val, label]) => (
-            <button
-              key={val}
-              onClick={() => setStatusFilter(val)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                statusFilter === val
-                  ? "bg-white/15 text-on-surface font-bold ring-1 ring-white/20"
-                  : "bg-surface-container text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              {val === "live" && liveCount > 0 ? `زنده (${liveCount})` : label}
-            </button>
-          )
-        )}
+        {([["all", "همه"], ["live", "زنده"], ["finished", "پایان‌یافته"]] as const).map(([val, label]) => (
+          <button
+            key={val}
+            onClick={() => setStatusFilter(val)}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+              statusFilter === val
+                ? "bg-white/15 text-on-surface font-bold ring-1 ring-white/20"
+                : "bg-surface-container text-on-surface-variant hover:text-on-surface"
+            }`}
+          >
+            {val === "live" && liveCount > 0 ? `زنده (${liveCount})` : label}
+          </button>
+        ))}
       </div>
 
-      {/* ── Match cards ── */}
+      {/* Match cards */}
       {loading ? (
-        <div className="flex flex-col gap-3">
-          <SkeletonCard />
-          <SkeletonCard />
-        </div>
+        <div className="flex flex-col gap-3"><SkeletonCard /><SkeletonCard /></div>
       ) : filteredLeagues.length === 0 ? (
         <div className="text-center py-20 text-on-surface-variant">
           <p className="text-5xl mb-4">⚽</p>
           <p className="text-sm">
-            {statusFilter === "live"
-              ? "در حال حاضر بازی زنده‌ای در جریان نیست"
-              : statusFilter === "finished"
-              ? "هنوز بازی پایان‌یافته‌ای وجود ندارد"
-              : "بازی‌ای برای این روز ثبت نشده"}
+            {statusFilter === "live" ? "در حال حاضر بازی زنده‌ای در جریان نیست"
+             : statusFilter === "finished" ? "هنوز بازی پایان‌یافته‌ای وجود ندارد"
+             : "بازی‌ای برای این روز ثبت نشده"}
           </p>
-          <p className="text-xs mt-2 text-on-surface-variant/60">
-            صفحه هر ۳۰ ثانیه به‌روز می‌شود
-          </p>
+          <p className="text-xs mt-2 text-on-surface-variant/60">صفحه هر ۳۰ ثانیه به‌روز می‌شود</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -444,11 +666,9 @@ export default function LiveScoreClient() {
                   <span className="mr-auto"><LiveDot sm /></span>
                 )}
               </div>
-
-              {/* Date sub-groups — only shown when "همه روزها" is active */}
+              {/* Date groups */}
               {league.date_groups.map((dg) => (
                 <div key={dg.jalali_key}>
-                  {/* Date subheader: show when multiple days or "all days" selected */}
                   {(!selectedDay || league.date_groups.length > 1) && (
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-white/[0.03] border-b border-white/5">
                       {(() => {
@@ -460,9 +680,7 @@ export default function LiveScoreClient() {
                                 rel === "امروز"
                                   ? "bg-secondary-fixed-dim/20 text-secondary-fixed-dim"
                                   : "bg-white/5 text-on-surface-variant"
-                              }`}>
-                                {rel}
-                              </span>
+                              }`}>{rel}</span>
                             )}
                             <span className="text-[10px] text-on-surface-variant">{dg.date_label}</span>
                           </>
@@ -471,7 +689,7 @@ export default function LiveScoreClient() {
                     </div>
                   )}
                   {dg.matches.map((match) => (
-                    <MatchRow key={match.id} match={match} isGoal={goalIds.has(match.id)} />
+                    <MatchCard key={match.id} match={match} isGoal={goalIds.has(match.id)} />
                   ))}
                 </div>
               ))}
