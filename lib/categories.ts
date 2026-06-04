@@ -72,9 +72,12 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
   },
 };
 
-/** Return the full category string for exact LIKE prefix matching. */
+/** Extract the emoji prefix (everything before the first space) for LIKE matching.
+ * Handles both "💻 تکنولوژی" (old) and "💻تکنولوژی" (new compact) — both become "💻".
+ */
 function emojiPrefix(cat: string): string {
-  return cat;
+  const spaceIdx = cat.indexOf(" ");
+  return spaceIdx > 0 ? cat.slice(0, spaceIdx) : cat;
 }
 
 /**
