@@ -70,6 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Google ignores <changefreq> and <priority> since ~2017 — omit them entirely.
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: latestArticleDate },
+    { url: `${SITE_URL}/livescore`, lastModified: new Date() },
     { url: `${SITE_URL}/prices`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/categories`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/archive`, lastModified: latestArticleDate },
