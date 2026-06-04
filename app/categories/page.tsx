@@ -141,13 +141,13 @@ export default async function CategoriesPage({
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {/* ── Mobile ── */}
-      <div className="md:hidden">
-        {/* Sticky category tabs */}
-        <div className="sticky top-16 z-30 bg-background border-b border-white/5 px-container-margin py-2">
+      <div className="md:hidden flex flex-col min-h-[calc(100dvh-104px)]">
+        {/* Sticky category tabs — offset = TopBarMobile (64px) + BreakingTicker (40px) */}
+        <div className="sticky top-[104px] z-30 bg-background border-b border-white/5 px-container-margin py-2">
           <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/categories" visibleGroups={activeGroups} />
         </div>
 
-        <main className="pb-4 px-container-margin pt-4">
+        <main className="flex-1 pb-4 px-container-margin pt-4">
           {!cat && !group && !source ? (
             <h1 className="text-base font-bold text-on-surface text-right mb-4">دسته‌بندی اخبار ایران</h1>
           ) : (

@@ -16,7 +16,7 @@ export default async function Header() {
   return (
     <>
       {/* Mobile */}
-      <div className="md:hidden">
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50">
         <TopBarMobile />
         <BreakingTicker items={tickerItems} />
       </div>

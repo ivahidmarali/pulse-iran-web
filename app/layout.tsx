@@ -186,6 +186,7 @@ export default function RootLayout({
       <body className="bg-background text-on-surface antialiased">
         <NonAdminOnly>
           <Header />
+          <div className="md:hidden h-[104px]" aria-hidden="true" />
           <BottomNav />
         </NonAdminOnly>
         {children}

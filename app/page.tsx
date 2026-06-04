@@ -181,8 +181,8 @@ export default async function HomePage({
       )}
 
       {/* ── Mobile ── */}
-      <div className="md:hidden">
-        {/* Sticky category tabs */}
+      <div className="md:hidden flex flex-col min-h-[calc(100dvh-104px)]">
+        {/* Sticky category tabs — offset = TopBarMobile (64px) + BreakingTicker (40px) */}
         <div className="sticky top-[104px] z-30 bg-background border-b border-white/5 px-container-margin py-2">
           <div className="relative">
             <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
@@ -190,7 +190,7 @@ export default async function HomePage({
           </div>
         </div>
 
-        <main className="pb-4 pt-3">
+        <main className="flex-1 pb-4 pt-3">
           {/* Page h1 + transparency strip — Stories 1 & 3 */}
           {/* Single-h1 SEO: desktop layout owns the real <h1>. Mobile uses
               role=heading so screen readers still announce heading level 1. */}
@@ -317,8 +317,8 @@ export default async function HomePage({
         <main className="max-w-[1600px] mx-auto grid grid-cols-12 gap-gutter px-container-margin pt-gutter pb-section-gap">
           {/* Left: 6 cols */}
           <section className="col-span-6 flex flex-col gap-section-gap">
-            {/* Desktop category tabs */}
-            <div className="sticky top-[72px] z-30 bg-background/80 backdrop-blur-md border-b border-white/5 py-2">
+            {/* Desktop category tabs — offset = BreakingTicker (40px) + TopBarDesktop (56px) */}
+            <div className="sticky top-24 z-30 bg-background/80 backdrop-blur-md border-b border-white/5 py-2">
               <CategoryTabs selectedCat={cat} selectedGroup={group} baseUrl="/" visibleGroups={activeGroups} />
             </div>
 

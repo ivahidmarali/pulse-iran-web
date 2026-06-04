@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function MobileFooter() {
   return (
-    <footer className="bg-surface-container border-t border-white/5 px-container-margin pt-6 pb-16 md:hidden">
+    <footer className="bg-surface-container border-t border-white/5 px-container-margin pt-6 pb-24 md:hidden">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <a href="https://t.me/palsiran" target="_blank" rel="noopener noreferrer" className="text-[10px] text-outline hover:text-on-surface-variant transition-colors">تلگرام</a>
