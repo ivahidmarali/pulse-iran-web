@@ -386,7 +386,7 @@ export default async function HomePage({
                 <h2 className="font-title-md text-title-md text-secondary-fixed-dim">مانیتورینگ زنده</h2>
                 <span className="text-secondary-fixed-dim text-xl">💰</span>
               </div>
-              <p className="text-[10px] text-on-surface-variant/60 mb-3 text-right">
+              <p className="text-[10px] text-on-surface-variant mb-3 text-right">
                 نرخ بازار آزاد
                 {priceTimeStr ? (
                   <> · <span className="tabular-nums">به‌روز {priceTimeStr}</span></>
