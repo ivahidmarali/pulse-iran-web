@@ -140,14 +140,14 @@ export default async function SourceProfilePage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: "منابع خبری", item: `${SITE_URL}/sources` },
-      { "@type": "ListItem", position: 3, name: src.name },
+      { "@type": "ListItem", position: 3, name: src.name, item: canonical },
     ],
   };
 
   return (
     <div className="cyber-grid" dir="rtl">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbJsonLd) }} />
 
       {/* Mobile */}
       <div className="md:hidden">

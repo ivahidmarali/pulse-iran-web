@@ -149,7 +149,7 @@ export default async function LeanPage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
       { "@type": "ListItem", position: 2, name: "منابع خبری", item: `${SITE_URL}/sources` },
-      { "@type": "ListItem", position: 3, name: `رسانه‌های ${lean.name}` },
+      { "@type": "ListItem", position: 3, name: `رسانه‌های ${lean.name}`, item: canonical },
     ],
   };
 

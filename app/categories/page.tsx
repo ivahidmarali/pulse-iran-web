@@ -79,7 +79,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { cat, group, source, page: pageStr } = await searchParams;
   const page = parseInt(pageStr ?? "1", 10) || 1;
-  const label = cat || group || source || "دسته‌بندی اخبار";
+  const label = cat || group || source;
   const q = new URLSearchParams();
   if (cat) q.set("cat", cat);
   if (group) q.set("group", group);
@@ -87,8 +87,10 @@ export async function generateMetadata({
   const qs = q.toString();
   const canonical = `${SITE_URL}/categories${qs ? `?${qs}` : ""}`;
   return {
-    title: label,
-    description: `مرور اخبار ایران بر اساس دسته‌بندی: ${label} — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی و بیشتر`,
+    title: label ? `اخبار ${label} | پالس ایران` : "دسته‌بندی اخبار ایران | پالس ایران",
+    description: label
+      ? `آخرین اخبار ${label} از منابع معتبر داخلی و خارجی — به‌روزرسانی زنده در پالس ایران`
+      : "مرور اخبار ایران بر اساس دسته‌بندی — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی، تکنولوژی",
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
     ...(page > 3 ? { robots: { index: false, follow: true } } : {}),
   };
@@ -146,9 +148,13 @@ export default async function CategoriesPage({
         </div>
 
         <main className="pb-4 px-container-margin pt-4">
-          {source && (
+          {!cat && !group && !source ? (
+            <h1 className="text-base font-bold text-on-surface text-right mb-4">دسته‌بندی اخبار ایران</h1>
+          ) : (
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-sm font-medium text-on-surface">اخبار {source}</span>
+              <span className="text-sm font-medium text-on-surface">
+                {source ? `اخبار ${source}` : `اخبار ${group || cat}`}
+              </span>
               <Link href="/categories" className="text-xs text-secondary-fixed-dim">× حذف فیلتر</Link>
             </div>
           )}
@@ -274,9 +280,13 @@ export default async function CategoriesPage({
 
             {/* News grid (9 cols) */}
             <div className="col-span-9">
-              {source && (
+              {!cat && !group && !source ? (
+                <h1 className="text-title-md font-title-md text-right mb-6">دسته‌بندی اخبار ایران</h1>
+              ) : (
                 <div className="mb-4 flex items-center gap-2">
-                  <h2 className="text-title-md font-title-md">اخبار {source}</h2>
+                  <h1 className="text-title-md font-title-md">
+                    اخبار {source || group || cat}
+                  </h1>
                   <Link href="/categories" className="text-xs text-on-surface-variant hover:text-secondary-fixed-dim">
                     × پاک کردن فیلتر
                   </Link>

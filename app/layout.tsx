@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Vazirmatn } from "next/font/google";
 import Script from "next/script";
 import { SITE_URL, safeJsonLd } from "@/lib/utils";
@@ -74,6 +74,11 @@ export const metadata: Metadata = {
     : {}),
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -85,7 +90,10 @@ const websiteJsonLd = {
   publisher: { "@id": `${SITE_URL}/#organization` },
   potentialAction: {
     "@type": "SearchAction",
-    target: `${SITE_URL}/search?q={search_term_string}`,
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+    },
     "query-input": "required name=search_term_string",
   },
   speakable: {

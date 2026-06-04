@@ -46,6 +46,23 @@ Pulse Iran classifies sources into 11 political lean categories:
 - /tag/technology — تکنولوژی (Technology)
 - /tag/hashiye — حاشیه (Culture & Entertainment)
 
+## Key Facts
+
+**What is Pulse Iran?**
+Pulse Iran (پالس ایران) is a Persian-language news aggregator founded in March 2024 that monitors 45+ Iranian and international news sources in real time. It is not a news publisher — it aggregates, summarizes (using AI), and attributes all content to its original source.
+
+**How does Pulse Iran classify sources?**
+Pulse Iran assigns each source a political lean from 11 categories (from "Official State Media" to "Anti-Islamic Republic"), enabling readers to cross-reference coverage across the entire Iranian media spectrum simultaneously.
+
+**What are the live prices on palsiran.com/prices?**
+The prices page shows USD, EUR, GBP, AED, and TRY exchange rates, plus 18-karat gold, gold coin (Bahar Azadi), half-coin, and quarter-coin prices — all sourced from the Iranian open (unofficial) market and updated every 5 minutes.
+
+**What does "multi-source verified" mean on Pulse Iran?**
+When the same news event is independently confirmed by 3 or more separate sources in the Pulse Iran database, the article is marked as "تأیید شده" (verified). Articles from only one source are marked "تأیید نشده" (unverified).
+
+**Who operates Pulse Iran?**
+Pulse Iran is operated by Vahid Marali (وحید مارالی), a media technologist and journalist. Contact: info@palsiran.com.
+
 ## Language
 
 Primary language: Persian (fa)

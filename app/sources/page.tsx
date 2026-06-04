@@ -6,9 +6,17 @@ import { getSources } from "@/lib/api";
 import { SourceInfo } from "@/lib/types";
 import { SITE_URL, safeJsonLd, sourceHref, toPersianNum } from "@/lib/utils";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
-  title: "منابع خبری",
-  description: "فهرست منابع خبری پالس ایران — رسانه‌های داخلی و خارجی با گرایش سیاسی",
+  title: "منابع خبری | پالس ایران",
+  description: "فهرست کامل منابع خبری پالس ایران — رسانه‌های داخلی و خارجی با گرایش سیاسی مشخص: اصولگرا، اصلاح‌طلب، مستقل، بین‌الملل",
+  openGraph: {
+    title: "منابع خبری پالس ایران",
+    description: "فهرست رسانه‌های داخلی و خارجی با گرایش سیاسی مشخص",
+    url: `${SITE_URL}/sources`,
+    type: "website",
+  },
   alternates: { canonical: `${SITE_URL}/sources`, languages: { fa: `${SITE_URL}/sources`, "x-default": `${SITE_URL}/sources` } },
 };
 

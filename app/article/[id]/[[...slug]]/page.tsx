@@ -12,6 +12,8 @@ import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
 
+export const revalidate = 300;
+
 // Cache article fetch so generateMetadata and the page share one request
 const getArticle = cache(async (id: string): Promise<NewsItem | null> => {
   try {
@@ -156,7 +158,7 @@ export async function generateMetadata({
       type: "article",
       publishedTime: publishedIso,
       modifiedTime: publishedIso,
-      authors: [item.source],
+      authors: SOURCE_URLS[item.source] ? [SOURCE_URLS[item.source]] : [item.source],
       section: catName,
       images: [{ url: imageUrl, width: 1200, height: 630, alt: item.title }],
     },
@@ -208,13 +210,32 @@ export default async function ArticlePage({
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const catName = categoryName(item.category);
 
+  // Derive the category group name for breadcrumb (e.g. "اقتصادی" from "💵 دلار و ارز")
+  const CATEGORY_GROUP_MAP: Record<string, string> = {
+    "🏛 سیاست داخلی": "سیاسی", "🎙 ترامپ": "سیاسی", "🇮🇷🇺🇸 ایران و آمریکا": "سیاسی",
+    "🔵 اصلاح‌طلبان": "سیاسی", "🔴 اصولگرایان": "سیاسی",
+    "⚔️ جنگ و بحران": "بین‌الملل", "💥 اسرائیل و غزه": "بین‌الملل",
+    "🇷🇺🇺🇦 روسیه و اوکراین": "بین‌الملل", "🇸🇦 عربستان": "بین‌الملل",
+    "🇹🇷 ترکیه": "بین‌الملل", "🇨🇳 چین": "بین‌الملل",
+    "💵 دلار و ارز": "اقتصادی", "🚫 تحریم": "اقتصادی",
+    "📈 بورس": "اقتصادی", "🏠 مسکن": "اقتصادی", "🛢 نفت و انرژی": "اقتصادی",
+    "🌐 اینترنت و فضای مجازی": "اجتماعی", "✊ اعتراضات": "اجتماعی",
+    "🚨 حوادث": "اجتماعی", "☢️ هسته‌ای": "اجتماعی",
+    "⚽️ فوتبال ایران": "ورزشی", "🏆 جام جهانی": "ورزشی", "🥇 ورزش جهانی": "ورزشی",
+    "💻 تکنولوژی": "تکنولوژی", "📱 موبایل و گجت": "تکنولوژی",
+  };
+  const groupName = item.category ? (CATEGORY_GROUP_MAP[item.category] ?? catName) : "اخبار";
+  const groupUrl = item.category
+    ? `${SITE_URL}/categories?group=${encodeURIComponent(groupName)}`
+    : `${SITE_URL}/categories`;
+
   // Build JSON-LD from trusted server-only data
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "اخبار", item: `${SITE_URL}/categories` },
+      { "@type": "ListItem", position: 2, name: groupName, item: groupUrl },
       { "@type": "ListItem", position: 3, name: item.title.slice(0, 60), item: canonical },
     ],
   };
@@ -239,7 +260,7 @@ export default async function ArticlePage({
     "@type": "NewsArticle",
     "@id": canonical,
     url: canonical,
-    headline: item.title,
+    headline: item.title.slice(0, 110),
     description:
       item.summary && item.summary.length > 30
         ? item.summary.slice(0, 160)
@@ -433,7 +454,7 @@ export default async function ArticlePage({
             <nav className="flex text-on-surface-variant font-label-sm text-label-sm gap-2">
               <Link href="/" className="hover:text-secondary-fixed-dim">صفحه اصلی</Link>
               <span>/</span>
-              <Link href="/categories" className="hover:text-secondary-fixed-dim">اخبار</Link>
+              <Link href={groupUrl} className="hover:text-secondary-fixed-dim">{groupName}</Link>
               <span>/</span>
               <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
             </nav>

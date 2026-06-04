@@ -60,16 +60,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return true;
   });
 
-  const now = new Date();
+  // lastModified = most recent article's publication date, not current wall-clock time.
+  // Constantly emitting `new Date()` for pages whose content hasn't changed trains
+  // Googlebot to distrust our lastmod values across the entire sitemap.
+  const latestArticleDate = newsItems[0]?.posted_at
+    ? new Date(newsItems[0].posted_at)
+    : new Date("2026-01-01");
+
   // Google ignores <changefreq> and <priority> since ~2017 — omit them entirely.
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: SITE_URL, lastModified: now },
-    { url: `${SITE_URL}/prices`, lastModified: now },
-    { url: `${SITE_URL}/categories`, lastModified: now },
-    { url: `${SITE_URL}/archive`, lastModified: now },
+    { url: SITE_URL, lastModified: latestArticleDate },
+    { url: `${SITE_URL}/prices`, lastModified: latestArticleDate },
+    { url: `${SITE_URL}/categories`, lastModified: latestArticleDate },
+    { url: `${SITE_URL}/archive`, lastModified: latestArticleDate },
     // /search is noindex — exclude from sitemap to avoid contradiction
-    { url: `${SITE_URL}/sources`, lastModified: now },
-    { url: `${SITE_URL}/editorial`, lastModified: now },
+    { url: `${SITE_URL}/sources`, lastModified: latestArticleDate },
+    { url: `${SITE_URL}/editorial`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01") },
     { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
     { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01") },
@@ -79,12 +85,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const leanRoutes: MetadataRoute.Sitemap = LEAN_SLUGS.map((slug) => ({
     url: `${SITE_URL}/lean/${slug}`,
-    lastModified: now,
+    lastModified: latestArticleDate,
   }));
 
   const tagRoutes: MetadataRoute.Sitemap = TAG_SLUGS.map((slug) => ({
     url: `${SITE_URL}/tag/${slug}`,
-    lastModified: now,
+    lastModified: latestArticleDate,
   }));
 
   // Exclude removed/inappropriate sources (chekhabarre) from sitemap
@@ -92,8 +98,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sourceRoutes: MetadataRoute.Sitemap = sources
     .filter((src) => !EXCLUDED_SOURCE_SLUGS.has(generateSlug(src.name)))
     .map((src) => ({
-      url: `${SITE_URL}/source/${encodeURIComponent(generateSlug(src.name))}`,
-      lastModified: now,
+      url: `${SITE_URL}/source/${generateSlug(src.name)}`,
+      lastModified: latestArticleDate,
     }));
 
   // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata

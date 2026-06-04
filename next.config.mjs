@@ -33,10 +33,10 @@ const nextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
-      // Homepage: short CDN cache (30s) with stale-while-revalidate for edge serving
+      // Homepage: CDN cache matches ISR revalidate=120 to avoid unnecessary origin hits
       {
         source: "/",
-        headers: [{ key: "Cache-Control", value: "public, s-maxage=30, stale-while-revalidate=60" }],
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=120, stale-while-revalidate=240" }],
       },
       // Article pages: longer CDN cache (5 min) — content rarely changes after publish
       {

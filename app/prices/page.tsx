@@ -152,16 +152,23 @@ const GoldIcon = () => (
   </svg>
 );
 
-function PricesJsonLd({ prices }: { prices: PriceItem[] }) {
-  const data = {
+function PricesJsonLd({ prices, priceMap }: { prices: PriceItem[]; priceMap: Record<string, PriceItem> }) {
+  const fmt = (key: string) => priceMap[key]?.price?.toLocaleString("fa-IR");
+  const dollar = fmt("price_dollar_rl");
+  const gold = fmt("geram18");
+  const sekeh = fmt("sekeb") ?? fmt("sekke");
+  const eur = fmt("price_eur");
+  const nim = fmt("nim");
+
+  const datasetData = {
     "@context": "https://schema.org",
     "@type": "Dataset",
     name: "نرخ زنده ارز و طلا در ایران",
     description: "نرخ لحظه‌ای دلار، یورو، طلا، سکه و ارزهای دیجیتال در بازار ایران",
-    url: "https://palsiran.com/prices",
-    temporalCoverage: new Date().toISOString(),
+    url: `${SITE_URL}/prices`,
+    temporalCoverage: "2024-01-01/..",
     dateModified: new Date().toISOString(),
-    publisher: { "@id": "https://palsiran.com/#organization" },
+    publisher: { "@id": `${SITE_URL}/#organization` },
     measurementMethod: "نرخ بازار آزاد ایران",
     variableMeasured: prices.map((p) => {
       const meta = PRICE_META[p.key];
@@ -174,13 +181,88 @@ function PricesJsonLd({ prices }: { prices: PriceItem[] }) {
       };
     }),
   };
+
+  const faqData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "قیمت دلار امروز در بازار آزاد ایران چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: dollar
+            ? `نرخ دلار در بازار آزاد ایران امروز ${dollar} تومان است. این قیمت هر ۵ دقیقه یکبار در پالس ایران به‌روزرسانی می‌شود.`
+            : "نرخ دلار در بازار آزاد ایران هر ۵ دقیقه در پالس ایران به‌روزرسانی می‌شود.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "قیمت طلای ۱۸ عیار امروز چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: gold
+            ? `قیمت طلای ۱۸ عیار امروز ${gold} تومان در هر گرم است. قیمت طلا بر اساس نرخ بازار آزاد ایران به‌روز می‌شود.`
+            : "قیمت طلای ۱۸ عیار بر اساس نرخ بازار آزاد ایران هر ۵ دقیقه در پالس ایران به‌روزرسانی می‌شود.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "قیمت سکه تمام بهار آزادی امروز چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: sekeh
+            ? `قیمت سکه تمام بهار آزادی امروز ${sekeh} تومان است. نیم‌سکه${nim ? ` (${nim} تومان)` : ""} و ربع‌سکه نیز در همین صفحه نمایش داده می‌شوند.`
+            : "قیمت سکه تمام بهار آزادی، نیم‌سکه و ربع‌سکه هر ۵ دقیقه در بخش طلا و سکه این صفحه به‌روز می‌شود.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "قیمت یورو امروز در ایران چقدر است؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: eur
+            ? `نرخ یورو در بازار آزاد ایران امروز ${eur} تومان است. نرخ درهم، پوند و لیر ترکیه نیز در جدول ارزها موجود است.`
+            : "نرخ یورو و سایر ارزها (درهم، پوند، لیر) بر اساس بازار آزاد ایران در این صفحه نمایش داده می‌شود.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "آیا قیمت‌ها نرخ بازار آزاد است یا رسمی؟",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "تمامی نرخ‌های ارز و طلا در پالس ایران بر اساس بازار آزاد (غیررسمی) است و شامل نرخ رسمی بانک مرکزی یا نرخ نیما نمی‌شود.",
+        },
+      },
+    ],
+  };
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: safeJsonLd(data) }}
-    />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(datasetData) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(faqData) }} />
+    </>
   );
 }
+
+const FAQ_ITEMS = [
+  {
+    q: "قیمت دلار امروز در بازار آزاد ایران چقدر است؟",
+    a: "نرخ دلار در بازار آزاد ایران هر ۵ دقیقه یکبار در پالس ایران به‌روزرسانی می‌شود. آخرین قیمت را در جدول ارزها در بالای همین صفحه مشاهده کنید.",
+  },
+  {
+    q: "قیمت طلا و سکه امروز در ایران چقدر است؟",
+    a: "قیمت طلای ۱۸ عیار، مثقال طلا، سکه تمام بهار آزادی، نیم‌سکه و ربع‌سکه هر ۵ دقیقه در بخش «طلا و سکه» این صفحه به‌روز می‌شود.",
+  },
+  {
+    q: "آیا قیمت‌های نمایش داده‌شده نرخ بازار آزاد است؟",
+    a: "بله. تمامی نرخ‌های ارز و طلا در پالس ایران بر اساس بازار آزاد (غیررسمی) است و شامل نرخ رسمی بانک مرکزی یا نرخ نیما نمی‌شود.",
+  },
+  {
+    q: "قیمت یورو و درهم امروز در ایران چقدر است؟",
+    a: "نرخ یورو، درهم امارات، پوند انگلیس و لیر ترکیه در بخش «ارزها» همین صفحه هر ۵ دقیقه به‌روزرسانی می‌شود.",
+  },
+];
 
 export default async function PricesPage() {
   const prices = await fetchPrices();
@@ -190,7 +272,7 @@ export default async function PricesPage() {
 
   return (
     <div className="cyber-grid" dir="rtl">
-      <PricesJsonLd prices={prices} />
+      <PricesJsonLd prices={prices} priceMap={priceMap} />
       {/* Mobile */}
       <div className="md:hidden">
         <main className="pb-4 px-container-margin pt-4">
@@ -228,6 +310,24 @@ export default async function PricesPage() {
               )}
             </div>
           </section>
+
+          {/* FAQ */}
+          <section className="mt-10">
+            <h2 className="text-base font-bold text-on-surface mb-4 text-right">سوالات متداول</h2>
+            <div className="space-y-3">
+              {FAQ_ITEMS.map((item) => (
+                <details key={item.q} className="bg-surface-container rounded-xl border border-white/5 overflow-hidden">
+                  <summary className="flex items-center justify-between gap-3 px-4 py-3 cursor-pointer text-sm font-medium text-on-surface text-right list-none">
+                    {item.q}
+                    <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0 text-on-surface-variant" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M4 6l4 4 4-4" />
+                    </svg>
+                  </summary>
+                  <p className="px-4 pb-4 pt-1 text-sm text-on-surface-variant leading-relaxed text-right">{item.a}</p>
+                </details>
+              ))}
+            </div>
+          </section>
         </main>
         <MobileFooter />
       </div>
@@ -260,6 +360,24 @@ export default async function PricesPage() {
             <SectionHeader title="طلا و سکه" icon={<GoldIcon />} />
             <div className="grid grid-cols-3 gap-4">
               {gold.map((p) => <PriceCard key={p.key} item={p} />)}
+            </div>
+          </section>
+
+          {/* FAQ */}
+          <section className="mt-12">
+            <h2 className="text-lg font-bold text-on-surface mb-6 text-right border-r-4 border-secondary-fixed-dim pr-3">سوالات متداول درباره قیمت ارز و طلا</h2>
+            <div className="space-y-3">
+              {FAQ_ITEMS.map((item) => (
+                <details key={item.q} className="bg-surface-container rounded-xl border border-white/5 overflow-hidden">
+                  <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer text-sm font-medium text-on-surface text-right list-none">
+                    {item.q}
+                    <svg viewBox="0 0 16 16" className="w-4 h-4 shrink-0 text-on-surface-variant" fill="none" stroke="currentColor" strokeWidth={2}>
+                      <path d="M4 6l4 4 4-4" />
+                    </svg>
+                  </summary>
+                  <p className="px-5 pb-5 pt-1 text-sm text-on-surface-variant leading-relaxed text-right">{item.a}</p>
+                </details>
+              ))}
             </div>
           </section>
         </main>
