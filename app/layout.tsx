@@ -10,7 +10,7 @@ import "./globals.css";
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
   variable: "--font-vazirmatn",
-  display: "optional",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
