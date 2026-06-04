@@ -287,7 +287,7 @@ export default async function PricesPage() {
               </span>
             </div>
           </div>
-          <p className="text-[10px] text-on-surface-variant/60 mb-6 text-right">منبع: نرخ بازار آزاد ایران</p>
+          <p className="text-xs text-on-surface-variant mb-6 text-right">منبع: بازار آزاد ایران (غیررسمی) — شامل نرخ رسمی بانک مرکزی نیست</p>
 
           {/* currencies */}
           <section className="mb-8">
@@ -337,7 +337,7 @@ export default async function PricesPage() {
         <main className="max-w-5xl mx-auto px-container-margin py-10">
           {/* page header */}
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-on-surface-variant">منبع: نرخ بازار آزاد — هر ۵ دقیقه</span>
+            <span className="text-xs text-on-surface-variant">منبع: بازار آزاد ایران (غیررسمی) — شامل نرخ رسمی بانک مرکزی نیست</span>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-black text-on-surface">قیمت دلار و طلا امروز</h1>
               <span className="relative flex h-2.5 w-2.5">

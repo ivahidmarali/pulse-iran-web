@@ -353,9 +353,15 @@ export default async function ArticlePage({
 
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
               {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
-                <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
-                  {item.summary}
-                </p>
+                <>
+                  <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
+                    {item.summary}
+                  </p>
+                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end">
+                    <span>🤖</span>
+                    <span>این خلاصه با هوش مصنوعی تهیه شده</span>
+                  </p>
+                </>
               ) : (
                 <div className="text-center py-4 space-y-4">
                   <p className="text-on-surface-variant text-sm">
@@ -511,9 +517,15 @@ export default async function ArticlePage({
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
               {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
-                <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
-                  {item.summary}
-                </p>
+                <>
+                  <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
+                    {item.summary}
+                  </p>
+                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end">
+                    <span>🤖</span>
+                    <span>این خلاصه با هوش مصنوعی تهیه شده</span>
+                  </p>
+                </>
               ) : (
                 <div className="text-center py-6 space-y-4">
                   <p className="text-on-surface-variant text-sm">
