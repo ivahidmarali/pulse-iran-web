@@ -158,9 +158,6 @@ export default function RootLayout({
     <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://cdn1.khabaronline.ir" />
-        <link rel="preconnect" href="https://media.mehrnews.com" />
-        <link rel="preconnect" href="https://newsmedia.tasnimnews.com" />
         <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         <link rel="alternate" type="application/rss+xml" title="پالس ایران" href={`${SITE_URL}/feed.xml`} />
         {/* safeJsonLd escapes <, >, & — prevents </script> injection from data values */}

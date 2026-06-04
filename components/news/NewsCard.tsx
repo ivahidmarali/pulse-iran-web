@@ -140,7 +140,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
           <div className="flex items-center gap-2 text-on-surface-variant text-label-sm flex-wrap">
             <span className="font-medium">{item.source}</span>
             {item.political_lean && (
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline bg-transparent border-white/20"}`}>
                 {item.political_lean}
               </span>
             )}
@@ -180,14 +180,14 @@ export default function NewsCard({ item, variant = "default", priority = false }
               <span className="text-[11px] text-secondary-fixed-dim/70 font-medium">{emoji}</span>
             )}
           </div>
-          <h4 className="font-bold text-[18px] leading-snug line-clamp-2">{item.title}</h4>
+          <h3 className="font-bold text-[18px] leading-snug line-clamp-2">{item.title}</h3>
           {item.summary && (
             <p className="text-[12px] text-on-surface-variant/80 line-clamp-2 leading-relaxed">{item.summary}</p>
           )}
           <div className="flex items-center gap-2 text-on-surface-variant text-[12px] flex-wrap">
             <span className="font-medium text-on-surface-variant/90">منبع: {item.source}</span>
             {item.political_lean && (
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline bg-transparent border-white/20"}`}>
                 {item.political_lean}
               </span>
             )}
@@ -213,7 +213,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
           <div className="flex items-center gap-2 text-outline text-[11px] mt-1 flex-wrap">
             <span>{item.source}</span>
             {item.political_lean && (
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline bg-transparent border-white/20"}`}>
                 {item.political_lean}
               </span>
             )}
@@ -250,7 +250,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
         <div className="flex items-center gap-2 text-[11px] text-outline flex-wrap">
           <span className="font-medium text-on-surface-variant/80">منبع: {item.source}</span>
           {item.political_lean && (
-            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline/70 bg-transparent border-white/10"}`}>
+            <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold border ${LEAN_BADGE[item.political_lean] ?? "text-outline bg-transparent border-white/20"}`}>
               {item.political_lean}
             </span>
           )}
