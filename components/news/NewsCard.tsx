@@ -116,7 +116,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high via-surface-container to-background flex items-center justify-center">
-            <span className="text-7xl opacity-20">{catEmoji(item.category)}</span>
+            <span className="text-5xl opacity-20" aria-hidden="true">{catEmoji(item.category)}</span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent z-10" />
