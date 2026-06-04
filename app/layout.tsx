@@ -108,7 +108,7 @@ const editorJsonLd = {
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about`,
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
 };
 
 const organizationJsonLd = {
@@ -126,7 +126,7 @@ const organizationJsonLd = {
     width: 512,
     height: 512,
   },
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news"],
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
   publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
   correctionsPolicy: `${SITE_URL}/corrections`,
   diversityPolicy: `${SITE_URL}/about/editorial-policy`,
