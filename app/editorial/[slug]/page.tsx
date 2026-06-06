@@ -213,8 +213,8 @@ export default async function EditorialArticlePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "تحریریه", item: `${SITE_URL}/editorial` },
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
+      { "@type": "ListItem", position: 2, name: "تحریریه", item: { "@id": `${SITE_URL}/editorial`, name: "تحریریه" } },
       { "@type": "ListItem", position: 3, name: article.title },
     ],
   };

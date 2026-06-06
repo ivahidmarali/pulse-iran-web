@@ -138,9 +138,9 @@ export default async function SourceProfilePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "منابع خبری", item: `${SITE_URL}/sources` },
-      { "@type": "ListItem", position: 3, name: src.name, item: canonical },
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
+      { "@type": "ListItem", position: 2, name: "منابع خبری", item: { "@id": `${SITE_URL}/sources`, name: "منابع خبری" } },
+      { "@type": "ListItem", position: 3, name: src.name, item: { "@id": canonical, name: src.name } },
     ],
   };
 

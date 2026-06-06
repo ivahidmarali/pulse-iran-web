@@ -25,9 +25,9 @@ const jsonLd = {
   breadcrumb: {
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "درباره ما", item: `${SITE_URL}/about` },
-      { "@type": "ListItem", position: 3, name: "سیاست تصحیح", item: `${SITE_URL}/corrections` },
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
+      { "@type": "ListItem", position: 2, name: "درباره ما", item: { "@id": `${SITE_URL}/about`, name: "درباره ما" } },
+      { "@type": "ListItem", position: 3, name: "سیاست تصحیح", item: { "@id": `${SITE_URL}/corrections`, name: "سیاست تصحیح" } },
     ],
   },
 };

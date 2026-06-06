@@ -235,9 +235,9 @@ export default async function ArticlePage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: groupName, item: groupUrl },
-      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60), item: canonical },
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
+      { "@type": "ListItem", position: 2, name: groupName, item: { "@id": groupUrl, name: groupName } },
+      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60) || "مقاله", item: { "@id": canonical, name: item.title.slice(0, 60) || "مقاله" } },
     ],
   };
 

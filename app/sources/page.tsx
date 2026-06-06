@@ -125,8 +125,7 @@ export default async function SourcesPage() {
       itemListElement: sources.map((src, i) => ({
         "@type": "ListItem",
         position: i + 1,
-        url: `${SITE_URL}${sourceHref(src.name)}`,
-        name: src.name,
+        item: { "@id": `${SITE_URL}${sourceHref(src.name)}`, name: src.name },
       })),
     },
   };

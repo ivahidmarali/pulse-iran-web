@@ -114,8 +114,7 @@ export default async function TagPage({
         itemListElement: items.slice(0, 10).map((item, i) => ({
           "@type": "ListItem",
           position: i + 1,
-          url: `${SITE_URL}/article/${item.item_id}`,
-          name: item.title,
+          item: { "@id": `${SITE_URL}/article/${item.item_id}`, "@type": "NewsArticle", name: item.title },
         })),
       },
     } : {}),
@@ -125,8 +124,8 @@ export default async function TagPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "دسته‌بندی‌ها", item: `${SITE_URL}/categories` },
+      { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
+      { "@type": "ListItem", position: 2, name: "دسته‌بندی‌ها", item: { "@id": `${SITE_URL}/categories`, name: "دسته‌بندی‌ها" } },
       { "@type": "ListItem", position: 3, name: `اخبار ${tag.name}` },
     ],
   };

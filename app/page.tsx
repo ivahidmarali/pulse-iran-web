@@ -163,8 +163,7 @@ export default async function HomePage({
     itemListElement: news.slice(0, 10).map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      url: articleUrl(item.item_id, item.title),
-      name: item.title,
+      item: { "@id": articleUrl(item.item_id, item.title), "@type": "NewsArticle", name: item.title },
     })),
   } : null;
 
