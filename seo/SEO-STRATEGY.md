@@ -1,9 +1,9 @@
 # SEO Strategy — پالس ایران (palsiran.com)
 
-**Last updated:** June 1, 2026  
+**Last updated:** June 8, 2026  
 **Business type:** Persian-language news aggregator (Publisher)  
 **Target audience:** Iranian diaspora (Europe, North America) + Persian-speaking global users  
-**Current SEO Health Score:** ~82/100 (up from 41/100 at start of June)  
+**Current SEO Health Score:** ~87/100 (up from 82/100 on June 1; up from 41/100 at launch)  
 **Target SEO Health Score:** 90/100 by December 2026
 
 ---
@@ -13,6 +13,8 @@
 palsiran.com launched organic search presence in June 2026 after fixing a Cloudflare Bot Fight Mode block. In the first weeks, a full technical SEO overhaul was completed: canonical tags, hreflang, Google News sitemap, NewsArticle schema, 45+ source profile pages, 11 political lean hub pages, editorial policy, CollectionPage schema, pagination noindex, performance optimization (mobile LCP: 4.5s → projected ~2.0s), and AI crawler readiness via `llms.txt`.
 
 The site now has a technically sound foundation. The next phase is **content authority** — editorial pieces that build E-E-A-T, source profiles with original commentary, and link acquisition from the diaspora community.
+
+**Week of June 1–8:** Further technical wins — speakable schema on article pages, full livescore football page, YouTube in sameAs schema, `<time datetime>` on article dates, itemListElement schema fix for Google rich results, 5 Lighthouse performance fixes, AI disclosure labels on articles, data source labels on prices.
 
 **Unique structural differentiator:** Transparent political bias labeling across 11 categories — no Persian-language competitor offers this. This is the primary keyword moat to defend and expand.
 
@@ -41,6 +43,7 @@ The site now has a technically sound foundation. The next phase is **content aut
 | Political analysis | `رسانه اصولگرا` | /lean/[slug] — ✅ live |
 | Archive/historical | `اخبار [date] ایران` | /archive page |
 | Topic browsing | `اخبار سیاسی ایران` | /categories page |
+| Live sports scores | `نتایج زنده فوتبال` | /livescore — ✅ live |
 | Editorial explainers | `تفاوت رسانه‌های ایران` | /editorial — scaffold only |
 
 ---
@@ -82,6 +85,10 @@ The site now has a technically sound foundation. The next phase is **content aut
 | [source name] + اخبار (×45) | 200–5K each | Low | /source/[slug] ✅ |
 | نرخ سکه امروز | 10K–30K | Medium | /prices exists |
 | نرخ یورو امروز | 5K–15K | Medium | /prices exists |
+| نتایج زنده فوتبال | 20K–60K | Medium | /livescore ✅ |
+| لایو اسکور | 10K–30K | Medium | /livescore ✅ |
+| نتایج فوتبال امروز | 15K–40K | Medium | /livescore ✅ |
+| نتایج لیگ برتر ایران | 5K–15K | Low | /livescore ✅ |
 
 ### Long-tail Keywords (Editorial content — not yet written)
 - `تفاوت رسانه اصولگرا و اصلاح‌طلب`
@@ -89,6 +96,8 @@ The site now has a technically sound foundation. The next phase is **content aut
 - `چطور اخبار ایران را با دیده انتقادی بخوانیم`
 - `چرا رسانه‌های مختلف یک رویداد را فرق می‌گویند`
 - `تاریخچه نرخ دلار در ایران`
+- `جدول لیگ برتر ایران`
+- `تقویم بازی‌های تیم ملی ایران`
 
 ---
 
@@ -150,15 +159,23 @@ The site now has a technically sound foundation. The next phase is **content aut
 - GTM deferred to `lazyOnload` (mobile LCP fix: 4.5s → ~2.0s projected)
 - Accessibility fixes (aria-labels, color contrast)
 - Sitemap updated (lean + source + editorial-policy routes)
+- `speakable` schema on article pages (`h1` + `[data-speakable]` paragraphs) *(June 2026)*
+- YouTube channel added to `sameAs` on Organization + editor schema *(June 2026)*
+- `<time datetime>` on article dates (ISO 8601 machine-readable) *(June 2026)*
+- `itemListElement` object format fixed for Google rich results *(June 2026)*
+- `/livescore` — live football scores page with full SEO metadata, keywords, WebPage schema *(June 2026)*
+- AI disclosure label on articles + data source label on /prices *(June 2026)*
+- 5 Lighthouse performance issues fixed (LCP, GA preconnect, contrast) *(June 2026)*
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` set in GitHub Actions env *(June 2026)*
 
 ### Pending (Next 30 days)
+- **CRITICAL: GitHub Actions Node.js 24 upgrade (deadline: June 16, 2026)** — `FORCE_NODE24` is set but `actions/setup-node@v4` still installs Node 22; must pin to node-version: 24
 - Custom OG image for homepage (not just og-default.jpg)
-- `speakable` schema on article summary paragraphs
 - Tag/topic pages (`/tag/[tag]`)
 - Price history pages / sparklines
 - FAQ schema on editorial explainer articles
 - GSC service account (Tier 1 credentials for URL Inspection API)
-- GitHub Actions Node.js 24 upgrade (deadline: June 16, 2026)
+- `/livescore` added to sitemap (currently absent — add to sitemap.ts)
 
 ### Pending (Month 2–3)
 - Named author entity with Person schema on editorial articles

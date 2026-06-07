@@ -1,6 +1,6 @@
 # Competitor Analysis — پالس ایران (palsiran.com)
 
-**Last updated:** June 1, 2026  
+**Last updated:** June 8, 2026  
 **Business type:** Persian-language news aggregator (Publisher)  
 **Target market:** Iranian diaspora + Persian-speaking global audience
 
@@ -140,12 +140,14 @@ Palsiran.com competes in Tier 2 and has a structural differentiator no competito
 |---------|-------------|-------------|-------|-------------|--------|
 | Political bias labeling | **✅ 11 categories** | ❌ | ❌ | ❌ | ❌ |
 | Live exchange rates | **✅** | ❌ | ❌ | ❌ | ❌ |
+| Live football scores | **✅** | ❌ | ❌ | ❌ | ❌ |
 | Multi-source aggregation | ✅ 45+ | ✅ | ✅ | ✅ | ❌ |
 | Mobile-first design | **✅** | ❌ | ❌ | Partial | Partial |
 | AI summaries | **✅** | ❌ | ❌ | ❌ | ❌ |
 | Source credibility scores | **✅** | ❌ | ❌ | ❌ | ❌ |
 | RTL optimized | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Dark mode | **✅** | ❌ | ❌ | ❌ | ❌ |
+| AI disclosure on content | **✅** | ❌ | ❌ | ❌ | ❌ |
 | Google News sitemap | ✅ | Unknown | Unknown | Unknown | ✅ |
 | Schema markup | **✅ Full** | Minimal | None | Minimal | Partial |
 
@@ -155,6 +157,7 @@ Palsiran.com competes in Tier 2 and has a structural differentiator no competito
 
 ### Palsiran.com owns these differentiating keyword clusters:
 - `گرایش سیاسی رسانه` — no competitor targets this
+- `نتایج زنده فوتبال` — no Persian news aggregator offers this; palsiran.com uniquely combines news + livescore
 - `منابع خبری معتبر` — partial coverage by competitors
 - `اخبار دلار و طلا` — price pages can rank for these
 - `نرخ دلار لحظه‌ای` — owned by price tracker sites; palsiran can rank

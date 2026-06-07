@@ -1,6 +1,6 @@
 # Site Structure & URL Architecture — palsiran.com
 
-**Last updated:** June 1, 2026  
+**Last updated:** June 8, 2026  
 **Legend:** ✅ Live | 🔧 Scaffold | ❌ Not built
 
 ---
@@ -16,6 +16,7 @@ palsiran.com/
 ├── /source/[slug]            ✅ Source profile pages ×45+ (CollectionPage schema)
 ├── /lean/[slug]              ✅ Political lean hub pages ×11 (CollectionPage schema)
 ├── /prices                   ✅ Live financial data (prices schema partial)
+├── /livescore                ✅ Live football scores (WebPage schema, keywords, OG)
 ├── /archive                  ✅ Date-based archive browser
 ├── /search                   ✅ Search (noindex)
 ├── /saved                    ✅ Saved articles (noindex, client-side)
@@ -47,6 +48,7 @@ palsiran.com/
 | `/editorial` | CollectionPage, BreadcrumbList | ✅ |
 | `/editorial/[slug]` | NewsArticle (with author) | ❌ needs building |
 | `/prices` | Dataset, PropertyValue | ⚠️ partial |
+| `/livescore` | WebPage | ✅ (SportsEvent schema — pending) |
 | `/tag/[tag]` | CollectionPage, ItemList | ❌ needs building |
 
 ---
@@ -111,6 +113,16 @@ Article page
 ### 4. `/corrections` — Correction Policy Page
 **Why:** E-E-A-T signal for publisher credibility (referenced in editorial policy but no dedicated page)  
 **Effort:** 1h (static page)
+
+### 5. `/livescore` — SportsEvent Schema Enhancement
+**Why:** Page is live and has basic WebPage schema + keywords; adding `SportsEvent` or `SportsOrganization` schema could unlock rich results for match queries.  
+**Schema:** `SportsEvent` per match (dynamically injected client-side or via SSR)  
+**Effort:** 4–6h  
+**Also needed:** Add `/livescore` to `sitemap.ts` (currently absent — not in any sitemap).
+
+### 6. `/livescore/[league]` — Per-League Landing Pages (Future)
+**Why:** Long-tail livescore keywords (`نتایج لیگ برتر ایران`, `نتایج لیگ قهرمانان آسیا`)  
+**Effort:** 4h (static routes backed by livescore API filter)
 
 ---
 

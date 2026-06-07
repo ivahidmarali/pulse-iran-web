@@ -1,8 +1,9 @@
 # Content Calendar — پالس ایران
 
-**Last updated:** June 1, 2026  
+**Last updated:** June 8, 2026  
 **Tier 1 (automated):** 50–200 articles/day — running ✅  
-**Tier 2 (manual editorial):** Target 2–3 pieces/week — not yet started ❌
+**Tier 2 (manual editorial):** Target 2–3 pieces/week — not yet started ❌  
+**Livescore page:** ✅ Live — `/livescore` added as 5th content pillar (sports/football)
 
 ---
 
@@ -52,6 +53,21 @@ Pick the 5 sources with highest monthly article count:
 
 ---
 
+### Batch 3.5 — Sports & Livescore Editorial (September–October 2026)
+
+Tied to the `/livescore` page — builds topical authority for football keywords and drives repeat visits.
+
+| Article | Target Keyword | Est. Volume | URL |
+|---------|---------------|-------------|-----|
+| راهنمای لیگ برتر ایران ۱۴۰۵ | لیگ برتر ایران | 10K–30K/mo | /editorial/rahnamaye-lighe-bartar |
+| تاریخچه تیم ملی فوتبال ایران | تیم ملی ایران | 20K–50K/mo | /editorial/tarikhe-time-melli |
+| بهترین سایت نتایج فوتبال فارسی | لایو اسکور فارسی | 5K–15K/mo | /editorial/behtarin-site-natayej |
+| جام جهانی ۲۰۲۶: راهنمای کامل | جام جهانی ۲۰۲۶ | 50K–100K/mo | /editorial/jame-jahani-2026 |
+
+**Format:** 600–900 words. Stats tables. Internal link to `/livescore`. Publish around key match dates for freshness signals.
+
+---
+
 ### Batch 4 — Quarterly Data Reports (Every 3 Months)
 
 **"گزارش فصلی پالس: رسانه‌های ایران"** — the primary linkbait and AI citation asset.
@@ -91,8 +107,8 @@ Every editorial article should include:
 | June 2026 | 2 | Batch 1 × 2 |
 | July 2026 | 4 | Batch 1 complete + Batch 2 × 2 |
 | August 2026 | 4 | Batch 2 complete |
-| September 2026 | 4 + Q2 report | Batch 3 × 2 + quarterly report |
-| October 2026 | 4 | Batch 3 complete |
+| September 2026 | 4 + Q2 report | Batch 3 × 2 + Batch 3.5 × 1 + quarterly report |
+| October 2026 | 4 | Batch 3 complete + Batch 3.5 sports content |
 | November 2026 | 4 | New based on GSC impression data |
 | December 2026 | 4 + Q3 report | Top impressions + quarterly report |
 

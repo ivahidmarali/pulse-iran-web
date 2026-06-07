@@ -1,6 +1,6 @@
 # Implementation Roadmap — palsiran.com
 
-**Last updated:** June 1, 2026  
+**Last updated:** June 8, 2026  
 **Phase 1 status:** COMPLETE ✅  
 **Current phase:** Phase 2 — Content & Authority  
 **Target:** 10,000+ monthly organic visitors by June 2027
@@ -50,13 +50,26 @@ All Phase 1 items shipped. Summary of what was implemented:
 ## Phase 2: Content & Authority Building (Weeks 5–16)
 **Goal: Get first organic traffic, build E-E-A-T, establish topical authority**
 
+### Completed Since June 1 ✅ (Week of June 1–8)
+
+| Task | Status | Notes |
+|------|--------|-------|
+| `speakable` schema on article summary paragraphs | ✅ Done | `h1` + `[data-speakable]` paragraphs in NewsArticle schema |
+| YouTube channel in sameAs schema | ✅ Done | Organization + editor entity |
+| `<time datetime>` on article dates | ✅ Done | ISO 8601 for machine readability |
+| `itemListElement` object format fix | ✅ Done | Google rich results compliance |
+| `/livescore` page | ✅ Done | Full SEO metadata, keywords, OG, WebPage schema |
+| AI disclosure + data source labels | ✅ Done | E-E-A-T + trust signals |
+| 5 Lighthouse issues fixed | ✅ Done | LCP, GA preconnect, contrast |
+| `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` | ✅ Done | Env var set in deploy.yml |
+
 ### Immediate (Next 2 Weeks) — Code
 
 | Task | Priority | Effort | Notes |
 |------|----------|--------|-------|
-| GitHub Actions: upgrade to Node.js 24 actions | **Critical** | 30 min | Deadline June 16, 2026 — current actions deprecated |
+| **GitHub Actions: pin node-version to 24** | **CRITICAL** | 15 min | Deadline June 16, 2026 — `FORCE_NODE24` set but `setup-node` still installs v22 |
+| Add `/livescore` to `sitemap.ts` | High | 15 min | Page is live but not in any sitemap — not crawlable |
 | Custom OG image for homepage (`/og-default.jpg` is generic) | High | 2h | Use Canva/Figma — 1200×630px branded image |
-| `speakable` schema on article summary paragraphs | Medium | 3h | Improves AI Overview citation eligibility |
 | Tag/topic pages (`/tag/[tag]`) — dynamic route | Medium | 6h | 20+ new indexable pages for topic keywords |
 | GSC service account setup (Tier 1 credentials) | High | 1h | Required for URL Inspection + indexation data |
 
@@ -140,24 +153,19 @@ All Phase 1 items shipped. Summary of what was implemented:
 
 ---
 
-## Immediate Action: GitHub Actions Node.js Upgrade
+## Immediate Action: GitHub Actions Node.js Upgrade ⚠️ DEADLINE JUNE 16
 
-**Deadline: June 16, 2026** — GitHub will force Node.js 24 on all runners.
+**Status:** Partial — `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` is set in job env, but `actions/setup-node@v4` still installs **Node 22**. The `FORCE_NODE24` env var applies to GitHub-hosted action scripts only, not the version installed by setup-node.
 
-Update `.github/workflows/deploy.yml`:
+**Required fix** in `.github/workflows/deploy.yml`:
 ```yaml
-# Change:
-uses: actions/checkout@v4
-uses: actions/setup-node@v4
-
-# To:
-uses: actions/checkout@v4
-uses: actions/setup-node@v4
-# AND add to the job env or step:
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+- name: Setup Node 24          # ← rename
+  uses: actions/setup-node@v4
+  with:
+    node-version: 24            # ← change from 22 to 24
+    cache: npm
 ```
-Or pin to `actions/setup-node@v5` when available.
+That's the only change needed. The `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` line can be kept or removed — it's now redundant once setup-node installs v24.
 
 ---
 
@@ -171,7 +179,7 @@ Or pin to `actions/setup-node@v5` when available.
 | Telegram sources block bot | Low | High | Diversify to RSS + web scrapers for key sources |
 | AI Overviews reduce click-through | High | Medium | Build newsletter list, optimize for AI citation |
 | Cloudflare misconfiguration recurrence | Low | Critical | Monitor GSC crawl stats weekly |
-| GitHub Actions Node.js 20 deprecation | **Certain** | Medium | Fix before June 16, 2026 ⚠️ |
+| GitHub Actions Node.js 24 deadline | **Certain** | Medium | `FORCE_NODE24` set; must also pin `node-version: 24` before June 16, 2026 ⚠️ |
 
 ---
 
