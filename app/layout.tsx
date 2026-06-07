@@ -108,7 +108,6 @@ const editorJsonLd = {
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about`,
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
 };
 
 const organizationJsonLd = {
@@ -133,11 +132,12 @@ const organizationJsonLd = {
   ethicsPolicy: `${SITE_URL}/about/editorial-policy`,
   editor: { "@id": `${SITE_URL}/#editor` },
   founder: { "@id": `${SITE_URL}/#editor` },
+  masthead: `${SITE_URL}/about`,
   contactPoint: {
     "@type": "ContactPoint",
     email: "info@palsiran.com",
-    contactType: "editorial",
-    availableLanguage: "Persian",
+    contactType: "customer service",
+    availableLanguage: "fa",
   },
   knowsAbout: [
     "Iran news",
@@ -160,7 +160,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://region1.google-analytics.com" />
-        <link rel="alternate" hrefLang="fa" href={SITE_URL} />
         <link rel="alternate" type="application/rss+xml" title="پالس ایران" href={`${SITE_URL}/feed.xml`} />
         {/* safeJsonLd escapes <, >, & — prevents </script> injection from data values */}
         {/* eslint-disable-next-line react/no-danger */}

@@ -420,9 +420,9 @@ function useTehranClock() {
 
 // ── Main component ─────────────────────────────────────────────────────────
 
-export default function LiveScoreClient() {
-  const [data, setData]             = useState<LiveScoreData | null>(null);
-  const [loading, setLoading]       = useState(true);
+export default function LiveScoreClient({ initialData }: { initialData?: LiveScoreData | null }) {
+  const [data, setData]             = useState<LiveScoreData | null>(initialData ?? null);
+  const [loading, setLoading]       = useState(!initialData);
   const [selectedDay, setSelectedDay] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<"all" | "live" | "finished">("all");
   const [goalIds, setGoalIds]       = useState<Set<number>>(new Set());

@@ -1,6 +1,7 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import ArticleActions from "@/components/article/ArticleActions";
@@ -102,6 +103,20 @@ const SOURCE_URLS: Record<string, string> = {
   "Deutsche Welle": "https://www.dw.com/fa",
 };
 
+const LEAN_META: Record<string, { bar: string; text: string; bg: string }> = {
+  "اصولگرا":              { bar: "bg-green-500",   text: "text-green-400",   bg: "bg-green-500/10" },
+  "رسمی دولتی":           { bar: "bg-green-600",   text: "text-green-500",   bg: "bg-green-600/10" },
+  "اصلاح‌طلب":            { bar: "bg-blue-500",    text: "text-blue-400",    bg: "bg-blue-500/10" },
+  "اصلاح‌طلب میانه":      { bar: "bg-blue-400",    text: "text-blue-300",    bg: "bg-blue-400/10" },
+  "محافظه‌کار میانه":     { bar: "bg-yellow-500",  text: "text-yellow-400",  bg: "bg-yellow-500/10" },
+  "لیبرال غربی":          { bar: "bg-purple-500",  text: "text-purple-400",  bg: "bg-purple-500/10" },
+  "لیبرال آمریکایی":     { bar: "bg-purple-400",  text: "text-purple-300",  bg: "bg-purple-400/10" },
+  "چپ لیبرال":            { bar: "bg-indigo-400",  text: "text-indigo-300",  bg: "bg-indigo-400/10" },
+  "مخالف جمهوری اسلامی": { bar: "bg-red-500",     text: "text-red-400",     bg: "bg-red-500/10" },
+  "محافظه‌کار عربی":      { bar: "bg-yellow-600",  text: "text-yellow-500",  bg: "bg-yellow-600/10" },
+  "مستقل":                { bar: "bg-slate-400",   text: "text-slate-400",   bg: "bg-slate-400/10" },
+};
+
 function toPersianNum(n: number): string {
   return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
 }
@@ -185,9 +200,15 @@ export default async function ArticlePage({
 }: {
   params: Promise<{ id: string; slug?: string[] }>;
 }) {
-  const { id } = await params;
+  const { id, slug } = await params;
   const decodedId = decodeURIComponent(id);
   const article = await getArticle(decodedId);
+
+  // 301 redirect from /article/{id} (no slug) → /article/{id}/{slug}
+  if (!slug && article) {
+    redirect(articleUrl(article.item_id, article.title));
+  }
+
   const related = await fetchRelated(decodedId, article?.category);
   const item = article;
 
@@ -299,7 +320,14 @@ export default async function ArticlePage({
         <main className="pb-4">
           <article className="px-container-margin py-section-gap">
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
-              <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
+              <div className="flex items-center gap-2">
+                <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
+                {item.political_lean && LEAN_META[item.political_lean] && (
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${LEAN_META[item.political_lean].text} ${LEAN_META[item.political_lean].bg}`}>
+                    {item.political_lean}
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-3">
                 {item.summary && item.summary.length > 30 && (
                   <span>{toPersianNum(readingTime(item.summary))} دقیقه</span>
@@ -498,7 +526,14 @@ export default async function ArticlePage({
 
               <div className="flex items-center justify-between py-4 border-y border-white/5 text-on-surface-variant">
                 <div className="flex items-center gap-4 text-sm">
-                  <span>📰 منبع: <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link></span>
+                  <span className="flex items-center gap-2">
+                    📰 منبع: <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
+                    {item.political_lean && LEAN_META[item.political_lean] && (
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${LEAN_META[item.political_lean].text} ${LEAN_META[item.political_lean].bg}`}>
+                        {item.political_lean}
+                      </span>
+                    )}
+                  </span>
                   <time dateTime={publishedIso}>🕐 {ago}</time>
                   {item.summary && item.summary.length > 30 && (
                     <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>

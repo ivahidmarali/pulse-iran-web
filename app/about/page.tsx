@@ -46,7 +46,45 @@ const editorPersonJsonLd = {
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about`,
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
+};
+
+const aboutFaqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "پالس ایران چیست؟",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "پالس ایران یک سامانه تجمیع اخبار فارسی است که اخبار را از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی جمع‌آوری و به صورت لحظه‌ای نمایش می‌دهد. هر منبع با گرایش سیاسی شفاف برچسب‌گذاری شده تا خوانندگان زاویه دید هر خبر را بشناسند.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "گرایش سیاسی منابع چگونه تعیین می‌شود؟",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "هر منبع خبری بر اساس سابقه تحریریه، مواضع رسمی و الگوی پوشش خبری در یکی از ۱۱ دسته گرایش سیاسی طبقه‌بندی شده است — از رسمی دولتی و اصولگرا تا لیبرال غربی و مخالف جمهوری اسلامی. این طبقه‌بندی به خوانندگان کمک می‌کند تا زاویه دید هر منبع را بشناسند.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "قیمت‌های لحظه‌ای ارز و طلا چیست؟",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "پالس ایران نرخ زنده دلار، یورو، درهم، پوند، طلا و سکه را بر اساس بازار آزاد ایران هر ۵ دقیقه به‌روزرسانی می‌کند. این قیمت‌ها در صفحه /prices قابل مشاهده هستند.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "تأیید چندمنبعه یعنی چه؟",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "سیستم تأیید چندمنبعی پالس ایران هر خبر را با منابع دیگر مقایسه می‌کند. خبری که توسط ۳ یا بیشتر منبع مستقل پوشش داده شده نشان تأیید شده دریافت می‌کند. منابع مستقل به معنای منابعی با گرایش سیاسی متفاوت است — تأیید توسط چند رسانه هم‌گرایش به عنوان چندمنبعه محاسبه نمی‌شود.",
+      },
+    },
+  ],
 };
 
 const LEAN_COLOR: Record<string, string> = {
@@ -86,6 +124,8 @@ export default async function AboutPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutPageJsonLd) }} />
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(editorPersonJsonLd) }} />
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutFaqJsonLd) }} />
       <main className="pb-4 md:pb-0">
         {/* Hero / Mission */}
         <section className="relative py-section-gap px-container-margin overflow-hidden">
@@ -257,6 +297,12 @@ export default async function AboutPage() {
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                   @palsiran_news
+                </a>
+                <a href="https://www.youtube.com/@palsiran" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-2 bg-[#FF0000]/80 text-white rounded-full text-sm font-bold hover:bg-[#FF0000] transition-colors">
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" fill="currentColor">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                  </svg>
+                  یوتیوب
                 </a>
               </div>
             </GlassCard>

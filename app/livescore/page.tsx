@@ -4,6 +4,49 @@ import LiveScoreClient from "./LiveScoreClient";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 
+export const revalidate = 120;
+
+const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
+
+interface LiveScoreData {
+  leagues: {
+    title: string;
+    date_groups: {
+      jalali_key: string;
+      date_label: string;
+      matches: {
+        id: number;
+        team1: string;
+        team2: string;
+        score1: number | null;
+        score2: number | null;
+        minute: string;
+        status: string;
+        status_code: number;
+        is_live: boolean;
+        is_final: boolean;
+        match_time: string;
+        start_utc: string;
+        has_details: boolean;
+        team1_logo?: string | null;
+        team2_logo?: string | null;
+      }[];
+    }[];
+  }[];
+  ts: number;
+  ok: boolean;
+}
+
+async function fetchInitialLiveScore(): Promise<LiveScoreData | null> {
+  try {
+    const res = await fetch(`${INTERNAL_API}/livescore`, { next: { revalidate: 120 } });
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
+
 export const metadata: Metadata = {
   title: "نتایج زنده فوتبال | پالس ایران",
   description:
@@ -50,12 +93,14 @@ const jsonLd = {
   },
 };
 
-export default function LiveScorePage() {
+export default async function LiveScorePage() {
+  const initialData = await fetchInitialLiveScore();
+
   return (
     <div className="cyber-grid" dir="rtl">
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
-      <LiveScoreClient />
+      <LiveScoreClient initialData={initialData} />
       <div className="hidden md:block">
         <Footer />
       </div>

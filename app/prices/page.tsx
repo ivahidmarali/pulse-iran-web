@@ -160,26 +160,43 @@ function PricesJsonLd({ prices, priceMap }: { prices: PriceItem[]; priceMap: Rec
   const eur = fmt("price_eur");
   const nim = fmt("nim");
 
-  const datasetData = {
+  const today = new Date().toISOString().split("T")[0];
+
+  const webPageData = {
     "@context": "https://schema.org",
-    "@type": "Dataset",
-    name: "نرخ زنده ارز و طلا در ایران",
-    description: "نرخ لحظه‌ای دلار، یورو، طلا، سکه و ارزهای دیجیتال در بازار ایران",
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/prices`,
+    name: "قیمت دلار و طلا امروز",
+    description: "نرخ زنده دلار، یورو، طلا، سکه در ایران — بازار آزاد، به‌روزرسانی هر ۵ دقیقه",
     url: `${SITE_URL}/prices`,
-    temporalCoverage: "2024-01-01/..",
-    dateModified: new Date().toISOString(),
+    inLanguage: "fa",
     publisher: { "@id": `${SITE_URL}/#organization` },
-    measurementMethod: "نرخ بازار آزاد ایران",
-    variableMeasured: prices.map((p) => {
-      const meta = PRICE_META[p.key];
-      return {
-        "@type": "PropertyValue",
-        name: meta?.name ?? p.key,
-        value: p.price,
-        unitText: "تومان",
-        unitCode: "IRR",
-      };
-    }),
+    dateModified: new Date().toISOString(),
+    mainEntity: {
+      "@type": "ItemList",
+      name: "نرخ زنده ارز و طلا",
+      itemListElement: prices
+        .filter((p) => PRICE_META[p.key])
+        .map((p, i) => {
+          const meta = PRICE_META[p.key];
+          return {
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Product",
+              name: meta.name,
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "IRR",
+                price: String(p.price),
+                priceValidUntil: today,
+                availability: "https://schema.org/InStock",
+                seller: { "@id": `${SITE_URL}/#organization` },
+              },
+            },
+          };
+        }),
+    },
   };
 
   const faqData = {
@@ -239,7 +256,9 @@ function PricesJsonLd({ prices, priceMap }: { prices: PriceItem[]; priceMap: Rec
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(datasetData) }} />
+      {/* eslint-disable-next-line react/no-danger */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(webPageData) }} />
+      {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(faqData) }} />
     </>
   );

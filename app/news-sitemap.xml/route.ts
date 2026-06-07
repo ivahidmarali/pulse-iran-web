@@ -9,6 +9,10 @@ const MAX_NEWS_ARTICLES = 1000; // Google News sitemap cap
 const MAX_PAGES = Math.ceil(MAX_NEWS_ARTICLES / MAX_PER_PAGE);
 const INDEXNOW_KEY = "palsiran2026indexnow";
 
+// Module-level: persists across ISR regenerations within the same process.
+// Ensures we only submit articles published after the previous ping.
+let lastIndexNowPingTs = 0;
+
 // Keywords that indicate spam/ad content — exclude from news sitemap
 const SPAM_PATTERNS = [
   /رایگان.{0,10}گیگ/,
@@ -124,8 +128,13 @@ export async function GET() {
 ${urls}
 </urlset>`;
 
-  // Ping IndexNow with new article URLs (fire-and-forget, don't block response)
-  if (articleUrls.length > 0) {
+  // Ping IndexNow only with articles published since the last ping (fire-and-forget).
+  const newSinceLastPing = unique.filter(
+    (item) => new Date(item.posted_at).getTime() > lastIndexNowPingTs
+  );
+  const newUrls = newSinceLastPing.map((item) => articleUrl(item.item_id, item.title));
+  if (newUrls.length > 0) {
+    const pingTs = Date.now();
     fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -133,9 +142,11 @@ ${urls}
         host: "palsiran.com",
         key: INDEXNOW_KEY,
         keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-        urlList: articleUrls.slice(0, 10000),
+        urlList: newUrls.slice(0, 10000),
       }),
-    }).catch(() => { /* ignore indexnow errors */ });
+    })
+      .then(() => { lastIndexNowPingTs = pingTs; })
+      .catch(() => { /* ignore indexnow errors */ });
   }
 
   return new Response(xml, {

@@ -23,7 +23,7 @@ async function fetchAllArticles(): Promise<NewsItem[]> {
   while (true) {
     const res = await fetch(
       `${INTERNAL_API}/news?page=${page}&per_page=${PAGE_SIZE}`,
-      { cache: "no-store" }
+      { next: { revalidate: 3600 } }
     );
     if (!res.ok) break;
     const data = await res.json();
