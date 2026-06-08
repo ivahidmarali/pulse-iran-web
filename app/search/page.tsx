@@ -51,7 +51,7 @@ function SearchResultRow({ item }: { item: NewsItem }) {
       dir="rtl"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] text-on-surface-variant">{timeAgo(item.posted_at)}</span>
+        <span className="text-[11px] text-on-surface-variant">{timeAgo(item.posted_at)}{" "}</span>
         <span className="text-xs text-secondary-fixed-dim font-medium">{item.source}</span>
       </div>
       <p className="text-sm font-semibold text-on-surface leading-relaxed line-clamp-2">{item.title}</p>

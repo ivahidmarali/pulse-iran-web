@@ -238,7 +238,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
     >
       <div className="p-4 space-y-2">
         <div className="flex justify-between items-center text-xs text-on-surface-variant">
-          <span>{ago}</span>
+          <span>{ago}{" "}</span>
           {item.category && (
             <span className="text-secondary-fixed-dim/70 text-[11px] font-medium">{emoji}</span>
           )}
