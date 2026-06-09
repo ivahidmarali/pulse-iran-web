@@ -10,7 +10,7 @@ import CurrencyRow from "@/components/prices/CurrencyRow";
 import DailyBriefingCard from "@/components/news/DailyBriefingCard";
 import { getNews, getPrices, getBreakingNews, getCategories, getLatestBriefings } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
-import { NewsItem, PriceItem } from "@/lib/types";
+import { NewsItem, PriceItem, LatestBriefings } from "@/lib/types";
 import { articleHref, articleUrl, toPersianNum, SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const revalidate = 120; // regenerate every 2 min for dynamic date + fresh schema
@@ -73,7 +73,7 @@ async function fetchData(categories?: string[], page = 1) {
       pages: newsData.pages ?? 1,
     };
   } catch {
-    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[], latestBriefings: {}, page: 1, pages: 1 };
+    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[], latestBriefings: {} as LatestBriefings, page: 1, pages: 1 };
   }
 }
 
