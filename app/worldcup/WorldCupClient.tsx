@@ -33,6 +33,34 @@ const WC_GROUPS = [
 const IRAN_GROUP = WC_GROUPS.find((g) => g.id === "G")!;
 const ALL_TEAMS_FLAGS = Object.fromEntries(WC_GROUPS.flatMap((g) => g.teams.map((t) => [t.name, t.flag])));
 
+// Full group-stage round-1 schedule (UTC). Times from Varzesh3 (Tehran UTC+3:30 → UTC).
+const WC_SCHEDULE = [
+  { utc: "2026-06-11T19:00:00Z", t1: "مکزیک",        t2: "آفریقای جنوبی", group: "A" },
+  { utc: "2026-06-12T02:00:00Z", t1: "کره جنوبی",    t2: "جمهوری چک",    group: "A" },
+  { utc: "2026-06-12T19:00:00Z", t1: "کانادا",        t2: "بوسنی",         group: "B" },
+  { utc: "2026-06-13T01:00:00Z", t1: "ایالات متحده",  t2: "پاراگوئه",      group: "D" },
+  { utc: "2026-06-13T04:00:00Z", t1: "استرالیا",      t2: "ترکیه",         group: "D" },
+  { utc: "2026-06-13T19:00:00Z", t1: "قطر",           t2: "سوئیس",         group: "B" },
+  { utc: "2026-06-13T22:00:00Z", t1: "برزیل",         t2: "مراکش",         group: "C" },
+  { utc: "2026-06-14T01:00:00Z", t1: "هائیتی",        t2: "اسکاتلند",      group: "C" },
+  { utc: "2026-06-14T17:00:00Z", t1: "آلمان",         t2: "کوراسائو",      group: "E" },
+  { utc: "2026-06-14T20:00:00Z", t1: "هلند",          t2: "ژاپن",          group: "F" },
+  { utc: "2026-06-14T23:00:00Z", t1: "ساحل عاج",      t2: "اکوادور",       group: "E" },
+  { utc: "2026-06-15T02:00:00Z", t1: "سوئد",          t2: "تونس",          group: "F" },
+  { utc: "2026-06-15T16:00:00Z", t1: "اسپانیا",       t2: "کیپ ورد",       group: "H" },
+  { utc: "2026-06-15T19:00:00Z", t1: "بلژیک",         t2: "مصر",           group: "G" },
+  { utc: "2026-06-15T22:00:00Z", t1: "عربستان",       t2: "اروگوئه",       group: "H" },
+  { utc: "2026-06-16T01:00:00Z", t1: "ایران",         t2: "نیوزیلند",      group: "G" },
+  { utc: "2026-06-16T04:00:00Z", t1: "اتریش",         t2: "اردن",          group: "J" },
+  { utc: "2026-06-16T19:00:00Z", t1: "فرانسه",        t2: "سنگال",         group: "I" },
+  { utc: "2026-06-16T22:00:00Z", t1: "عراق",          t2: "نروژ",          group: "I" },
+  { utc: "2026-06-17T01:00:00Z", t1: "آرژانتین",      t2: "الجزایر",       group: "J" },
+  { utc: "2026-06-17T17:00:00Z", t1: "پرتغال",        t2: "کلمبیا",        group: "K" },
+  { utc: "2026-06-17T20:00:00Z", t1: "ازبکستان",      t2: "کنگو",          group: "K" },
+  { utc: "2026-06-17T23:00:00Z", t1: "انگلستان",      t2: "پاناما",        group: "L" },
+  { utc: "2026-06-18T02:00:00Z", t1: "غنا",           t2: "کرواسی",        group: "L" },
+];
+
 // ── Types ──────────────────────────────────────────────────────────────────
 
 interface Match {
@@ -410,6 +438,110 @@ function NewsSection({ news }: { news: NewsItem[] }) {
   );
 }
 
+// ── Upcoming matches (hard-coded schedule + live API overlay) ─────────────
+
+interface ScheduleMatch { utc: string; t1: string; t2: string; group: string; }
+
+function ScheduleRow({ m, now }: { m: ScheduleMatch; now: number }) {
+  const ms = new Date(m.utc).getTime();
+  const isPast = now > ms + 2 * 3600000;
+  const isToday = (() => {
+    const d = new Date(m.utc);
+    const t = new Date();
+    return d.toDateString() === t.toDateString();
+  })();
+  const isTomorrow = (() => {
+    const d = new Date(m.utc);
+    const t = new Date(); t.setDate(t.getDate() + 1);
+    return d.toDateString() === t.toDateString();
+  })();
+  const hasIran = m.t1 === "ایران" || m.t2 === "ایران";
+
+  return (
+    <div className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl border transition-all ${
+      hasIran   ? "bg-[#3cd7ff]/5 border-[#3cd7ff]/20" :
+      isPast    ? "opacity-40 bg-white/2 border-white/4" :
+                  "bg-surface-container border-white/6 hover:border-white/12"
+    }`}>
+      {/* Group badge */}
+      <span className="text-[10px] font-bold text-on-surface-variant/30 w-4 shrink-0 text-center">{m.group}</span>
+
+      {/* Team 1 */}
+      <div className="flex items-center gap-1.5 flex-1 justify-end min-w-0">
+        <span className={`text-sm font-bold truncate ${hasIran && m.t1 === "ایران" ? "text-[#3cd7ff]" : "text-on-surface"}`}>{m.t1}</span>
+        <TeamLogo flag={ALL_TEAMS_FLAGS[m.t1]} name={m.t1} size={18} />
+      </div>
+
+      {/* Time / VS */}
+      <div className="flex flex-col items-center shrink-0 min-w-[52px]">
+        <span className={`text-xs font-black tabular-nums ${isPast ? "text-on-surface-variant/30" : isToday ? "text-amber-400" : "text-on-surface-variant/60"}`}>
+          {tehranTime(m.utc)}
+        </span>
+        <span className={`text-[9px] mt-0.5 ${isToday ? "text-amber-400/80 font-bold" : isTomorrow ? "text-[#3cd7ff]/50" : "text-on-surface-variant/25"}`}>
+          {isToday ? "امروز" : isTomorrow ? "فردا" : tehranDate(m.utc)}
+        </span>
+      </div>
+
+      {/* Team 2 */}
+      <div className="flex items-center gap-1.5 flex-1 justify-start min-w-0">
+        <TeamLogo flag={ALL_TEAMS_FLAGS[m.t2]} name={m.t2} size={18} />
+        <span className={`text-sm font-bold truncate ${hasIran && m.t2 === "ایران" ? "text-[#3cd7ff]" : "text-on-surface"}`}>{m.t2}</span>
+      </div>
+    </div>
+  );
+}
+
+function UpcomingSection({ liveUpcoming, liveRecent, now }: { liveUpcoming: Match[]; liveRecent: Match[]; now: number }) {
+  // Group WC_SCHEDULE by Gregorian date label for display
+  const scheduleUpcoming = WC_SCHEDULE.filter((m) => new Date(m.utc).getTime() > now - 7200000); // include in-progress
+
+  // When livescore has actual data, show that (tournament running)
+  if (liveUpcoming.length > 0 || liveRecent.length > 0) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {liveUpcoming.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold text-on-surface mb-3 flex items-center gap-2"><span>📅</span> بازی‌های پیش رو</h2>
+            <div className="space-y-2">{liveUpcoming.map((m) => <MatchCard key={m.id} m={m} />)}</div>
+          </section>
+        )}
+        {liveRecent.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold text-on-surface mb-3 flex items-center gap-2"><span>📋</span> نتایج اخیر</h2>
+            <div className="space-y-2">{liveRecent.map((m) => <MatchCard key={m.id} m={m} />)}</div>
+          </section>
+        )}
+      </div>
+    );
+  }
+
+  // Pre-tournament or API empty: show full hard-coded schedule grouped by date
+  const byDay: Record<string, ScheduleMatch[]> = {};
+  for (const m of scheduleUpcoming) {
+    const day = new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", weekday: "long", month: "long", day: "numeric" }).format(new Date(m.utc));
+    (byDay[day] ||= []).push(m);
+  }
+
+  return (
+    <section>
+      <h2 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2"><span>📅</span> برنامه مرحله گروهی</h2>
+      <div className="space-y-5">
+        {Object.entries(byDay).map(([day, matches]) => (
+          <div key={day}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-bold text-on-surface-variant/50">{day}</span>
+              <div className="flex-1 h-px bg-white/5" />
+            </div>
+            <div className="space-y-1.5">
+              {matches.map((m) => <ScheduleRow key={m.utc + m.t1} m={m} now={now} />)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default function WorldCupClient({ initialLiveData, initialStandings, initialNews }: Props) {
@@ -657,36 +789,11 @@ export default function WorldCupClient({ initialLiveData, initialStandings, init
         </section>
 
         {/* ── UPCOMING + RESULTS ────────────────────────────────────── */}
-        {(upcomingMatches.length > 0 || recentMatches.length > 0) ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {upcomingMatches.length > 0 && (
-              <section>
-                <h2 className="text-sm font-bold text-on-surface mb-3 flex items-center gap-2">
-                  <span>📅</span> بازی‌های پیش رو
-                </h2>
-                <div className="space-y-2">
-                  {upcomingMatches.map((m) => <MatchCard key={m.id} m={m} />)}
-                </div>
-              </section>
-            )}
-            {recentMatches.length > 0 && (
-              <section>
-                <h2 className="text-sm font-bold text-on-surface mb-3 flex items-center gap-2">
-                  <span>📋</span> نتایج اخیر
-                </h2>
-                <div className="space-y-2">
-                  {recentMatches.map((m) => <MatchCard key={m.id} m={m} />)}
-                </div>
-              </section>
-            )}
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-surface-container border border-white/5 p-8 text-center">
-            <p className="text-4xl mb-3">⚽</p>
-            <p className="text-sm font-bold text-on-surface">مسابقات از ۱۱ ژوئن آغاز می‌شود</p>
-            <p className="text-xs text-on-surface-variant/40 mt-1">نتایج و برنامه بازی‌ها به‌صورت زنده نمایش داده می‌شود</p>
-          </div>
-        )}
+        <UpcomingSection
+          liveUpcoming={upcomingMatches}
+          liveRecent={recentMatches}
+          now={now}
+        />
 
         {/* ── ALL GROUPS ────────────────────────────────────────────── */}
         <section>
