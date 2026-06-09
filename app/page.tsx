@@ -224,7 +224,7 @@ export default async function HomePage({
           {/* World Cup banner — shown during WC season */}
           {new Date() <= new Date("2026-07-19T23:59:59Z") && (
             <div className="px-container-margin mb-4">
-              <Link href="/worldcup" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-l from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all">
+              <Link href="/جام-جهانی" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-l from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-amber-400/70 flex items-center gap-1">پوشش زنده ← <span className="text-amber-400 font-bold">جام جهانی</span></span>
                   <div className="flex items-center gap-2">
@@ -379,7 +379,7 @@ export default async function HomePage({
 
             {/* World Cup banner — desktop */}
             {new Date() <= new Date("2026-07-19T23:59:59Z") && (
-              <Link href="/worldcup" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-r from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all mb-2">
+              <Link href="/جام-جهانی" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-r from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all mb-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-amber-400/70">پوشش زنده · نتایج و جدول گروه‌ها →</span>
                   <div className="flex items-center gap-3">

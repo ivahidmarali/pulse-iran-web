@@ -38,9 +38,9 @@ function NavLinks() {
         نتایج زنده
       </Link>
       <Link
-        href="/worldcup"
+        href="/جام-جهانی"
         className={`px-3 py-1.5 rounded-lg text-sm font-bold transition-all duration-200 whitespace-nowrap flex items-center gap-1.5 ${
-          pathname === "/worldcup"
+          pathname === "/جام-جهانی" || pathname === "/worldcup"
             ? "text-amber-400 bg-amber-400/10 border border-amber-400/20"
             : "text-amber-400/80 hover:text-amber-400 hover:bg-amber-400/10 border border-amber-400/0 hover:border-amber-400/20"
         }`}

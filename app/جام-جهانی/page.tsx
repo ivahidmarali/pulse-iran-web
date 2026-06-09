@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   description:
     "پوشش کامل جام جهانی ۲۰۲۶: نتایج زنده بازی‌ها، جدول گروه‌ها، اخبار تیم ملی ایران در گروه G با بلژیک، مصر و نیوزیلند. به‌روزرسانی لحظه‌ای.",
   alternates: {
-    canonical: `${SITE_URL}/worldcup`,
-    languages: { fa: `${SITE_URL}/worldcup`, "x-default": `${SITE_URL}/worldcup` },
+    canonical: `${SITE_URL}/جام-جهانی`,
+    languages: { fa: `${SITE_URL}/جام-جهانی`, "x-default": `${SITE_URL}/جام-جهانی` },
   },
   openGraph: {
     title: "جام جهانی ۲۰۲۶ | پالس ایران",
     description: "نتایج زنده، جدول گروه‌ها و اخبار تیم ملی ایران در جام جهانی ۲۰۲۶",
-    url: `${SITE_URL}/worldcup`,
+    url: `${SITE_URL}/جام-جهانی`,
     type: "website",
   },
   twitter: {
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
 const wcEventSchema = {
   "@context": "https://schema.org",
   "@type": "SportsEvent",
-  "@id": `${SITE_URL}/worldcup`,
+  "@id": `${SITE_URL}/جام-جهانی`,
   name: "جام جهانی فوتبال ۲۰۲۶",
   alternateName: "FIFA World Cup 2026",
   startDate: "2026-06-11",
@@ -61,7 +61,7 @@ const wcEventSchema = {
   ],
   organizer: { "@type": "Organization", name: "FIFA", url: "https://www.fifa.com" },
   description: "۴۸ تیم از سرتاسر جهان در جام جهانی ۲۰۲۶ رقابت می‌کنند. تیم ملی ایران در گروه G قرار دارد.",
-  url: `${SITE_URL}/worldcup`,
+  url: `${SITE_URL}/جام-جهانی`,
 };
 
 const faqSchema = {
@@ -108,16 +108,16 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "پالس ایران", item: SITE_URL },
-    { "@type": "ListItem", position: 2, name: "جام جهانی ۲۰۲۶", item: `${SITE_URL}/worldcup` },
+    { "@type": "ListItem", position: 2, name: "جام جهانی ۲۰۲۶", item: `${SITE_URL}/جام-جهانی` },
   ],
 };
 
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "@id": `${SITE_URL}/worldcup`,
+  "@id": `${SITE_URL}/جام-جهانی`,
   name: "جام جهانی ۲۰۲۶ — نتایج، جدول و اخبار",
-  url: `${SITE_URL}/worldcup`,
+  url: `${SITE_URL}/جام-جهانی`,
   inLanguage: "fa",
   isPartOf: { "@id": `${SITE_URL}/#website` },
   publisher: { "@id": `${SITE_URL}/#organization` },

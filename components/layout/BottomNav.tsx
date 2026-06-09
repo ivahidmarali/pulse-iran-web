@@ -47,7 +47,7 @@ const STATIC_ITEMS: NavItem[] = [
 ];
 
 const WC_ITEM: NavItem = {
-  href: "/worldcup",
+  href: "/جام-جهانی",
   label: "جام جهانی",
   isWC: true,
   icon: () => <span className="text-2xl leading-none">🏆</span>,

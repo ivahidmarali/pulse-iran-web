@@ -495,8 +495,10 @@ function UpcomingSection({ liveUpcoming, liveRecent, now }: { liveUpcoming: Matc
   // Group WC_SCHEDULE by Gregorian date label for display
   const scheduleUpcoming = WC_SCHEDULE.filter((m) => new Date(m.utc).getTime() > now - 7200000); // include in-progress
 
-  // When livescore has actual data, show that (tournament running)
-  if (liveUpcoming.length > 0 || liveRecent.length > 0) {
+  // When livescore has meaningful data, show that (tournament running).
+  // Require actual results OR many upcoming matches to avoid switching to this
+  // branch when the API only returns 1-2 pre-tournament preview fixtures.
+  if (liveRecent.length > 0 || liveUpcoming.length >= 5) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {liveUpcoming.length > 0 && (

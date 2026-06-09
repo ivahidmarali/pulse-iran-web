@@ -72,7 +72,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: latestArticleDate },
     { url: `${SITE_URL}/livescore`, lastModified: new Date() },
-    { url: `${SITE_URL}/worldcup`, lastModified: new Date() },
+    { url: `${SITE_URL}/جام-جهانی`, lastModified: new Date() },
     { url: `${SITE_URL}/prices`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/categories`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/archive`, lastModified: latestArticleDate },
