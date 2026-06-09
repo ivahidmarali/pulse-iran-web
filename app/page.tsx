@@ -7,7 +7,8 @@ import NewsCard from "@/components/news/NewsCard";
 import LoadMoreFeed from "@/components/news/LoadMoreFeed";
 import TelegramVideoCard from "@/components/news/TelegramVideoCard";
 import CurrencyRow from "@/components/prices/CurrencyRow";
-import { getNews, getPrices, getBreakingNews, getCategories } from "@/lib/api";
+import DailyBriefingCard from "@/components/news/DailyBriefingCard";
+import { getNews, getPrices, getBreakingNews, getCategories, getLatestBriefings } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, PriceItem } from "@/lib/types";
 import { articleHref, articleUrl, toPersianNum, SITE_URL, safeJsonLd } from "@/lib/utils";
@@ -50,11 +51,12 @@ const PAGE_SIZE = 33;
 
 async function fetchData(categories?: string[], page = 1) {
   try {
-    const [newsData, prices, breaking, cats] = await Promise.all([
+    const [newsData, prices, breaking, cats, latestBriefings] = await Promise.all([
       getNews(page, PAGE_SIZE, categories?.length ? categories : undefined),
       getPrices(),
       getBreakingNews(),
       getCategories(),
+      getLatestBriefings().catch(() => ({})),
     ]);
     // Derive which CATEGORY_GROUPS have at least one article
     const catNames = new Set(cats.map((c) => c.name));
@@ -66,11 +68,12 @@ async function fetchData(categories?: string[], page = 1) {
       prices,
       breaking,
       activeGroups,
+      latestBriefings,
       page: newsData.page,
       pages: newsData.pages ?? 1,
     };
   } catch {
-    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[], page: 1, pages: 1 };
+    return { news: [] as NewsItem[], prices: [] as PriceItem[], breaking: [] as NewsItem[], activeGroups: [] as string[], latestBriefings: {}, page: 1, pages: 1 };
   }
 }
 
@@ -82,7 +85,7 @@ export default async function HomePage({
   const { cat, group, page: pageParam } = await searchParams;
   const currentPage = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const categories = getCategoryFilter(cat, group);
-  const { news, prices, breaking, activeGroups, page, pages } = await fetchData(categories, currentPage);
+  const { news, prices, breaking, activeGroups, latestBriefings, page, pages } = await fetchData(categories, currentPage);
 
   function pageUrl(p: number) {
     const q = new URLSearchParams();
@@ -298,6 +301,13 @@ export default async function HomePage({
             </div>
           )}
 
+          {/* Daily briefing — mobile */}
+          {(latestBriefings.morning || latestBriefings.nightly) && (
+            <div className="px-container-margin mb-5">
+              <DailyBriefingCard briefings={latestBriefings} />
+            </div>
+          )}
+
           {/* News feed with load-more */}
           <LoadMoreFeed
             initialItems={rest}
@@ -437,6 +447,11 @@ export default async function HomePage({
                   ))}
                 </div>
               </section>
+            )}
+
+            {/* Daily briefings — AI summaries posted at 08:00 and 22:00 Tehran */}
+            {(latestBriefings.morning || latestBriefings.nightly) && (
+              <DailyBriefingCard briefings={latestBriefings} />
             )}
           </aside>
         </main>

@@ -59,6 +59,19 @@ export interface PaginatedNews {
   has_more: boolean;
 }
 
+export interface Briefing {
+  id: number;
+  type: "morning" | "nightly";
+  content: string;
+  date: string;
+  created_at: string;
+}
+
+export interface LatestBriefings {
+  morning?: Briefing;
+  nightly?: Briefing;
+}
+
 export interface SearchResult {
   items: NewsItem[];
   total: number;

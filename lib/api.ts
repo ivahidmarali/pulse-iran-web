@@ -109,3 +109,11 @@ export async function deletePost(itemId: string, token: string) {
     next: { revalidate: 0 },
   });
 }
+
+export async function getLatestBriefings() {
+  return apiFetch<import("./types").LatestBriefings>("/briefings/latest");
+}
+
+export async function getBriefings(limit = 20) {
+  return apiFetch<import("./types").Briefing[]>(`/briefings?limit=${limit}`);
+}
