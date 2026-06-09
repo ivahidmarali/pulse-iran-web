@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import HeroImage from "@/components/news/HeroImage";
 import { NewsItem } from "@/lib/types";
 import { articleHref } from "@/lib/utils";
 
@@ -106,12 +107,10 @@ export default function NewsCard({ item, variant = "default", priority = false }
     return (
       <Link href={href} className="block relative group overflow-hidden rounded-xl bg-surface-container-high aspect-[16/9] pulse-glow">
         {item.image_url ? (
-          <Image
+          <HeroImage
             src={item.image_url}
             alt={item.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-cover"
+            categoryEmoji={catEmoji(item.category)}
             priority={priority}
           />
         ) : (
