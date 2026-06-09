@@ -1,7 +1,7 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import ArticleActions from "@/components/article/ArticleActions";
@@ -204,27 +204,18 @@ export default async function ArticlePage({
   const decodedId = decodeURIComponent(id);
   const article = await getArticle(decodedId);
 
+  if (!article) notFound();
+
   // 301 redirect from /article/{id} (no slug) → /article/{id}/{slug}
-  if (!slug && article) {
-    redirect(articleUrl(article.item_id, article.title));
+  // Only redirect when the target URL actually differs (article has a non-empty title).
+  if (!slug) {
+    const target = articleHref(article.item_id, article.title);
+    const bare = `/article/${encodeURIComponent(article.item_id)}`;
+    if (target !== bare) redirect(`${SITE_URL}${target}`);
   }
 
   const related = await fetchRelated(decodedId, article?.category);
   const item = article;
-
-  if (!item) {
-    return (
-      <div className="cyber-grid flex items-center justify-center text-on-surface-variant">
-        <div className="text-center">
-          <span className="text-[64px] block mb-4">📰</span>
-          <p>خبر یافت نشد</p>
-          <Link href="/" className="mt-4 inline-block text-secondary-fixed-dim hover:underline">
-            بازگشت به خانه
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   const ago = timeAgo(item.posted_at);
   const publishedIso = new Date(item.posted_at).toISOString();
