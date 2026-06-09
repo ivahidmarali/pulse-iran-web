@@ -21,6 +21,8 @@ const nextConfig = {
       { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
       { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
       { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+      { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
       {
         // Vazirmatn is fully self-hosted via next/font — no googleapis/gstatic needed
         key: "Content-Security-Policy",
@@ -45,7 +47,7 @@ const nextConfig = {
       },
       // Static asset pages (prices, categories, lean, tag): 60s CDN cache
       {
-        source: "/(prices|categories|archive|search|sources|lean/:path*|tag/:path*|editorial/:path*|about/:path*)",
+        source: "/(prices|prices/:path*|categories|archive|search|sources|lean/:path*|tag/:path*|editorial/:path*|about/:path*)",
         headers: [{ key: "Cache-Control", value: "public, s-maxage=60, stale-while-revalidate=120" }],
       },
       // Sitemaps: 5 min cache (matches revalidate interval)

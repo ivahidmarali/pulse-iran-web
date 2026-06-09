@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   ],
 };
 
-const jsonLd = {
+const webPageJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   "@id": `${SITE_URL}/livescore`,
@@ -93,13 +93,61 @@ const jsonLd = {
   },
 };
 
+function buildSportsEventSchema(data: LiveScoreData | null) {
+  if (!data) return null;
+  const events: object[] = [];
+  for (const league of data.leagues ?? []) {
+    for (const group of league.date_groups ?? []) {
+      for (const m of group.matches ?? []) {
+        if (!m.start_utc) continue;
+        const status = m.is_live
+          ? "https://schema.org/EventScheduled"
+          : m.is_final
+          ? "https://schema.org/EventScheduled"
+          : "https://schema.org/EventScheduled";
+        const event: Record<string, unknown> = {
+          "@type": "SportsEvent",
+          name: `${m.team1} در برابر ${m.team2}`,
+          startDate: m.start_utc,
+          eventStatus: status,
+          location: { "@type": "Place", name: league.title },
+          competitor: [
+            { "@type": "SportsTeam", name: m.team1 },
+            { "@type": "SportsTeam", name: m.team2 },
+          ],
+        };
+        if (m.is_final && m.score1 !== null && m.score2 !== null) {
+          event.description = `نتیجه نهایی: ${m.team1} ${m.score1}–${m.score2} ${m.team2}`;
+        }
+        events.push(event);
+      }
+    }
+  }
+  if (events.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "نتایج زنده فوتبال",
+    itemListElement: events.map((e, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: e,
+    })),
+  };
+}
+
 export default async function LiveScorePage() {
   const initialData = await fetchInitialLiveScore();
+  const sportsEventsSchema = buildSportsEventSchema(initialData);
 
   return (
     <div className="cyber-grid" dir="rtl">
       {/* eslint-disable-next-line react/no-danger */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(webPageJsonLd) }} />
+      {sportsEventsSchema && (
+        // eslint-disable-next-line react/no-danger
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(sportsEventsSchema) }} />
+      )}
       <LiveScoreClient initialData={initialData} />
       <div className="hidden md:block">
         <Footer />

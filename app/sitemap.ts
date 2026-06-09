@@ -1,6 +1,7 @@
 export const revalidate = 3600;
 
 import { articleUrl, generateSlug, SITE_URL } from "@/lib/utils";
+import { ARTICLES } from "@/lib/editorial-articles";
 import type { NewsItem, SourceInfo } from "@/lib/types";
 import type { MetadataRoute } from "next";
 
@@ -76,9 +77,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/archive`, lastModified: latestArticleDate },
     // /search is noindex — exclude from sitemap to avoid contradiction
     { url: `${SITE_URL}/sources`, lastModified: latestArticleDate },
-    { url: `${SITE_URL}/editorial`, lastModified: latestArticleDate },
-    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/editorial`, lastModified: new Date("2026-06-09") },
+    { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-09") },
     { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
+    { url: `${SITE_URL}/about/vahid-marali`, lastModified: new Date("2026-06-09") },
+    { url: `${SITE_URL}/prices/dollar`, lastModified: new Date() },
+    { url: `${SITE_URL}/prices/euro`, lastModified: new Date() },
+    { url: `${SITE_URL}/prices/gold`, lastModified: new Date() },
+    { url: `${SITE_URL}/prices/coin`, lastModified: new Date() },
     { url: `${SITE_URL}/corrections`, lastModified: new Date("2026-06-01") },
     { url: `${SITE_URL}/privacy`, lastModified: new Date("2026-05-29") },
     { url: `${SITE_URL}/terms`, lastModified: new Date("2026-05-29") },
@@ -112,5 +118,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
     }));
 
-  return [...staticRoutes, ...leanRoutes, ...tagRoutes, ...sourceRoutes, ...articleRoutes];
+  const editorialRoutes: MetadataRoute.Sitemap = ARTICLES.map((a) => ({
+    url: `${SITE_URL}/editorial/${a.slug}`,
+    lastModified: new Date(a.dateModified),
+  }));
+
+  return [...staticRoutes, ...leanRoutes, ...tagRoutes, ...editorialRoutes, ...sourceRoutes, ...articleRoutes];
 }

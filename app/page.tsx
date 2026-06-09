@@ -56,7 +56,7 @@ async function fetchData(categories?: string[], page = 1) {
       getPrices(),
       getBreakingNews(),
       getCategories(),
-      getLatestBriefings().catch(() => ({})),
+      getLatestBriefings().catch((): LatestBriefings => ({})),
     ]);
     // Derive which CATEGORY_GROUPS have at least one article
     const catNames = new Set(cats.map((c) => c.name));

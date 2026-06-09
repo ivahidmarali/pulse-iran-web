@@ -92,10 +92,6 @@ const websiteJsonLd = {
     },
     "query-input": "required name=search_term_string",
   },
-  speakable: {
-    "@type": "SpeakableSpecification",
-    cssSelector: ["h1"],
-  },
 };
 
 const editorJsonLd = {
@@ -107,7 +103,7 @@ const editorJsonLd = {
   jobTitle: "Founder & Editor-in-Chief",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
-  url: `${SITE_URL}/about`,
+  url: `${SITE_URL}/about/vahid-marali`,
 };
 
 const organizationJsonLd = {
