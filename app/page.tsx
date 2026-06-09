@@ -221,6 +221,24 @@ export default async function HomePage({
             </div>
           </div>
 
+          {/* World Cup banner — shown during WC season */}
+          {new Date() <= new Date("2026-07-19T23:59:59Z") && (
+            <div className="px-container-margin mb-4">
+              <Link href="/worldcup" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-l from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-amber-400/70 flex items-center gap-1">پوشش زنده ← <span className="text-amber-400 font-bold">جام جهانی</span></span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl">🏆</span>
+                    <div>
+                      <p className="text-sm font-black text-amber-400 leading-tight">جام جهانی ۲۰۲۶</p>
+                      <p className="text-[10px] text-on-surface-variant/60">🇮🇷 ایران · گروه G</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          )}
+
           {/* Hero */}
           {hero && (
             <div className="px-container-margin mb-4">
@@ -358,6 +376,22 @@ export default async function HomePage({
                 و سیستم تأیید چندمنبعی ارائه می‌شود.
               </p>
             </div>
+
+            {/* World Cup banner — desktop */}
+            {new Date() <= new Date("2026-07-19T23:59:59Z") && (
+              <Link href="/worldcup" className="block rounded-2xl overflow-hidden border border-amber-400/20 bg-gradient-to-r from-amber-900/20 to-[#0a1628] p-4 hover:border-amber-400/40 transition-all mb-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-amber-400/70">پوشش زنده · نتایج و جدول گروه‌ها →</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-3xl">🏆</span>
+                    <div>
+                      <p className="text-base font-black text-amber-400">جام جهانی ۲۰۲۶</p>
+                      <p className="text-xs text-on-surface-variant/60">🇮🇷 ایران در گروه G · بلژیک · مصر · نیوزیلند</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            )}
 
             {hero && <NewsCard item={hero} variant="hero" priority />}
 

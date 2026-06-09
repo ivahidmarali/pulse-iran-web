@@ -117,3 +117,23 @@ export async function getLatestBriefings() {
 export async function getBriefings(limit = 20) {
   return apiFetch<import("./types").Briefing[]>(`/briefings?limit=${limit}`);
 }
+
+export interface WCGroup {
+  title: string;
+  teams: {
+    rank: number; name: string; logo: string;
+    played: number; won: number; drawn: number; lost: number;
+    gf: number; ga: number; gd: number; points: number;
+  }[];
+}
+
+export async function getWorldCupStandings() {
+  return apiFetch<{ groups: WCGroup[]; ts: number; ok: boolean }>("/worldcup/standings");
+}
+
+export async function getWorldCupNews(perPage = 12) {
+  return apiFetch<{
+    items: import("./types").NewsItem[];
+    total: number; page: number; per_page: number; pages: number; has_more: boolean;
+  }>(`/news?category=${encodeURIComponent("🏆")}&per_page=${perPage}`);
+}
