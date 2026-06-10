@@ -41,6 +41,26 @@ function categoryName(category?: string): string {
   return stripped || "اخبار";
 }
 
+// Returns a meaningful title for display and SEO.
+// Telegram channels often post with minimal titles like "🔴فوری" or "⚡خبر" —
+// when the substantive text is under 12 chars we derive the title from the summary instead.
+function effectiveTitle(item: { title: string; summary?: string; category?: string }): string {
+  const substantive = item.title.replace(/[^؀-ۿa-zA-Z0-9‌]/g, "").trim();
+  if (substantive.length >= 12) return item.title;
+
+  if (item.summary && item.summary.length > 30) {
+    // First complete sentence up to 90 chars, else just slice
+    const m = item.summary.match(/^.{20,90}[.!؟\n]/);
+    const derived = m ? m[0].trim().replace(/[.!؟]$/, "") : item.summary.slice(0, 80).trim();
+    if (derived.length >= 15) return derived;
+  }
+
+  // Last resort: prepend category label
+  const cat = categoryName(item.category);
+  const bare = item.title.replace(/[^؀-ۿa-zA-Z0-9\s]/g, "").trim();
+  return cat !== "اخبار" && bare ? `${cat}: ${bare}` : item.title;
+}
+
 // Map known source names to their canonical homepage URL for schema author.url
 const SOURCE_URLS: Record<string, string> = {
   "ایرنا": "https://www.irna.ir",
@@ -151,7 +171,8 @@ export async function generateMetadata({
   const item = await getArticle(decodeURIComponent(id));
   if (!item) return { title: "خبر یافت نشد" };
 
-  const rawDesc = item.summary && item.summary.length > 30 ? item.summary : item.title;
+  const seoTitle = effectiveTitle(item);
+  const rawDesc = item.summary && item.summary.length > 30 ? item.summary : seoTitle;
   const description = rawDesc.length > 155
     ? (rawDesc.lastIndexOf(" ", 155) > 10
         ? rawDesc.slice(0, rawDesc.lastIndexOf(" ", 155)) + "…"
@@ -164,10 +185,10 @@ export async function generateMetadata({
   const publishedIso = new Date(item.posted_at).toISOString();
 
   return {
-    title: item.title,
+    title: seoTitle,
     description,
     openGraph: {
-      title: item.title,
+      title: seoTitle,
       description,
       url: canonical,
       siteName: "پالس ایران",
@@ -181,7 +202,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: item.title,
+      title: seoTitle,
       description,
       images: [imageUrl],
     },
@@ -231,6 +252,7 @@ export default async function ArticlePage({
   const canonical = articleUrl(cleanId, item.title);
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const catName = categoryName(item.category);
+  const displayTitle = effectiveTitle(item);
 
   // Derive the category group name for breadcrumb (e.g. "اقتصادی" from "💵 دلار و ارز")
   const CATEGORY_GROUP_MAP: Record<string, string> = {
@@ -258,7 +280,7 @@ export default async function ArticlePage({
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "صفحه اصلی", item: { "@id": SITE_URL, name: "صفحه اصلی" } },
       { "@type": "ListItem", position: 2, name: groupName, item: { "@id": groupUrl, name: groupName } },
-      { "@type": "ListItem", position: 3, name: item.title.slice(0, 60) || "مقاله", item: { "@id": canonical, name: item.title.slice(0, 60) || "مقاله" } },
+      { "@type": "ListItem", position: 3, name: displayTitle.slice(0, 60) || "مقاله", item: { "@id": canonical, name: displayTitle.slice(0, 60) || "مقاله" } },
     ],
   };
 
@@ -288,7 +310,7 @@ export default async function ArticlePage({
     "@type": "NewsArticle",
     "@id": canonical,
     url: canonical,
-    headline: item.title.slice(0, 110),
+    headline: displayTitle.slice(0, 110),
     description: truncateAtWord(
       item.summary && item.summary.length > 30 ? item.summary : item.title
     ),
@@ -321,7 +343,7 @@ export default async function ArticlePage({
     <div className="cyber-grid" dir="rtl">
       {/* Mobile */}
       <div className="md:hidden">
-        <ArticleNavBar title={item.title} />
+        <ArticleNavBar title={displayTitle} />
         <main className="pb-4">
           <article className="px-container-margin py-section-gap">
             <nav aria-label="breadcrumb" className="flex items-center gap-1.5 text-[11px] text-on-surface-variant mb-4 flex-wrap">
@@ -329,7 +351,7 @@ export default async function ArticlePage({
               <span aria-hidden="true">/</span>
               <Link href={groupUrl} className="hover:text-secondary-fixed-dim">{groupName}</Link>
               <span aria-hidden="true">/</span>
-              <span className="text-on-surface truncate max-w-[160px]">{item.title.slice(0, 40)}{item.title.length > 40 ? "…" : ""}</span>
+              <span className="text-on-surface truncate max-w-[160px]">{displayTitle.slice(0, 40)}{displayTitle.length > 40 ? "…" : ""}</span>
             </nav>
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
               <div className="flex items-center gap-2">
@@ -360,7 +382,7 @@ export default async function ArticlePage({
               aria-level={1}
               className="text-headline-lg-mobile font-headline-lg-mobile text-on-surface leading-snug mb-6"
             >
-              {item.title}
+              {displayTitle}
             </div>
 
             {item.verification_status && item.verification_status !== "unverified" && item.source_count && item.source_count >= 2 && (() => {
@@ -385,11 +407,11 @@ export default async function ArticlePage({
             ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
-              <ArticleImage src={item.image_url} alt={item.title} className="mb-6" />
+              <ArticleImage src={item.image_url} alt={displayTitle} className="mb-6" />
             ) : null}
 
             <div className="flex flex-row-reverse items-center justify-between py-4 border-y border-white/5 mb-6">
-              <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
+              <ArticleActions title={displayTitle} itemId={item.item_id} source={item.source} />
             </div>
 
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
@@ -503,7 +525,7 @@ export default async function ArticlePage({
               <span aria-hidden="true">/</span>
               <Link href={groupUrl} className="hover:text-secondary-fixed-dim">{groupName}</Link>
               <span aria-hidden="true">/</span>
-              <span className="text-on-surface">{item.title.slice(0, 60)}{item.title.length > 60 ? "…" : ""}</span>
+              <span className="text-on-surface">{displayTitle.slice(0, 60)}{displayTitle.length > 60 ? "…" : ""}</span>
             </nav>
 
             <header>
@@ -516,7 +538,7 @@ export default async function ArticlePage({
                 <time dateTime={publishedIso} className="text-outline font-label-sm text-label-sm">🕐 {ago}</time>
               </div>
               <h1 className="font-headline-lg text-headline-lg text-on-surface leading-snug mb-6">
-                {item.title}
+                {displayTitle}
               </h1>
 
               {item.verification_status && item.verification_status !== "unverified" && item.source_count && item.source_count >= 2 && (() => {
@@ -551,7 +573,7 @@ export default async function ArticlePage({
                     <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>
                   )}
                 </div>
-                <ArticleActions title={item.title} itemId={item.item_id} source={item.source} />
+                <ArticleActions title={displayTitle} itemId={item.item_id} source={item.source} />
               </div>
             </header>
 
@@ -560,7 +582,7 @@ export default async function ArticlePage({
             ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
-              <ArticleImage src={item.image_url} alt={item.title} />
+              <ArticleImage src={item.image_url} alt={displayTitle} />
             ) : null}
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
