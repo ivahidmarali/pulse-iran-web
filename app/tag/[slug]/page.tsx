@@ -107,6 +107,7 @@ export default async function TagPage({
     inLanguage: "fa",
     publisher: { "@id": `${SITE_URL}/#organization` },
     about: { "@type": "Thing", name: tag.name },
+    ...(items[0]?.posted_at ? { dateModified: new Date(items[0].posted_at).toISOString() } : {}),
     ...(items.length > 0 ? {
       mainEntity: {
         "@type": "ItemList",

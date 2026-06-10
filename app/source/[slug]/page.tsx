@@ -127,8 +127,9 @@ export default async function SourceProfilePage({
     url: canonical,
     inLanguage: "fa",
     publisher: { "@id": `${SITE_URL}/#organization` },
+    ...(items[0]?.posted_at ? { dateModified: new Date(items[0].posted_at).toISOString() } : {}),
     about: {
-      "@type": "Organization",
+      "@type": "NewsMediaOrganization",
       name: src.name,
       ...(src.telegram_channel ? { sameAs: [`https://t.me/${src.telegram_channel.replace(/^@/, "")}`] } : {}),
     },
