@@ -47,7 +47,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PAGE_SIZE = 33;
+const PAGE_SIZE = 20;
 
 async function fetchData(categories?: string[], page = 1) {
   try {
