@@ -449,7 +449,7 @@ export default async function HomePage({
 
             <section className="bg-surface-container-low p-gutter rounded-xl">
               <div className="flex items-center gap-2 mb-6">
-                <h2 className="font-title-md text-title-md">🔥 داغ‌ترین خبرها</h2>
+                <h2 className="font-title-md text-title-md"><span aria-hidden="true">🔥 </span>داغ‌ترین خبرها</h2>
               </div>
               <div className="space-y-4">
                 {breaking.slice(0, 5).map((item, i) => (
@@ -467,7 +467,7 @@ export default async function HomePage({
             {videoItems.length > 0 && (
               <section className="bg-surface-container-low p-gutter rounded-xl">
                 <div className="flex items-center gap-2 mb-4">
-                  <h2 className="font-title-md text-title-md">📹 ویدئوهای امروز</h2>
+                  <h2 className="font-title-md text-title-md"><span aria-hidden="true">📹 </span>ویدئوهای امروز</h2>
                 </div>
                 <div className="space-y-3">
                   {videoItems.map((item) => (
