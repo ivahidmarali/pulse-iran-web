@@ -3,7 +3,9 @@ const nextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
-      { source: "/worldcup", destination: "/جام-جهانی", permanent: true },
+      // /worldcup → canonical Persian URL (301 for SEO)
+      // Destination must be percent-encoded for Next.js redirect to work correctly
+      { source: "/worldcup", destination: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", permanent: true },
     ];
   },
   images: {

@@ -270,16 +270,21 @@ export default async function ArticlePage({
     ? { "@type": "ImageObject", url: imageUrl, width: 1200, height: 630 }
     : { "@type": "ImageObject", url: imageUrl };
 
+  function truncateAtWord(text: string, max = 155): string {
+    if (text.length <= max) return text;
+    const cut = text.lastIndexOf(" ", max);
+    return (cut > 10 ? text.slice(0, cut) : text.slice(0, max)) + "…";
+  }
+
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "@id": canonical,
     url: canonical,
     headline: item.title.slice(0, 110),
-    description:
-      item.summary && item.summary.length > 30
-        ? item.summary.slice(0, 160)
-        : item.title.slice(0, 160),
+    description: truncateAtWord(
+      item.summary && item.summary.length > 30 ? item.summary : item.title
+    ),
     image: imageNode,
     datePublished: new Date(item.posted_at).toISOString(),
     dateModified: new Date(item.posted_at).toISOString(),
@@ -312,6 +317,13 @@ export default async function ArticlePage({
         <ArticleNavBar title={item.title} />
         <main className="pb-4">
           <article className="px-container-margin py-section-gap">
+            <nav aria-label="breadcrumb" className="flex items-center gap-1.5 text-[11px] text-on-surface-variant mb-4 flex-wrap">
+              <Link href="/" className="hover:text-secondary-fixed-dim">صفحه اصلی</Link>
+              <span aria-hidden="true">/</span>
+              <Link href={groupUrl} className="hover:text-secondary-fixed-dim">{groupName}</Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-on-surface truncate max-w-[160px]">{item.title.slice(0, 40)}{item.title.length > 40 ? "…" : ""}</span>
+            </nav>
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
               <div className="flex items-center gap-2">
                 <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
@@ -411,7 +423,7 @@ export default async function ArticlePage({
           {related.length > 0 && (
             <section className="px-container-margin">
               <h2 className="text-title-md font-title-md border-r-4 border-secondary-fixed-dim pr-3 mb-4">
-                📰 اخبار مرتبط
+                <span aria-hidden="true">📰 </span>اخبار مرتبط
               </h2>
               <div className="flex flex-row-reverse gap-3 overflow-x-auto pb-2 no-scrollbar">
                 {related.map((rel) => (
@@ -479,12 +491,12 @@ export default async function ArticlePage({
           </aside>
 
           <article className="col-span-9 flex flex-col gap-gutter">
-            <nav className="flex text-on-surface-variant font-label-sm text-label-sm gap-2">
+            <nav aria-label="breadcrumb" className="flex text-on-surface-variant font-label-sm text-label-sm gap-2 items-center flex-wrap">
               <Link href="/" className="hover:text-secondary-fixed-dim">صفحه اصلی</Link>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <Link href={groupUrl} className="hover:text-secondary-fixed-dim">{groupName}</Link>
-              <span>/</span>
-              <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-on-surface">{item.title.slice(0, 60)}{item.title.length > 60 ? "…" : ""}</span>
             </nav>
 
             <header>
