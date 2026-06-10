@@ -26,6 +26,7 @@ export async function GET() {
       <content:encoded><![CDATA[${item.summary && item.summary.length > 30 ? item.summary : item.title}${item.link ? `\n\nمنبع: ${item.source} — ${item.link}` : ""}]]></content:encoded>
       <source url="${SITE_URL}">${escapeXml(item.source)}</source>
       ${item.category ? `<category>${escapeXml(item.category)}</category>` : ""}
+      ${item.political_lean ? `<category>${escapeXml(item.political_lean)}</category>` : ""}
     </item>`;
     })
     .join("\n");
