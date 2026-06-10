@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "صفحه یافت نشد | پالس ایران",
+  title: "صفحه یافت نشد",
   robots: { index: false, follow: true },
 };
 

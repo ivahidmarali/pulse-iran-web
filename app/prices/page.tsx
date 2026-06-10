@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   }).format(new Date());
   return {
-    title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,
+    title: `قیمت دلار و طلا امروز — ${today}`,
     description: `نرخ زنده دلار، یورو، طلا، سکه در ایران امروز (${today}) — نرخ بازار آزاد، به‌روزرسانی هر ۵ دقیقه`,
     openGraph: {
       title: `قیمت دلار و طلا امروز — ${today} | پالس ایران`,

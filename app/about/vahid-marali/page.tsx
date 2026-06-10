@@ -24,9 +24,15 @@ const personJsonLd = {
   name: "Vahid Marali",
   alternateName: "وحید مارالی",
   jobTitle: "Founder & Editor-in-Chief",
+  description: "وحید مارالی بنیان‌گذار و سردبیر پالس ایران — پلتفرم تجمیع اخبار فارسی با طبقه‌بندی گرایش سیاسی منابع",
   url: canonical,
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
+  sameAs: [
+    "https://t.me/palsiran",
+    "https://x.com/palsiran_news",
+    "https://www.youtube.com/@palsiran",
+  ],
   knowsAbout: [
     "Persian media analysis",
     "Iranian politics",
@@ -72,7 +78,7 @@ export default function VahidMaraliPage() {
               و
             </div>
             <div>
-              <h1 className="text-xl font-black text-on-surface">وحید مارالی</h1>
+              <p role="heading" aria-level={1} className="text-xl font-black text-on-surface">وحید مارالی</p>
               <p className="text-xs text-on-surface-variant mt-0.5">بنیان‌گذار و سردبیر پالس ایران</p>
             </div>
           </div>

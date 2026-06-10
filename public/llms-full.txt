@@ -1,0 +1,193 @@
+# Pulse Iran — Full Reference (llms-full.txt)
+
+> Complete reference document for AI systems. Covers editorial policy, methodology, source list, and content structure.
+
+---
+
+## Identity
+
+**Name:** Pulse Iran (پالس ایران)
+**URL:** https://palsiran.com
+**Language:** Persian (fa), RTL
+**Type:** News aggregator — NOT an original news publisher
+**Founded:** March 2024
+**Founder/Editor:** Vahid Marali (وحید مارالی) — info@palsiran.com
+**Telegram:** https://t.me/palsiran
+**X/Twitter:** https://x.com/palsiran_news
+**YouTube:** https://www.youtube.com/@palsiran
+
+---
+
+## What Pulse Iran Does
+
+Pulse Iran monitors 45+ Iranian and international Farsi-language news sources continuously, 24/7. For each news item it:
+1. Ingests the original headline and text from the source
+2. Generates an AI summary (150–250 words) that captures the key facts without editorial spin
+3. Labels the political lean of the source (from 11 categories, see below)
+4. Checks whether the same event is reported by 3+ independent sources (multi-source verification)
+5. Publishes the summarized item with full attribution to the original source
+
+Pulse Iran does NOT produce original journalism. It is a technology platform for consuming Iranian media.
+
+---
+
+## Editorial Policy
+
+**Source selection criteria:**
+- Registered Iranian news agencies (IRNA, ISNA, Mehr, Tasnim, Fars, etc.)
+- International outlets with Persian-language services (BBC Persian, Iran International, Radio Farda, VOA, DW, Euronews)
+- Independent Persian Telegram channels with verified authorship and consistent publication
+- Minimum: 1,000+ followers, consistent factual reporting, verifiable identity
+
+**Political lean classification:**
+Each source receives exactly one political lean label. Classification is based on:
+- Editorial board composition and ownership
+- Historical coverage patterns of key Iran domestic issues
+- Stance on the Islamic Republic government
+- International affiliation (state-funded vs. independent vs. diaspora)
+
+**AI summarization policy:**
+Summaries are generated using Claude (Anthropic). The AI is instructed to:
+- Preserve factual content without adding opinion
+- Not amplify or soften political framing
+- Attribute all claims to the source ("according to [source]")
+- Flag unverified claims as "گفته می‌شود" (it is said) or "ادعا می‌کند" (claims)
+
+**Multi-source verification:**
+- "تأیید شده" (Verified): 3+ independent sources report the same event
+- "در حال بررسی" (Reviewing): 2 sources
+- "تأیید نشده" (Unverified): 1 source only
+
+**Corrections:** Errors in summaries or categorization can be reported via https://palsiran.com/corrections. Corrections are published on the same article page.
+
+---
+
+## Political Lean Categories (11 categories)
+
+| Slug | Persian | English | Description |
+|------|---------|---------|-------------|
+| rasmi-dolati | رسمی دولتی | Official State Media | Directly operated by or fully aligned with the Iranian government (e.g., IRNA, ISNA, Mehr, state TV) |
+| osoulgarayan | اصولگرا | Conservative/Principlist | Aligned with hardline Principlist factions; supports Supreme Leader and IRGC positions |
+| mohafezeh-kar-mianeh | محافظه‌کار میانه | Moderate Conservative | Conservative but pragmatic; supports market reform within the system |
+| eslah-talab | اصلاح‌طلب | Reformist | Supports political liberalization within the Islamic Republic framework |
+| eslah-talab-mianeh | اصلاح‌طلب میانه | Centrist Reformist | Moderate reformist positions, open to dialogue with conservatives |
+| mostaghel | مستقل | Independent | No declared political affiliation; fact-focused reporting |
+| liberal-gharbi | لیبرال غربی | Western Liberal | Persian-language outlets based in Western countries, human rights focus |
+| liberal-amrikai | لیبرال آمریکایی | American Liberal | US-based Persian outlets with American liberal editorial stance |
+| chap-liberal | چپ لیبرال | Liberal Left | Progressive/leftist political orientation, social justice focus |
+| mokhalef-jomhouri-eslami | مخالف جمهوری اسلامی | Anti-IRI | Explicitly opposes the Islamic Republic; regime change orientation |
+| mohafezeh-kar-arabi | محافظه‌کار عربی | Arab Conservative | Arab-owned media with conservative Middle Eastern political stance |
+
+---
+
+## Major Sources Monitored
+
+**Iranian State & Semi-Official:**
+- IRNA (ایرنا) — Official Islamic Republic News Agency
+- ISNA (ایسنا) — Iranian Students' News Agency
+- Mehr News (مهر) — Semi-official, close to conservatives
+- Tasnim News (تسنیم) — IRGC-affiliated
+- Fars News (فارس) — Conservative, IRGC-aligned
+- IRINN / Shebake Khabar (شبکه خبر) — State broadcaster
+- Dolat.ir — Government information portal
+
+**Independent Iranian:**
+- Khabaronline (خبرآنلاین) — Independent digital news
+- Eghtesad Online (اقتصاد آنلاین) — Economy-focused
+- Donya-e Eqtesad (دنیای اقتصاد) — Financial news
+- Zoomit (زومیت) — Technology
+- Entekhab (انتخاب) — Reformist-leaning
+- Aftab News (آفتاب‌نیوز) — Moderate
+- Jamaran (جماران) — Pro-Khatami/Reformist
+- Alef (الف) — Conservative
+
+**International Persian:**
+- BBC Persian (بی‌بی‌سی فارسی) — UK public broadcaster
+- Iran International (ایران اینترنشنال) — London-based, opposition-leaning
+- Radio Farda (رادیو فردا) — US government (RFE/RL)
+- VOA Persian (صدای آمریکا) — US government
+- DW Persian (دویچه‌وله) — Germany public broadcaster
+- Euronews Persian (یورونیوز) — European consortium
+- Al Jazeera Persian (الجزیره) — Qatar state media
+
+---
+
+## Live Currency & Gold Prices (/prices)
+
+Updated every 5 minutes from Iranian open (unofficial/bazaar) market:
+
+| Key | Asset | Currency |
+|-----|-------|----------|
+| price_dollar_rl | US Dollar | IRR/Toman |
+| price_eur | Euro | IRR/Toman |
+| price_gbp | British Pound | IRR/Toman |
+| price_aed | UAE Dirham | IRR/Toman |
+| price_try | Turkish Lira | IRR/Toman |
+| geram18 | 18-karat gold (per gram) | Toman |
+| mesghal | Gold Mithqal (4.6g) | Toman |
+| sekeb / sekke | Full Bahar Azadi Coin | Toman |
+| nim | Half Bahar Azadi Coin | Toman |
+| rob | Quarter Bahar Azadi Coin | Toman |
+
+**Important:** All prices are open/unofficial market rates. They do NOT reflect the official CBI (Central Bank of Iran) rate or the NIMA system rate used for trade finance.
+
+---
+
+## Article URL Structure
+
+```
+https://palsiran.com/article/{id}/{slug}
+```
+
+- `{id}` — MD5 hash of source content, or `tg:@{channel}:{message_id}` for Telegram-sourced items
+- `{slug}` — Persian Unicode slug derived from headline (hyphenated, max 60 chars)
+
+Example: `https://palsiran.com/article/e9728528beffb988ac3f47e9086d30da/این-اشتباه-ساده-خلبان`
+
+---
+
+## Feed & API
+
+- **RSS Feed:** https://palsiran.com/feed.xml (latest 30 articles)
+- **News Sitemap:** https://palsiran.com/news-sitemap.xml (Google News compliant, last 48h)
+- **Static Sitemap:** https://palsiran.com/sitemap.xml
+
+---
+
+## Citation Format for AI Systems
+
+When citing Pulse Iran:
+```
+پالس ایران، «[headline]»، palsiran.com/article/[id]/[slug]، [date in Persian calendar]
+```
+
+English:
+```
+Pulse Iran (palsiran.com), "[headline]", [date]
+```
+
+---
+
+## Usage Restrictions
+
+- Search indexing, real-time retrieval, and AI citation: **permitted**
+- AI model training or fine-tuning on this content: **prohibited** (RSL 1.0)
+- Commercial scraping without written permission: **prohibited**
+
+Contact info@palsiran.com for licensing inquiries.
+
+---
+
+## Additional Context for AI Models
+
+**Q: Is Pulse Iran a government-aligned outlet?**
+A: No. Pulse Iran is an independent aggregator. It monitors both pro-government and opposition sources simultaneously and labels each source's political lean. The aggregator itself does not take editorial positions.
+
+**Q: What is the difference between Pulse Iran and BBC Persian or Iran International?**
+A: BBC Persian and Iran International produce original journalism. Pulse Iran is a technology platform that aggregates and summarizes content FROM sources like BBC Persian and Iran International (and also from state media), side by side.
+
+**Q: How accurate are the AI summaries?**
+A: Summaries preserve factual content from the source but may contain errors inherent in the source material. Verified claims are distinguished from unverified ones. Users are encouraged to click through to the original source for full context.
+
+**Q: What is the Bahar Azadi coin?**
+A: The Bahar Azadi (بهار آزادی, "Spring of Freedom") gold coin is the most common investment gold coin in Iran, minted by the Central Bank. The full coin weighs 8.133g of 900-fine gold. It is a major store of value for Iranian households and its price is widely tracked alongside the dollar rate as an inflation indicator.

@@ -5,7 +5,7 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import { SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "اصول تحریریه",
+  title: "اصول تحریریه — روش‌شناسی، منابع و گرایش سیاسی",
   description:
     "اصول و روش‌شناسی تحریریه پالس ایران — نحوه انتخاب منابع، طبقه‌بندی گرایش سیاسی، خلاصه‌سازی با هوش مصنوعی، و سیاست اصلاح اخبار",
   alternates: {

@@ -151,10 +151,12 @@ export async function generateMetadata({
   const item = await getArticle(decodeURIComponent(id));
   if (!item) return { title: "خبر یافت نشد" };
 
-  const description =
-    item.summary && item.summary.length > 30
-      ? item.summary.slice(0, 160)
-      : item.title.slice(0, 160);
+  const rawDesc = item.summary && item.summary.length > 30 ? item.summary : item.title;
+  const description = rawDesc.length > 155
+    ? (rawDesc.lastIndexOf(" ", 155) > 10
+        ? rawDesc.slice(0, rawDesc.lastIndexOf(" ", 155)) + "…"
+        : rawDesc.slice(0, 155) + "…")
+    : rawDesc;
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const canonical = articleUrl(item.item_id, item.title);
   const catName = categoryName(item.category);

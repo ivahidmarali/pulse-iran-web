@@ -101,9 +101,22 @@ const editorJsonLd = {
   name: "Vahid Marali",
   alternateName: "وحید مارالی",
   jobTitle: "Founder & Editor-in-Chief",
+  description: "وحید مارالی بنیان‌گذار و سردبیر پالس ایران — پلتفرم تجمیع اخبار فارسی با طبقه‌بندی گرایش سیاسی منابع",
   worksFor: { "@id": `${SITE_URL}/#organization` },
   email: "info@palsiran.com",
   url: `${SITE_URL}/about/vahid-marali`,
+  sameAs: [
+    "https://t.me/palsiran",
+    "https://x.com/palsiran_news",
+    "https://www.youtube.com/@palsiran",
+  ],
+  knowsAbout: [
+    "Persian media analysis",
+    "Iranian politics",
+    "News aggregation",
+    "Political bias in media",
+    "Middle East news",
+  ],
 };
 
 const organizationJsonLd = {
