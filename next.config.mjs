@@ -52,6 +52,11 @@ const nextConfig = {
         source: "/article/:path*",
         headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=600" }],
       },
+      // World Cup hub: matches ISR revalidate=120
+      {
+        source: "/جام-جهانی",
+        headers: [{ key: "Cache-Control", value: "public, s-maxage=120, stale-while-revalidate=240" }],
+      },
       // Static asset pages (prices, categories, lean, tag): 60s CDN cache
       {
         source: "/(prices|prices/:path*|categories|archive|search|sources|lean/:path*|tag/:path*|editorial/:path*|about/:path*)",
