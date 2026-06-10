@@ -4,6 +4,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
+interface MatchSet {
+  set: number;
+  host: number;
+  guest: number;
+  active: boolean;
+}
+
 interface Match {
   id: number;
   team1: string;
@@ -20,6 +27,7 @@ interface Match {
   match_time: string;
   start_utc: string;
   has_details: boolean;
+  sets?: MatchSet[] | null;
 }
 
 interface DateGroup {
@@ -306,6 +314,35 @@ function EventTimeline({
   );
 }
 
+// ── Volleyball / Basketball set scores panel ──────────────────────────────
+
+function SetScorePanel({ sets }: { sets: MatchSet[] }) {
+  return (
+    <div className="border-t border-white/5 px-3 py-2 space-y-1">
+      {sets.map((s) => (
+        <div
+          key={s.set}
+          className={`grid grid-cols-[28px_1fr_48px_1fr] items-center gap-1 py-1 px-2 rounded-lg text-sm tabular-nums ${
+            s.active ? "bg-green-500/10 ring-1 ring-green-500/20" : "bg-white/[0.02]"
+          }`}
+        >
+          <span className="text-[10px] text-on-surface-variant font-medium">ست {s.set}</span>
+          <span className={`font-bold text-right ${s.active ? "text-green-300" : "text-on-surface"}`}>
+            {s.host}
+          </span>
+          <span className="text-center text-on-surface-variant/50">–</span>
+          <span className={`font-bold ${s.active ? "text-green-300" : "text-on-surface"}`}>
+            {s.guest}
+            {s.active && (
+              <span className="mr-1.5 text-[9px] font-bold text-green-400 align-middle">● زنده</span>
+            )}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 // ── Match card (row + expandable detail) ─────────────────────────────────
 
 function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
@@ -313,11 +350,15 @@ function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
   const [events, setEvents]         = useState<MatchEvent[] | null>(null);
   const [loadingEvt, setLoadingEvt] = useState(false);
 
+  const hasSets      = (match.sets?.length ?? 0) > 0;
+  const isExpandable = hasSets || match.has_details;
+  const activeSet    = match.sets?.find((s) => s.active) ?? null;
+
   const toggle = async () => {
-    if (!match.has_details) return;
+    if (!isExpandable) return;
     const next = !expanded;
     setExpanded(next);
-    if (next && events === null) {
+    if (next && !hasSets && events === null) {
       setLoadingEvt(true);
       try {
         const res = await fetch(`${API_BASE}/livescore/match/${match.id}/events`, { cache: "no-store" });
@@ -339,7 +380,7 @@ function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
         onClick={toggle}
         className={`grid grid-cols-[1fr_76px_1fr] items-center px-3 py-3 border-b border-white/5 transition-colors duration-700 ${
           isGoal ? "bg-green-500/15" : ""
-        } ${match.has_details ? "cursor-pointer hover:bg-white/[0.03] active:bg-white/[0.05]" : ""}`}
+        } ${isExpandable ? "cursor-pointer hover:bg-white/[0.03] active:bg-white/[0.05]" : ""}`}
       >
         {/* Home team */}
         <div className="flex items-center gap-2 min-w-0">
@@ -354,9 +395,17 @@ function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
               {match.match_time || "—"}
             </span>
           ) : (
-            <span className={`text-base font-bold tabular-nums ${match.is_live ? "text-on-surface" : "text-on-surface-variant"}`}>
-              {match.score1} - {match.score2}
-            </span>
+            <>
+              <span className={`text-base font-bold tabular-nums ${match.is_live ? "text-on-surface" : "text-on-surface-variant"}`}>
+                {match.score1} - {match.score2}
+              </span>
+              {/* Active set score shown inline below sets-won */}
+              {activeSet && (
+                <span className="text-[10px] tabular-nums text-green-400/80 leading-none">
+                  {activeSet.host}–{activeSet.guest}
+                </span>
+              )}
+            </>
           )}
           <MatchStatus match={match} />
           {isGoal && (
@@ -368,7 +417,7 @@ function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
         <div className="flex items-center gap-2 justify-end min-w-0">
           <span className="text-sm font-medium text-on-surface truncate leading-tight text-right">{match.team2}</span>
           <TeamLogo src={match.team2_logo} alt={match.team2} />
-          {match.has_details && (
+          {isExpandable && (
             <svg viewBox="0 0 24 24" className={`w-3.5 h-3.5 shrink-0 text-on-surface-variant/40 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2}>
               <path d="M6 9l6 6 6-6" />
             </svg>
@@ -376,9 +425,11 @@ function MatchCard({ match, isGoal }: { match: Match; isGoal: boolean }) {
         </div>
       </div>
 
-      {/* Expandable event timeline */}
+      {/* Expandable panel — sets for volleyball/basketball, events timeline for football */}
       {expanded && (
-        <EventTimeline events={events} loading={loadingEvt} />
+        hasSets
+          ? <SetScorePanel sets={match.sets!} />
+          : <EventTimeline events={events} loading={loadingEvt} />
       )}
     </div>
   );
