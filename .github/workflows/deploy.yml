@@ -40,9 +40,9 @@ jobs:
           script: |
             set -e
             cd ~/pulse-iran-web
-            git checkout -- .
+            git fetch origin main
+            git reset --hard origin/main
             git clean -fd -e .env.local -e node_modules
-            git pull origin main
 
             # Write env vars
             printf "NEXT_PUBLIC_API_URL=%s\nNEXT_PUBLIC_SITE_URL=%s\nINTERNAL_API_URL=http://127.0.0.1:8000\nNEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=%s\n" \
