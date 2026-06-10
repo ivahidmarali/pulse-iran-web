@@ -136,7 +136,7 @@ function TeamLogo({ flag, name, size = 24 }: { flag?: string | null; name: strin
     return <span style={{ fontSize: size }} className="leading-none select-none">{flag}</span>;
   }
   if (flag?.startsWith("http")) {
-    return <img src={flag} alt={name} width={size} height={size} className="rounded-full object-contain bg-white/5 shrink-0" />;
+    return <img src={flag} alt={name} width={size} height={size} className="rounded-full object-contain bg-white/5 shrink-0" loading="lazy" />;
   }
   return (
     <span style={{ width: size, height: size }} className="rounded-full bg-white/10 flex items-center justify-center text-[9px] font-bold text-on-surface-variant shrink-0">
@@ -337,6 +337,8 @@ function NewsCard({ item, large = false }: { item: NewsItem; large?: boolean }) 
             src={item.image_url}
             alt={item.title}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-85 group-hover:opacity-100"
+            loading={large ? "eager" : "lazy"}
+            fetchPriority={large ? "high" : undefined}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
           <div className="absolute bottom-0 inset-x-0 p-3 md:p-4">
@@ -418,7 +420,7 @@ function NewsSection({ news }: { news: NewsItem[] }) {
               className="flex items-start gap-3 px-4 py-3 bg-surface-container hover:bg-white/3 transition-colors group"
             >
               {item.image_url && (
-                <img src={item.image_url} alt="" className="w-14 h-14 rounded-lg object-cover shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" />
+                <img src={item.image_url} alt="" className="w-14 h-14 rounded-lg object-cover shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" loading="lazy" />
               )}
               <div className="min-w-0 flex-1 py-0.5">
                 <p className="text-sm font-medium text-on-surface group-hover:text-[#3cd7ff] transition-colors line-clamp-2 leading-relaxed">

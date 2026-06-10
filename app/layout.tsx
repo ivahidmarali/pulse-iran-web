@@ -167,6 +167,8 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className={`dark ${vazirmatn.variable}`}>
       <head>
+        {/* Full Arabic subset — next/font only preloads the partial subset; this file is in the CSS→font critical chain */}
+        <link rel="preload" href="/_next/static/media/8c96cc4bd2a39381-s.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://region1.google-analytics.com" />
