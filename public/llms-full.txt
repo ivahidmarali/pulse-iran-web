@@ -112,6 +112,21 @@ Summaries are generated using Claude (Anthropic). The AI is instructed to:
 
 ---
 
+## FIFA World Cup 2026 Hub (/جام-جهانی)
+
+Real-time World Cup 2026 coverage page with:
+- **Live match scores** from the official livescore API (updated every 30 seconds)
+- **Iran team spotlight**: Iran is in Group G alongside Belgium, Egypt, and New Zealand
+  - Match 1: Iran vs New Zealand — 2026-06-16, Los Angeles
+  - Match 2: Iran vs Belgium — 2026-06-21, Los Angeles
+  - Match 3: Iran vs Egypt — 2026-06-27, Seattle
+- **Group standings** for all 12 groups (A–L) with live points, wins, losses, goal difference
+- **Full group-stage schedule**: 24 matches through 2026-06-18 (Round 1)
+- **Tournament bracket** (knockout rounds after group stage ends 2026-06-27)
+- **Latest World Cup news** filtered from the Pulse Iran news feed
+
+---
+
 ## Live Currency & Gold Prices (/prices)
 
 Updated every 5 minutes from Iranian open (unofficial/bazaar) market:

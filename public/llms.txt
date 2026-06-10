@@ -19,6 +19,7 @@
 - /about/editorial-policy — Editorial methodology: source selection, political lean classification, AI summarization policy
 - /corrections — Correction policy: how errors in summaries and categorization are reported and fixed
 - /article/[id]/[slug] — Individual news articles with source attribution and AI summary
+- /جام-جهانی — FIFA World Cup 2026 hub: live scores, group standings, Iran team schedule (Group G: Iran, Belgium, Egypt, New Zealand), tournament bracket
 - /feed.xml — RSS feed with latest 30 articles
 
 ## Political Lean Categories
