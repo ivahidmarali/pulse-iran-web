@@ -3,9 +3,18 @@ const nextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
-      // /worldcup → canonical Persian URL (301 for SEO)
-      // Destination must be percent-encoded for Next.js redirect to work correctly
+      // /worldcup → canonical Persian URL (308 for SEO)
       { source: "/worldcup", destination: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", permanent: true },
+      // ASCII internal route → canonical Persian URL (keeps URLs clean for users)
+      { source: "/jame-jahani", destination: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", permanent: true },
+    ];
+  },
+  async rewrites() {
+    return [
+      // Persian URL rewrites to ASCII internal route — avoids Unicode directory issues on Linux
+      // Both the decoded Unicode form and the percent-encoded form are covered
+      { source: "/جام-جهانی", destination: "/jame-jahani" },
+      { source: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", destination: "/jame-jahani" },
     ];
   },
   images: {
@@ -52,9 +61,9 @@ const nextConfig = {
         source: "/article/:path*",
         headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=600" }],
       },
-      // World Cup hub: matches ISR revalidate=120
+      // World Cup hub: matches ISR revalidate=120 — cover both the Persian URL and ASCII internal route
       {
-        source: "/جام-جهانی",
+        source: "/(jame-jahani|%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C)",
         headers: [{ key: "Cache-Control", value: "public, s-maxage=120, stale-while-revalidate=240" }],
       },
       // Static asset pages (prices, categories, lean, tag): 60s CDN cache
