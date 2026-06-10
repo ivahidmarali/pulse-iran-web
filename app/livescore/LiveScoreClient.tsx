@@ -423,6 +423,7 @@ function useTehranClock() {
 export default function LiveScoreClient({ initialData }: { initialData?: LiveScoreData | null }) {
   const [data, setData]             = useState<LiveScoreData | null>(initialData ?? null);
   const [loading, setLoading]       = useState(!initialData);
+  const [selectedDay, setSelectedDay] = useState<string>(() => todayTehranKey());
   const [statusFilter, setStatusFilter] = useState<"all" | "live" | "finished">("all");
   const [goalIds, setGoalIds]       = useState<Set<number>>(new Set());
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -432,6 +433,31 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
   const audioCtxRef = useRef<AudioContext | null>(null);
   const isFirstLoad = useRef(true);
   const clock       = useTehranClock();
+
+  const todayKey     = todayTehranKey();
+  const yesterdayKey = new Date(new Date(todayKey + "T00:00:00Z").getTime() - 86_400_000).toISOString().slice(0, 10);
+  const tomorrowKey  = new Date(new Date(todayKey + "T00:00:00Z").getTime() + 86_400_000).toISOString().slice(0, 10);
+
+  const days = useMemo(() => {
+    const matchDays = new Set(
+      (data?.leagues ?? []).flatMap((l) =>
+        l.date_groups.flatMap((dg) => dg.matches.map((m) => tehranDateKey(m.start_utc)))
+      )
+    );
+    return [yesterdayKey, todayKey, tomorrowKey]
+      .filter((k) => matchDays.has(k))
+      .map((k) => ({
+        key: k,
+        label: k === yesterdayKey ? "دیروز" : k === todayKey ? "امروز" : "فردا",
+      }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, yesterdayKey, todayKey, tomorrowKey]);
+
+  const handleDayChange = useCallback((key: string) => {
+    setSelectedDay(key);
+    if (key !== todayKey) setStatusFilter("all");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [todayKey]);
 
   const enableSound = useCallback(() => {
     try {
@@ -503,16 +529,19 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
           date_groups: league.date_groups
             .map((dg) => ({
               ...dg,
-              matches: dg.matches.filter((m) =>
-                statusFilter === "live"     ? m.is_live
-              : statusFilter === "finished" ? m.is_final
-              : true
-              ),
+              matches: dg.matches.filter((m) => {
+                const dayMatch = statusFilter === "live" || tehranDateKey(m.start_utc) === selectedDay;
+                const statusMatch =
+                  statusFilter === "live"     ? m.is_live
+                : statusFilter === "finished" ? m.is_final
+                : true;
+                return dayMatch && statusMatch;
+              }),
             }))
             .filter((dg) => dg.matches.length > 0),
         }))
         .filter((l) => l.date_groups.length > 0),
-    [data, statusFilter]
+    [data, statusFilter, selectedDay]
   );
 
   return (
@@ -563,9 +592,30 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
         </p>
       )}
 
+      {/* Day tabs */}
+      {days.length > 0 && (
+        <div className="flex gap-2 mb-3">
+          {days.map((d) => (
+            <button
+              key={d.key}
+              onClick={() => handleDayChange(d.key)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                selectedDay === d.key
+                  ? "bg-white/15 text-on-surface font-bold ring-1 ring-white/20"
+                  : "bg-surface-container text-on-surface-variant hover:text-on-surface"
+              }`}
+            >
+              {d.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Status chips */}
       <div className="flex gap-2 mb-5">
-        {([["all", "همه"], ["live", "زنده"], ["finished", "پایان‌یافته"]] as const).map(([val, label]) => (
+        {(
+          [["all", "همه"], ["live", "زنده"], ["finished", "پایان‌یافته"]] as const
+        ).filter(([val]) => val !== "live" || selectedDay === todayKey).map(([val, label]) => (
           <button
             key={val}
             onClick={() => setStatusFilter(val)}
