@@ -7,6 +7,9 @@ import type { MetadataRoute } from "next";
 
 const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
 const PAGE_SIZE = 100;
+// Cap sitemap at recent articles only — fetching all 14K+ articles wastes crawl
+// budget on a low-authority domain. news-sitemap.xml handles the last-48h feed.
+const MAX_SITEMAP_ARTICLES = 500;
 
 const LEAN_SLUGS = [
   "osoulgarayan", "rasmi-dolati", "eslah-talab", "eslah-talab-mianeh",
@@ -21,7 +24,7 @@ const TAG_SLUGS = [
 async function fetchAllArticles(): Promise<NewsItem[]> {
   const items: NewsItem[] = [];
   let page = 1;
-  while (true) {
+  while (items.length < MAX_SITEMAP_ARTICLES) {
     const res = await fetch(
       `${INTERNAL_API}/news?page=${page}&per_page=${PAGE_SIZE}`,
       { next: { revalidate: 3600 } }
@@ -30,10 +33,10 @@ async function fetchAllArticles(): Promise<NewsItem[]> {
     const data = await res.json();
     const batch: NewsItem[] = data.items ?? [];
     items.push(...batch);
-    if (!data.has_more || batch.length < PAGE_SIZE) break;
+    if (!data.has_more || batch.length < PAGE_SIZE || items.length >= MAX_SITEMAP_ARTICLES) break;
     page++;
   }
-  return items;
+  return items.slice(0, MAX_SITEMAP_ARTICLES);
 }
 
 async function fetchSources(): Promise<SourceInfo[]> {
