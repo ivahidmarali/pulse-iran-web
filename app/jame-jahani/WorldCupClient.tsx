@@ -492,12 +492,9 @@ function ScheduleRow({ m, now }: { m: ScheduleMatch; now: number }) {
 }
 
 function UpcomingSection({ liveUpcoming, liveRecent, now }: { liveUpcoming: Match[]; liveRecent: Match[]; now: number }) {
-  // Group WC_SCHEDULE by Gregorian date label for display
-  const scheduleUpcoming = WC_SCHEDULE.filter((m) => new Date(m.utc).getTime() > now - 7200000); // include in-progress
+  const [selDay, setSelDay] = useState(0);
 
   // When livescore has meaningful data, show that (tournament running).
-  // Require actual results OR many upcoming matches to avoid switching to this
-  // branch when the API only returns 1-2 pre-tournament preview fixtures.
   if (liveRecent.length > 0 || liveUpcoming.length >= 5) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -517,27 +514,65 @@ function UpcomingSection({ liveUpcoming, liveRecent, now }: { liveUpcoming: Matc
     );
   }
 
-  // Pre-tournament or API empty: show full hard-coded schedule grouped by date
-  const byDay: Record<string, ScheduleMatch[]> = {};
-  for (const m of scheduleUpcoming) {
-    const day = new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", weekday: "long", month: "long", day: "numeric" }).format(new Date(m.utc));
-    (byDay[day] ||= []).push(m);
+  // Pre-tournament or API empty: date-tabbed schedule (shows one day at a time)
+  const remaining = WC_SCHEDULE.filter((m) => new Date(m.utc).getTime() > now - 7200000);
+
+  const days: { key: string; label: string; shortLabel: string; matches: ScheduleMatch[] }[] = [];
+  const idx: Record<string, number> = {};
+  for (const m of remaining) {
+    const d = new Date(m.utc);
+    const key = new Intl.DateTimeFormat("sv", { timeZone: "Asia/Tehran" }).format(d); // YYYY-MM-DD stable key
+    if (idx[key] === undefined) {
+      idx[key] = days.length;
+      days.push({
+        key,
+        label: new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", weekday: "long", month: "long", day: "numeric" }).format(d),
+        shortLabel: new Intl.DateTimeFormat("fa-IR", { timeZone: "Asia/Tehran", day: "numeric" }).format(d),
+        matches: [],
+      });
+    }
+    days[idx[key]].matches.push(m);
   }
+
+  if (days.length === 0) return null;
+
+  const activeDay = Math.min(selDay, days.length - 1);
+  const dayData = days[activeDay];
 
   return (
     <section>
-      <h2 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2"><span>📅</span> برنامه مرحله گروهی</h2>
-      <div className="space-y-5">
-        {Object.entries(byDay).map(([day, matches]) => (
-          <div key={day}>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs font-bold text-on-surface-variant/50">{day}</span>
-              <div className="flex-1 h-px bg-white/5" />
-            </div>
-            <div className="space-y-1.5">
-              {matches.map((m) => <ScheduleRow key={m.utc + m.t1} m={m} now={now} />)}
-            </div>
-          </div>
+      <h2 className="text-sm font-bold text-on-surface mb-3 flex items-center gap-2">
+        <span>📅</span> برنامه مرحله گروهی
+      </h2>
+
+      {/* Horizontal date tab strip — one pill per day, horizontally scrollable */}
+      <div className="overflow-x-auto -mx-1 px-1 pb-1 mb-3">
+        <div className="flex gap-1.5 min-w-max">
+          {days.map((d, i) => {
+            const hasIran = d.matches.some((m) => m.t1 === "ایران" || m.t2 === "ایران");
+            return (
+              <button
+                key={d.key}
+                onClick={() => setSelDay(i)}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold transition-all border whitespace-nowrap ${
+                  activeDay === i
+                    ? "bg-[#3cd7ff]/15 text-[#3cd7ff] border-[#3cd7ff]/30"
+                    : "text-on-surface-variant/60 border-white/8 bg-surface-container hover:border-white/20 hover:text-on-surface-variant"
+                } ${hasIran ? "ring-1 ring-amber-400/30" : ""}`}
+              >
+                {hasIran && <span className="text-[10px]">🇮🇷</span>}
+                <span>{d.shortLabel}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <p className="text-xs font-bold text-on-surface-variant/40 mb-2.5">{dayData.label}</p>
+
+      <div className="space-y-1.5">
+        {dayData.matches.map((m) => (
+          <ScheduleRow key={m.utc + m.t1} m={m} now={now} />
         ))}
       </div>
     </section>
