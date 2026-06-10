@@ -423,7 +423,6 @@ function useTehranClock() {
 export default function LiveScoreClient({ initialData }: { initialData?: LiveScoreData | null }) {
   const [data, setData]             = useState<LiveScoreData | null>(initialData ?? null);
   const [loading, setLoading]       = useState(!initialData);
-  const [selectedDay, setSelectedDay] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<"all" | "live" | "finished">("all");
   const [goalIds, setGoalIds]       = useState<Set<number>>(new Set());
   const [soundEnabled, setSoundEnabled] = useState(false);
@@ -474,15 +473,6 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
       isFirstLoad.current = false;
       setData(json);
       setLastUpdated(new Date().toLocaleTimeString("fa-IR"));
-
-      setSelectedDay((prev) => {
-        if (prev !== "") return prev;
-        const today = todayTehranKey();
-        const hasToday = json.leagues.some((l) =>
-          l.date_groups.some((dg) => dg.matches.some((m) => tehranDateKey(m.start_utc) === today))
-        );
-        return hasToday ? today : "";
-      });
     } catch {}
     setLoading(false);
   }, []);
@@ -505,20 +495,6 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
     [data]
   );
 
-  const days = useMemo(() => {
-    if (!data) return [];
-    const map = new Map<string, string>();
-    for (const l of data.leagues)
-      for (const dg of l.date_groups)
-        for (const m of dg.matches) {
-          const key = tehranDateKey(m.start_utc);
-          if (key && !map.has(key)) map.set(key, dg.date_label);
-        }
-    return Array.from(map.entries())
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([key, label]) => ({ key, label, rel: relativeLabel(key) }));
-  }, [data]);
-
   const filteredLeagues = useMemo(
     () =>
       (data?.leagues ?? [])
@@ -527,18 +503,16 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
           date_groups: league.date_groups
             .map((dg) => ({
               ...dg,
-              matches: dg.matches.filter((m) => {
-                const dayOk    = !selectedDay || tehranDateKey(m.start_utc) === selectedDay;
-                const statusOk = statusFilter === "live"     ? m.is_live
-                               : statusFilter === "finished" ? m.is_final
-                               : true;
-                return dayOk && statusOk;
-              }),
+              matches: dg.matches.filter((m) =>
+                statusFilter === "live"     ? m.is_live
+              : statusFilter === "finished" ? m.is_final
+              : true
+              ),
             }))
             .filter((dg) => dg.matches.length > 0),
         }))
         .filter((l) => l.date_groups.length > 0),
-    [data, selectedDay, statusFilter]
+    [data, statusFilter]
   );
 
   return (
@@ -589,41 +563,6 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
         </p>
       )}
 
-      {/* Day selector tabs */}
-      {days.length > 0 && (
-        <div className="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
-          <button
-            onClick={() => setSelectedDay("")}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-              selectedDay === ""
-                ? "bg-secondary-fixed-dim text-background font-bold"
-                : "bg-surface-container text-on-surface-variant hover:text-on-surface"
-            }`}
-          >
-            همه روزها
-          </button>
-          {days.map(({ key, label, rel }) => (
-            <button
-              key={key}
-              onClick={() => setSelectedDay(key)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-                selectedDay === key
-                  ? "bg-secondary-fixed-dim text-background font-bold"
-                  : "bg-surface-container text-on-surface-variant hover:text-on-surface"
-              }`}
-            >
-              {rel === "امروز" && selectedDay !== key && <LiveDot sm />}
-              <span>{rel || label}</span>
-              {rel && (
-                <span className="text-[10px] opacity-60">
-                  {label.split(" ").slice(0, 2).join(" ")}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Status chips */}
       <div className="flex gap-2 mb-5">
         {([["all", "همه"], ["live", "زنده"], ["finished", "پایان‌یافته"]] as const).map(([val, label]) => (
@@ -669,7 +608,7 @@ export default function LiveScoreClient({ initialData }: { initialData?: LiveSco
               {/* Date groups */}
               {league.date_groups.map((dg) => (
                 <div key={dg.jalali_key}>
-                  {(!selectedDay || league.date_groups.length > 1) && (
+                  {league.date_groups.length > 1 && (
                     <div className="flex items-center gap-2 px-4 py-1.5 bg-white/[0.03] border-b border-white/5">
                       {(() => {
                         const rel = relativeLabel(tehranDateKey(dg.matches[0]?.start_utc ?? ""));
