@@ -1,6 +1,7 @@
 export interface NewsItem {
   id: number;
   item_id: string;
+  url_id?: string;
   source: string;
   political_lean?: string;
   title: string;

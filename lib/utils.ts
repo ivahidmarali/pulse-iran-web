@@ -20,6 +20,11 @@ export function generateSlug(title: string): string {
   return slug || "خبر";
 }
 
+/** Returns the clean URL-safe ID for a news item (url_id when available, else item_id) */
+export function articleId(item: { url_id?: string; item_id: string }): string {
+  return item.url_id || item.item_id;
+}
+
 /** Internal href for an article page (with optional slug for SEO) */
 export function articleHref(itemId: string, title?: string): string {
   const slug = title ? generateSlug(title) : "";

@@ -1,6 +1,6 @@
 export const revalidate = 3600;
 
-import { articleUrl, generateSlug, SITE_URL } from "@/lib/utils";
+import { articleUrl, articleId, generateSlug, SITE_URL } from "@/lib/utils";
 import { ARTICLES } from "@/lib/editorial-articles";
 import type { NewsItem, SourceInfo } from "@/lib/types";
 import type { MetadataRoute } from "next";
@@ -115,7 +115,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const articleRoutes: MetadataRoute.Sitemap = uniqueItems
     .filter((item) => !EXCLUDED_SOURCE_SLUGS.has(generateSlug(item.source ?? "")))
     .map((item) => ({
-      url: articleUrl(item.item_id, item.title),
+      url: articleUrl(articleId(item), item.title),
       lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),
     }));
 

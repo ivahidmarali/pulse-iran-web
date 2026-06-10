@@ -11,7 +11,7 @@ import DailyBriefingCard from "@/components/news/DailyBriefingCard";
 import { getNews, getPrices, getBreakingNews, getCategories, getLatestBriefings } from "@/lib/api";
 import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
 import { NewsItem, PriceItem, LatestBriefings } from "@/lib/types";
-import { articleHref, articleUrl, toPersianNum, SITE_URL, safeJsonLd } from "@/lib/utils";
+import { articleHref, articleUrl, articleId, toPersianNum, SITE_URL, safeJsonLd } from "@/lib/utils";
 
 export const revalidate = 120; // regenerate every 2 min for dynamic date + fresh schema
 
@@ -148,9 +148,9 @@ export default async function HomePage({
     },
     liveBlogUpdate: breaking.slice(0, 5).map((item) => ({
       "@type": "BlogPosting",
-      "@id": articleUrl(item.item_id, item.title),
+      "@id": articleUrl(articleId(item), item.title),
       headline: item.title,
-      url: articleUrl(item.item_id, item.title),
+      url: articleUrl(articleId(item), item.title),
       datePublished: new Date(item.posted_at).toISOString(),
       author: { "@id": `${SITE_URL}/#organization` },
     })),
@@ -166,7 +166,7 @@ export default async function HomePage({
     itemListElement: news.slice(0, 10).map((item, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      item: { "@id": articleUrl(item.item_id, item.title), "@type": "NewsArticle", name: item.title },
+      item: { "@id": articleUrl(articleId(item), item.title), "@type": "NewsArticle", name: item.title },
     })),
   } : null;
 
@@ -453,7 +453,7 @@ export default async function HomePage({
               </div>
               <div className="space-y-4">
                 {breaking.slice(0, 5).map((item, i) => (
-                  <Link key={item.item_id} href={articleHref(item.item_id, item.title)} className="flex gap-3 group cursor-pointer breaking-news-headline">
+                  <Link key={item.item_id} href={articleHref(articleId(item), item.title)} className="flex gap-3 group cursor-pointer breaking-news-headline">
                     <span className="text-2xl font-black text-secondary-fixed-dim/20 group-hover:text-secondary-fixed-dim transition-colors shrink-0">
                       {(i + 1).toLocaleString("fa-IR")}
                     </span>

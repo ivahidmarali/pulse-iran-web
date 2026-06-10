@@ -1,7 +1,7 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound, redirect, permanentRedirect } from "next/navigation";
 import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import ArticleActions from "@/components/article/ArticleActions";
@@ -10,7 +10,7 @@ import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
-import { articleHref, articleUrl, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
+import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import type { NewsItem } from "@/lib/types";
 
 export const revalidate = 300;
@@ -158,7 +158,7 @@ export async function generateMetadata({
         : rawDesc.slice(0, 155) + "…")
     : rawDesc;
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
-  const canonical = articleUrl(item.item_id, item.title);
+  const canonical = articleUrl(articleId(item), item.title);
   const catName = categoryName(item.category);
   // OG spec requires ISO 8601; item.posted_at from the API may be space-separated.
   const publishedIso = new Date(item.posted_at).toISOString();
@@ -208,11 +208,18 @@ export default async function ArticlePage({
 
   if (!article) notFound();
 
+  const cleanId = articleId(article);
+
+  // 308 permanent redirect: legacy Telegram IDs (tg:@...) → clean MD5 hash URL
+  if (decodedId !== cleanId) {
+    permanentRedirect(articleUrl(cleanId, article.title));
+  }
+
   // 301 redirect from /article/{id} (no slug) → /article/{id}/{slug}
   // Only redirect when the target URL actually differs (article has a non-empty title).
   if (!slug) {
-    const target = articleHref(article.item_id, article.title);
-    const bare = `/article/${encodeURIComponent(article.item_id)}`;
+    const target = articleHref(cleanId, article.title);
+    const bare = `/article/${encodeURIComponent(cleanId)}`;
     if (target !== bare) redirect(`${SITE_URL}${target}`);
   }
 
@@ -221,7 +228,7 @@ export default async function ArticlePage({
 
   const ago = timeAgo(item.posted_at);
   const publishedIso = new Date(item.posted_at).toISOString();
-  const canonical = articleUrl(item.item_id, item.title);
+  const canonical = articleUrl(cleanId, item.title);
   const imageUrl = item.image_url || `${SITE_URL}/og-default.jpg`;
   const catName = categoryName(item.category);
 
@@ -429,7 +436,7 @@ export default async function ArticlePage({
                 {related.map((rel) => (
                   <Link
                     key={rel.item_id}
-                    href={articleHref(rel.item_id, rel.title)}
+                    href={articleHref(articleId(rel), rel.title)}
                     className="shrink-0 w-52 bg-surface-container-low rounded-lg p-3 border border-white/5"
                   >
                     {!rel.source.startsWith("@") && (
@@ -474,7 +481,7 @@ export default async function ArticlePage({
                   {related.slice(0, 4).map((rel) => (
                     <Link
                       key={rel.item_id}
-                      href={articleHref(rel.item_id, rel.title)}
+                      href={articleHref(articleId(rel), rel.title)}
                       className="group block"
                     >
                       <p className="font-body-md text-body-md text-on-surface-variant group-hover:text-secondary-fixed-dim transition-colors line-clamp-2">
@@ -611,7 +618,7 @@ export default async function ArticlePage({
                   {related.slice(0, 3).map((rel) => (
                     <Link
                       key={rel.item_id}
-                      href={articleHref(rel.item_id, rel.title)}
+                      href={articleHref(articleId(rel), rel.title)}
                       className="bg-surface-container-low p-4 rounded-xl border border-white/5 hover:border-secondary-fixed-dim/30 transition-all group"
                     >
                       {!rel.source.startsWith("@") && (

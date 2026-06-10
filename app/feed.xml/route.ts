@@ -1,5 +1,5 @@
 import { getNews } from "@/lib/api";
-import { articleUrl, SITE_URL } from "@/lib/utils";
+import { articleUrl, articleId, SITE_URL } from "@/lib/utils";
 
 const CONTENT_NS = 'xmlns:content="http://purl.org/rss/1.0/modules/content/"';
 
@@ -12,7 +12,7 @@ export async function GET() {
 
   const rssItems = items
     .map((item) => {
-      const link = articleUrl(item.item_id, item.title);
+      const link = articleUrl(articleId(item), item.title);
       const pubDate = new Date(item.posted_at).toUTCString();
       const description = item.summary && item.summary.length > 30
         ? escapeXml(item.summary)

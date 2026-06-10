@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import HeroImage from "@/components/news/HeroImage";
 import { NewsItem } from "@/lib/types";
-import { articleHref } from "@/lib/utils";
+import { articleHref, articleId } from "@/lib/utils";
 
 const LEAN_BADGE: Record<string, string> = {
   "اصولگرا": "text-green-400 bg-green-500/15 border-green-500/20",
@@ -97,7 +97,7 @@ function categoryBorder(category?: string): string {
 }
 
 export default function NewsCard({ item, variant = "default", priority = false }: Props) {
-  const href = articleHref(item.item_id, item.title);
+  const href = articleHref(articleId(item), item.title);
   const ago = timeAgo(item.posted_at);
   const emoji = catEmoji(item.category);
   const border = categoryBorder(item.category);

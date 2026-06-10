@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import MobileFooter from "@/components/layout/MobileFooter";
 import { searchNews } from "@/lib/api";
 import { NewsItem } from "@/lib/types";
-import { articleHref, SITE_URL } from "@/lib/utils";
+import { articleHref, articleId, SITE_URL } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "جستجو",
@@ -46,7 +46,7 @@ function SearchResultRow({ item }: { item: NewsItem }) {
 
   return (
     <Link
-      href={articleHref(item.item_id, item.title)}
+      href={articleHref(articleId(item), item.title)}
       className={`flex flex-col gap-1.5 p-4 rounded-xl bg-surface-container border border-white/5 border-r-2 ${importanceColor} hover:bg-surface-container-high hover:border-secondary-fixed-dim/20 transition-all`}
       dir="rtl"
     >

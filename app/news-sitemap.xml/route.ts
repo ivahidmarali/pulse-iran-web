@@ -1,4 +1,4 @@
-import { articleUrl, SITE_URL } from "@/lib/utils";
+import { articleUrl, articleId, SITE_URL } from "@/lib/utils";
 
 export const revalidate = 300; // regenerate every 5 minutes
 
@@ -100,7 +100,7 @@ export async function GET() {
     return true;
   });
 
-  const articleUrls = unique.map((item) => articleUrl(item.item_id, item.title));
+  const articleUrls = unique.map((item) => articleUrl(articleId(item), item.title));
 
   const urls = unique
     .map(
@@ -132,7 +132,7 @@ ${urls}
   const newSinceLastPing = unique.filter(
     (item) => new Date(item.posted_at).getTime() > lastIndexNowPingTs
   );
-  const newUrls = newSinceLastPing.map((item) => articleUrl(item.item_id, item.title));
+  const newUrls = newSinceLastPing.map((item) => articleUrl(articleId(item), item.title));
   if (newUrls.length > 0) {
     const pingTs = Date.now();
     fetch("https://api.indexnow.org/indexnow", {
