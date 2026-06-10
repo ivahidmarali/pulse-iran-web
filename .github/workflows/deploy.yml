@@ -58,9 +58,17 @@ jobs:
             # Do NOT add them here too — duplicates intersect with Cloudflare and
             # drop telegram.org / api.indexnow.org from the effective CSP.
             cat > /etc/nginx/sites-available/palsiran << 'NGINX'
+            # www -> canonical non-www (Cloudflare handles SSL termination;
+            # this redirect fires for any request nginx sees with Host: www.*)
             server {
                 listen 80;
-                server_name palsiran.com www.palsiran.com;
+                server_name www.palsiran.com;
+                return 301 https://palsiran.com$request_uri;
+            }
+
+            server {
+                listen 80;
+                server_name palsiran.com;
 
                 location / {
                     proxy_pass         http://localhost:3000;
