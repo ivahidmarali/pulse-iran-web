@@ -17,10 +17,10 @@ export default function BreakingTicker({ items = DEFAULT_ITEMS, topOffset = "top
         <span>🚨</span>
         خبر فوری
       </div>
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-hidden relative" data-nosnippet>
         <div className="ticker-scroll whitespace-nowrap flex items-center gap-12 font-medium">
           <span>{text}</span>
-          <span>{text}</span>
+          <span aria-hidden="true">{text}</span>
         </div>
       </div>
     </div>

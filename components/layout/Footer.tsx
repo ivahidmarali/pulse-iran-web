@@ -93,7 +93,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center mt-8 pt-6 border-t border-white/5">
-        <p className="text-on-surface-variant text-xs">© ۱۴۰۴ پالس ایران — تمامی حقوق محفوظ است | <a href="mailto:info@palsiran.com" className="hover:text-on-surface transition-colors">info@palsiran.com</a></p>
+        <p className="text-on-surface-variant text-xs">© ۱۴۰۵ پالس ایران — تمامی حقوق محفوظ است | <a href="mailto:info@palsiran.com" className="hover:text-on-surface transition-colors">info@palsiran.com</a></p>
       </div>
     </footer>
   );

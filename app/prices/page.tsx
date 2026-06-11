@@ -152,15 +152,13 @@ const GoldIcon = () => (
   </svg>
 );
 
-function PricesJsonLd({ prices, priceMap }: { prices: PriceItem[]; priceMap: Record<string, PriceItem> }) {
+function PricesJsonLd({ priceMap }: { priceMap: Record<string, PriceItem> }) {
   const fmt = (key: string) => priceMap[key]?.price?.toLocaleString("fa-IR");
   const dollar = fmt("price_dollar_rl");
   const gold = fmt("geram18");
   const sekeh = fmt("sekeb") ?? fmt("sekke");
   const eur = fmt("price_eur");
   const nim = fmt("nim");
-
-  const today = new Date().toISOString().split("T")[0];
 
   const webPageData = {
     "@context": "https://schema.org",
@@ -172,31 +170,6 @@ function PricesJsonLd({ prices, priceMap }: { prices: PriceItem[]; priceMap: Rec
     inLanguage: "fa",
     publisher: { "@id": `${SITE_URL}/#organization` },
     dateModified: new Date().toISOString(),
-    mainEntity: {
-      "@type": "ItemList",
-      name: "نرخ زنده ارز و طلا",
-      itemListElement: prices
-        .filter((p) => PRICE_META[p.key])
-        .map((p, i) => {
-          const meta = PRICE_META[p.key];
-          return {
-            "@type": "ListItem",
-            position: i + 1,
-            item: {
-              "@type": "Product",
-              name: meta.name,
-              offers: {
-                "@type": "Offer",
-                priceCurrency: "IRR",
-                price: String(p.price),
-                priceValidUntil: today,
-                availability: "https://schema.org/InStock",
-                seller: { "@id": `${SITE_URL}/#organization` },
-              },
-            },
-          };
-        }),
-    },
   };
 
   const faqData = {
@@ -291,7 +264,7 @@ export default async function PricesPage() {
 
   return (
     <div className="cyber-grid" dir="rtl">
-      <PricesJsonLd prices={prices} priceMap={priceMap} />
+      <PricesJsonLd priceMap={priceMap} />
       {/* Mobile */}
       <div className="md:hidden">
         <main className="pb-4 px-container-margin pt-4">

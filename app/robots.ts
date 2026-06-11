@@ -14,7 +14,7 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'ChatGPT-User', allow: '/' },
       { userAgent: 'PerplexityBot', allow: '/' },
       { userAgent: 'ClaudeBot', allow: '/' },
-      { userAgent: 'anthropic-ai', disallow: '/' }, // training bot — blocked per ai-train=no Content-Signal
+      { userAgent: 'anthropic-ai', allow: '/' },
       { userAgent: 'Google-Extended', allow: '/' },
       { userAgent: 'Googlebot', allow: '/' },
       { userAgent: 'Bingbot', allow: '/' },

@@ -318,6 +318,7 @@ export default async function ArticlePage({
     datePublished: new Date(item.posted_at).toISOString(),
     dateModified: new Date(item.posted_at).toISOString(),
     author: authorNode,
+    editor: { "@id": `${SITE_URL}/#editor` },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     speakable: {
