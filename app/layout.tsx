@@ -173,6 +173,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://www.google-analytics.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://region1.google-analytics.com" />
         <link rel="alternate" type="application/rss+xml" title="پالس ایران" href={`${SITE_URL}/feed.xml`} />
+        <link rel="alternate" type="text/plain" href={`${SITE_URL}/llms.txt`} title="LLMs.txt" />
         {/* safeJsonLd escapes <, >, & — prevents </script> injection from data values */}
         {/* eslint-disable-next-line react/no-danger */}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }} />

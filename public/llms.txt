@@ -4,48 +4,47 @@
 
 ## Sections
 
-- / — Homepage: latest breaking news, currency prices, category filters
-- /prices — Live exchange rates: USD, EUR, GBP, AED, TRY, gold, coins (updated every 5 minutes)
-- /categories — Browse news by category: politics, economy, international, sports, society
-- /archive — Full news archive with date and source filters
-- /search — Full-text search across all articles
-- /sources — Directory of all monitored news sources with political lean indicators
-- /source/[slug] — Individual source profile: description, political lean, credibility score, article feed
-- /lean/[slug] — Articles and sources grouped by political lean (11 categories)
-- /tag/[slug] — News by topic group: siasi, beinolmelal, eqtesadi, ejtemai, varzeshi, technology, hashiye
-- /editorial — Editorial analysis and commentary by the Pulse Iran team
-- /editorial/[slug] — Individual editorial articles
-- /about — About Pulse Iran, methodology, and editorial principles
-- /about/editorial-policy — Editorial methodology: source selection, political lean classification, AI summarization policy
-- /corrections — Correction policy: how errors in summaries and categorization are reported and fixed
-- /article/[id]/[slug] — Individual news articles with source attribution and AI summary
-- /جام-جهانی — FIFA World Cup 2026 hub: live scores, group standings, Iran team schedule (Group G: Iran, Belgium, Egypt, New Zealand), tournament bracket
-- /feed.xml — RSS feed with latest 30 articles
+- [Homepage](https://palsiran.com/): Latest breaking news, currency prices, category filters
+- [Live Prices](https://palsiran.com/prices): Live exchange rates: USD, EUR, GBP, AED, TRY, gold, coins (updated every 5 minutes)
+- [Categories](https://palsiran.com/categories): Browse news by category: politics, economy, international, sports, society
+- [Archive](https://palsiran.com/archive): Full news archive with date and source filters
+- [Search](https://palsiran.com/search): Full-text search across all articles
+- [Sources](https://palsiran.com/sources): Directory of all monitored news sources with political lean indicators
+- [Source Profile](https://palsiran.com/source/bbc-persian): Individual source profile: description, political lean, credibility score, article feed
+- [Political Lean](https://palsiran.com/lean/mostaghel): Articles and sources grouped by political lean (11 categories)
+- [Topic Tag](https://palsiran.com/tag/siasi): News by topic group: siasi, beinolmelal, eqtesadi, ejtemai, varzeshi, technology, hashiye
+- [Editorial](https://palsiran.com/editorial): Editorial analysis and commentary by the Pulse Iran team
+- [About](https://palsiran.com/about): About Pulse Iran, methodology, and editorial principles
+- [Editorial Policy](https://palsiran.com/about/editorial-policy): Editorial methodology: source selection, political lean classification, AI summarization policy
+- [Corrections](https://palsiran.com/corrections): Correction policy: how errors in summaries and categorization are reported and fixed
+- [World Cup 2026](https://palsiran.com/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C): FIFA World Cup 2026 hub: live scores, group standings, Iran team schedule (Group G: Iran, Belgium, Egypt, New Zealand), tournament bracket
+- [RSS Feed](https://palsiran.com/feed.xml): RSS feed with latest 30 articles
 
 ## Political Lean Categories
 
 Pulse Iran classifies sources into 11 political lean categories:
-- /lean/rasmi-dolati — رسمی دولتی (Official state media)
-- /lean/osoulgarayan — اصولگرا (Conservative/Principlist)
-- /lean/mohafezeh-kar-mianeh — محافظه‌کار میانه (Moderate Conservative)
-- /lean/eslah-talab — اصلاح‌طلب (Reformist)
-- /lean/eslah-talab-mianeh — اصلاح‌طلب میانه (Centrist Reformist)
-- /lean/mostaghel — مستقل (Independent)
-- /lean/liberal-gharbi — لیبرال غربی (Western Liberal)
-- /lean/liberal-amrikai — لیبرال آمریکایی (American Liberal)
-- /lean/chap-liberal — چپ لیبرال (Liberal Left)
-- /lean/mokhalef-jomhouri-eslami — مخالف جمهوری اسلامی (Anti-IRI)
-- /lean/mohafezeh-kar-arabi — محافظه‌کار عربی (Arab Conservative)
+
+- [رسمی دولتی — Official State Media](https://palsiran.com/lean/rasmi-dolati): Directly operated by or fully aligned with the Iranian government
+- [اصولگرا — Conservative/Principlist](https://palsiran.com/lean/osoulgarayan): Aligned with hardline Principlist factions
+- [محافظه‌کار میانه — Moderate Conservative](https://palsiran.com/lean/mohafezeh-kar-mianeh): Conservative but pragmatic
+- [اصلاح‌طلب — Reformist](https://palsiran.com/lean/eslah-talab): Supports political liberalization within the Islamic Republic framework
+- [اصلاح‌طلب میانه — Centrist Reformist](https://palsiran.com/lean/eslah-talab-mianeh): Moderate reformist positions
+- [مستقل — Independent](https://palsiran.com/lean/mostaghel): No declared political affiliation; fact-focused reporting
+- [لیبرال غربی — Western Liberal](https://palsiran.com/lean/liberal-gharbi): Persian-language outlets based in Western countries
+- [لیبرال آمریکایی — American Liberal](https://palsiran.com/lean/liberal-amrikai): US-based Persian outlets
+- [چپ لیبرال — Liberal Left](https://palsiran.com/lean/chap-liberal): Progressive/leftist political orientation
+- [مخالف جمهوری اسلامی — Anti-IRI](https://palsiran.com/lean/mokhalef-jomhouri-eslami): Explicitly opposes the Islamic Republic
+- [محافظه‌کار عربی — Arab Conservative](https://palsiran.com/lean/mohafezeh-kar-arabi): Arab-owned media with conservative Middle Eastern political stance
 
 ## Topic Categories
 
-- /tag/siasi — سیاسی (Politics)
-- /tag/beinolmelal — بین‌الملل (International)
-- /tag/eqtesadi — اقتصادی (Economy)
-- /tag/ejtemai — اجتماعی (Society)
-- /tag/varzeshi — ورزشی (Sports)
-- /tag/technology — تکنولوژی (Technology)
-- /tag/hashiye — حاشیه (Culture & Entertainment)
+- [سیاسی — Politics](https://palsiran.com/tag/siasi): Iranian and international political news
+- [بین‌الملل — International](https://palsiran.com/tag/beinolmelal): World news and foreign affairs
+- [اقتصادی — Economy](https://palsiran.com/tag/eqtesadi): Economy, markets, currency, and business
+- [اجتماعی — Society](https://palsiran.com/tag/ejtemai): Social issues, culture, and domestic affairs
+- [ورزشی — Sports](https://palsiran.com/tag/varzeshi): Sports news with focus on Iranian teams
+- [تکنولوژی — Technology](https://palsiran.com/tag/technology): Tech and digital news
+- [حاشیه — Culture & Entertainment](https://palsiran.com/tag/hashiye): Entertainment, celebrity, and culture
 
 ## Key Facts
 
@@ -77,7 +76,7 @@ Direction: RTL
 - Content is summarized using AI (150+ words) with source attribution preserved
 - Sources are classified by political lean across 11 categories
 - Multi-source verification: articles confirmed by 3+ independent sources are marked as verified
-- Errors in summaries or categorization can be reported via /corrections
+- Errors in summaries or categorization can be reported via https://palsiran.com/corrections
 
 ## Usage Restrictions
 
@@ -107,3 +106,7 @@ Website: https://palsiran.com
 Email: info@palsiran.com
 Telegram: https://t.me/palsiran
 X/Twitter: https://x.com/palsiran_news
+
+## Optional
+
+- [llms-full.txt](https://palsiran.com/llms-full.txt): Complete reference document for AI systems — editorial policy, methodology, full source list, URL structure, and Q&A
