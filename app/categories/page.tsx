@@ -87,7 +87,7 @@ export async function generateMetadata({
   const qs = q.toString();
   const canonical = `${SITE_URL}/categories${qs ? `?${qs}` : ""}`;
   return {
-    title: label ? `اخبار ${label} | پالس ایران` : "دسته‌بندی اخبار ایران | پالس ایران",
+    title: { absolute: label ? `اخبار ${label} | پالس ایران` : "دسته‌بندی اخبار ایران | پالس ایران" },
     description: label
       ? `آخرین اخبار ${label} از منابع معتبر داخلی و خارجی — به‌روزرسانی زنده در پالس ایران`
       : "مرور اخبار ایران بر اساس دسته‌بندی — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی، تکنولوژی",

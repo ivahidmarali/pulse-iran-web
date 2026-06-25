@@ -27,7 +27,7 @@ function getPersianDate(): string {
 export async function generateMetadata(): Promise<Metadata> {
   const today = getPersianDate();
   return {
-    title: `اخبار ایران امروز — ${today} | پالس ایران`,
+    title: { absolute: `اخبار ایران امروز — ${today} | پالس ایران` },
     description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس — بی‌طرف از ۴۵+ منبع.`,
     openGraph: {
       title: `اخبار ایران امروز — ${today} | پالس ایران`,
@@ -146,7 +146,10 @@ export default async function HomePage({
       "@type": "SpeakableSpecification",
       cssSelector: ["h1", ".breaking-news-headline"],
     },
-    liveBlogUpdate: breaking.slice(0, 5).map((item) => ({
+    liveBlogUpdate: breaking
+      .filter((item, i, arr) => arr.findIndex((b) => b.item_id === item.item_id) === i)
+      .slice(0, 5)
+      .map((item) => ({
       "@type": "BlogPosting",
       "@id": articleUrl(articleId(item), item.title),
       headline: item.title,

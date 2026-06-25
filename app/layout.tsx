@@ -73,6 +73,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#101415",
 };
 
 const websiteJsonLd = {
@@ -86,10 +87,7 @@ const websiteJsonLd = {
   publisher: { "@id": `${SITE_URL}/#organization` },
   potentialAction: {
     "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
-    },
+    target: `${SITE_URL}/search?q={search_term_string}`,
     "query-input": "required name=search_term_string",
   },
 };

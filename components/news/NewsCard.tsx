@@ -23,6 +23,11 @@ function toPersianNum(n: number): string {
   return n.toString().replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[parseInt(d)]);
 }
 
+function toIso(dateStr: string): string {
+  const normalized = /[Zz]|[+-]\d{2}:\d{2}$/.test(dateStr) ? dateStr : dateStr + 'Z';
+  return new Date(normalized).toISOString();
+}
+
 function timeAgo(dateStr: string): string {
   // Ensure UTC parsing — append Z if no timezone info present
   const normalized = /[Zz]|[+-]\d{2}:\d{2}$/.test(dateStr) ? dateStr : dateStr + 'Z';
@@ -144,7 +149,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
               </span>
             )}
             <span>•</span>
-            <span>{ago}</span>
+            <time dateTime={toIso(item.posted_at)}>{ago}</time>
             {vBadge && (
               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
                 {vBadge.text}
@@ -191,7 +196,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
               </span>
             )}
             <span>·</span>
-            <span>{ago}</span>
+            <time dateTime={toIso(item.posted_at)}>{ago}</time>
             {vBadge && (
               <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
                 {vBadge.text}
@@ -217,7 +222,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
               </span>
             )}
             <span>·</span>
-            <span>{ago}</span>
+            <time dateTime={toIso(item.posted_at)}>{ago}</time>
             {vBadge && (
               <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold ${vBadge.cls}`}>
                 {vBadge.text}
@@ -237,7 +242,7 @@ export default function NewsCard({ item, variant = "default", priority = false }
     >
       <div className="p-4 space-y-2">
         <div className="flex justify-between items-center text-xs text-on-surface-variant">
-          <span>{ago}{" "}</span>
+          <time dateTime={toIso(item.posted_at)}>{ago}{" "}</time>
           {item.category && (
             <span className="text-secondary-fixed-dim/70 text-[11px] font-medium">{emoji}</span>
           )}

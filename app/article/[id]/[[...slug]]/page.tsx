@@ -290,13 +290,9 @@ export default async function ArticlePage({
 
   // Resolve author URL: use known source URL, fall back to palsiran organization
   const authorUrl = SOURCE_URLS[item.source];
-  const authorNode = item.source.startsWith("@")
+  const authorNode = item.source.startsWith("@") || !authorUrl
     ? { "@id": `${SITE_URL}/#organization` }
-    : {
-        "@type": "Organization",
-        name: item.source,
-        ...(authorUrl ? { url: authorUrl } : { "@id": `${SITE_URL}/#organization` }),
-      };
+    : { "@type": "Organization", name: item.source, url: authorUrl };
 
   // Image: use real dimensions only for og-default fallback; skip dimensions for external images
   const imageNode = imageUrl === `${SITE_URL}/og-default.jpg`
