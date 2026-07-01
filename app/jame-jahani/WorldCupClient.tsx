@@ -8,11 +8,12 @@ import type { NewsItem } from "@/lib/types";
 // ── Hard-coded WC 2026 data ────────────────────────────────────────────────
 
 const WC_START_UTC = new Date("2026-06-11T19:00:00Z");
+const WC_FINAL_UTC = new Date("2026-07-19T20:00:00Z");
 
 const IRAN_SCHEDULE = [
-  { id: "ir1", opponent: "نیوزیلند", opponentEn: "New Zealand", flag: "🇳🇿", utc: "2026-06-16T01:00:00Z", venue: "لس آنجلس" },
-  { id: "ir2", opponent: "بلژیک",    opponentEn: "Belgium",     flag: "🇧🇪", utc: "2026-06-21T19:00:00Z", venue: "لس آنجلس" },
-  { id: "ir3", opponent: "مصر",      opponentEn: "Egypt",       flag: "🇪🇬", utc: "2026-06-27T03:00:00Z", venue: "سیاتل"   },
+  { id: "ir1", opponent: "نیوزیلند", opponentEn: "New Zealand", flag: "🇳🇿", utc: "2026-06-16T01:00:00Z", venue: "لس آنجلس", iranGoals: 2, oppGoals: 2 },
+  { id: "ir2", opponent: "بلژیک",    opponentEn: "Belgium",     flag: "🇧🇪", utc: "2026-06-21T19:00:00Z", venue: "لس آنجلس", iranGoals: 0, oppGoals: 0 },
+  { id: "ir3", opponent: "مصر",      opponentEn: "Egypt",       flag: "🇪🇬", utc: "2026-06-27T03:00:00Z", venue: "سیاتل",   iranGoals: 1, oppGoals: 1 },
 ];
 
 const WC_GROUPS = [
@@ -252,73 +253,99 @@ function StandingsTable({ staticTeams, liveRows }: {
   );
 }
 
-// ── Tournament bracket (flow stepper) ──────────────────────────────────────
+// ── Tournament bracket ──────────────────────────────────────────────────────
 
-const BRACKET_ROUNDS = [
-  { label: "یک شانزدهم", sub: "۳۲ تیم", matches: 16 },
-  { label: "یک هشتم",    sub: "۱۶ تیم", matches: 8  },
-  { label: "یک چهارم",   sub: "۸ تیم",  matches: 4  },
-  { label: "نیمه‌نهایی", sub: "۴ تیم",  matches: 2  },
-  { label: "فینال",       sub: "۲ تیم",  matches: 1  },
+interface BM { t1: string; t2: string; f1: string; f2: string; s1?: number; s2?: number; pen?: string; upcoming?: boolean; }
+
+const R16: BM[] = [
+  { t1: "پاراگوئه",      t2: "آلمان",          f1: "🇵🇾", f2: "🇩🇪", pen: "پاراگوئه" },
+  { t1: "فرانسه",        t2: "سوئد",           f1: "🇫🇷", f2: "🇸🇪", s1: 3, s2: 0 },
+  { t1: "کانادا",        t2: "آفریقای جنوبی",  f1: "🇨🇦", f2: "🇿🇦", s1: 1, s2: 0 },
+  { t1: "مراکش",         t2: "هلند",           f1: "🇲🇦", f2: "🇳🇱", pen: "مراکش" },
+  { t1: "بلژیک",         t2: "سنگال",          f1: "🇧🇪", f2: "🇸🇳", s1: 3, s2: 2 },
+  { t1: "برزیل",         t2: "ژاپن",           f1: "🇧🇷", f2: "🇯🇵", s1: 2, s2: 1 },
+  { t1: "نروژ",          t2: "ساحل عاج",       f1: "🇳🇴", f2: "🇨🇮", s1: 2, s2: 1 },
+  { t1: "مکزیک",         t2: "اکوادور",        f1: "🇲🇽", f2: "🇪🇨", s1: 2, s2: 0 },
+  { t1: "انگلستان",      t2: "کنگو",           f1: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", f2: "🇨🇩", s1: 2, s2: 1 },
+  { t1: "پرتغال",        t2: "کرواسی",         f1: "🇵🇹", f2: "🇭🇷", upcoming: true },
+  { t1: "اسپانیا",       t2: "اتریش",          f1: "🇪🇸", f2: "🇦🇹", upcoming: true },
+  { t1: "ایالات متحده",  t2: "بوسنی",          f1: "🇺🇸", f2: "🇧🇦", upcoming: true },
+  { t1: "استرالیا",      t2: "مصر",            f1: "🇦🇺", f2: "🇪🇬", upcoming: true },
+  { t1: "سوئیس",         t2: "الجزایر",        f1: "🇨🇭", f2: "🇩🇿", upcoming: true },
+  { t1: "کلمبیا",        t2: "غنا",            f1: "🇨🇴", f2: "🇬🇭", upcoming: true },
+  { t1: "آرژانتین",      t2: "کیپ ورد",        f1: "🇦🇷", f2: "🇨🇻", upcoming: true },
 ];
 
-function BracketSection() {
-  return (
-    <section>
-      <h2 className="text-sm font-bold text-on-surface mb-5 flex items-center gap-2">
-        <span>🏆</span> نمودار مرحله حذفی
-      </h2>
+const QF: BM[] = [
+  { t1: "پاراگوئه", t2: "فرانسه",   f1: "🇵🇾", f2: "🇫🇷" },
+  { t1: "کانادا",   t2: "مراکش",    f1: "🇨🇦", f2: "🇲🇦" },
+  { t1: "برزیل",    t2: "نروژ",     f1: "🇧🇷", f2: "🇳🇴" },
+  { t1: "مکزیک",    t2: "انگلستان", f1: "🇲🇽", f2: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+];
 
-      {/* Horizontal stepper */}
-      <div className="overflow-x-auto pb-1">
-        <div className="flex items-stretch gap-0 min-w-max" dir="rtl">
-          {BRACKET_ROUNDS.map((round, i) => (
-            <div key={round.label} className="flex items-center">
-              <div className={`flex flex-col items-center justify-center gap-1.5 px-5 py-4 rounded-2xl border min-w-[100px] ${
-                round.label === "فینال"
-                  ? "bg-amber-400/10 border-amber-400/30 shadow-[0_0_20px_rgba(251,191,36,0.1)]"
-                  : "bg-surface-container border-white/8"
-              }`}>
-                <span className="text-2xl leading-none">
-                  {round.label === "فینال" ? "🏆" : `${round.matches * 2}`}
-                </span>
-                <span className={`text-xs font-bold ${round.label === "فینال" ? "text-amber-400" : "text-on-surface"}`}>
-                  {round.label}
-                </span>
-                <span className="text-[10px] text-on-surface-variant/40">{round.sub}</span>
-                <span className="text-[10px] text-on-surface-variant/25">{round.matches} بازی</span>
-              </div>
-              {i < BRACKET_ROUNDS.length - 1 && (
-                <div className="flex items-center px-1">
-                  <svg width="20" height="12" viewBox="0 0 20 12" className="text-on-surface-variant/20">
-                    <path d="M0 6 L14 6 M10 2 L14 6 L10 10" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              )}
-            </div>
-          ))}
+function BracketCard({ m, compact = false }: { m: BM; compact?: boolean }) {
+  const done = !m.upcoming;
+  const winner = m.pen ?? (m.s1 !== undefined && m.s2 !== undefined ? (m.s1 > m.s2 ? m.t1 : m.t2) : null);
+  return (
+    <div className={`rounded-xl border p-3 ${done ? "bg-surface-container border-white/8" : "bg-white/2 border-white/5 opacity-70"}`}>
+      <div className="flex items-center gap-2">
+        <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${winner === m.t1 ? "opacity-100" : winner ? "opacity-40" : ""}`}>
+          <span className="text-sm font-bold truncate text-on-surface">{m.t1}</span>
+          <span className="text-lg leading-none">{m.f1}</span>
+        </div>
+        <div className="flex flex-col items-center shrink-0 min-w-[52px]">
+          {m.pen ? (
+            <span className="text-[10px] text-on-surface-variant/50 font-bold">پنالتی</span>
+          ) : m.s1 !== undefined ? (
+            <span className="text-sm font-black text-on-surface tabular-nums">{m.s1}–{m.s2}</span>
+          ) : (
+            <span className="text-xs text-on-surface-variant/30">vs</span>
+          )}
+        </div>
+        <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${winner === m.t2 ? "opacity-100" : winner ? "opacity-40" : ""}`}>
+          <span className="text-lg leading-none">{m.f2}</span>
+          <span className="text-sm font-bold truncate text-on-surface">{m.t2}</span>
         </div>
       </div>
+    </div>
+  );
+}
 
-      {/* Match grid — shows placeholder match slots */}
-      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i} className="flex items-center justify-between gap-2 p-3 rounded-xl bg-surface-container border border-white/5">
-            <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px] text-on-surface-variant/30">؟</span>
-              <span className="text-xs text-on-surface-variant/30">در انتظار</span>
-            </div>
-            <span className="text-on-surface-variant/20 text-xs">–</span>
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-on-surface-variant/30">در انتظار</span>
-              <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-[10px] text-on-surface-variant/30">؟</span>
-            </div>
-          </div>
+function BracketSection() {
+  const [tab, setTab] = useState<"r16" | "qf">("r16");
+  const doneCount = R16.filter((m) => !m.upcoming).length;
+  return (
+    <section>
+      <h2 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2">
+        <span>🏆</span> مرحله حذفی
+      </h2>
+
+      {/* Tabs */}
+      <div className="flex gap-2 mb-4">
+        {([["r16", `یک شانزدهم (${doneCount}/۱۶)`], ["qf", "یک هشتم (۴ مشخص)"]] as const).map(([key, label]) => (
+          <button key={key} onClick={() => setTab(key)}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${tab === key ? "bg-[#3cd7ff]/15 text-[#3cd7ff] border-[#3cd7ff]/30" : "text-on-surface-variant/60 border-white/8 bg-surface-container"}`}>
+            {label}
+          </button>
         ))}
       </div>
-      <p className="text-[11px] text-on-surface-variant/30 mt-3 text-center">
-        جدول حذفی پس از پایان مرحله گروهی (۲۷ ژوئن) تکمیل می‌شود
-      </p>
+
+      {tab === "r16" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {R16.map((m) => <BracketCard key={m.t1 + m.t2} m={m} />)}
+        </div>
+      )}
+
+      {tab === "qf" && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+            {QF.map((m) => <BracketCard key={m.t1 + m.t2} m={m} />)}
+          </div>
+          <p className="text-[11px] text-on-surface-variant/30 text-center">
+            ۴ جفت دیگر پس از تکمیل یک‌شانزدهم مشخص می‌شوند
+          </p>
+        </>
+      )}
     </section>
   );
 }
@@ -620,6 +647,8 @@ export default function WorldCupClient({ initialLiveData, initialStandings, init
       if (now < wcStartMs) return { ms: wcStartMs, label: "تا آغاز جام جهانی" };
       const next = IRAN_SCHEDULE.find((m) => new Date(m.utc).getTime() > now);
       if (next) return { ms: new Date(next.utc).getTime(), label: `تا بازی ایران – ${next.flag} ${next.opponent}` };
+      const finalMs = WC_FINAL_UTC.getTime();
+      if (now < finalMs) return { ms: finalMs, label: "تا فینال جام جهانی" };
       return { ms: 0, label: "جام جهانی ۲۰۲۶" };
     };
 
@@ -715,9 +744,14 @@ export default function WorldCupClient({ initialLiveData, initialStandings, init
                     ایران vs {nextIranMatch.flag} {nextIranMatch.opponent} · {tehranDateFull(nextIranMatch.utc)} · {tehranTime(nextIranMatch.utc)}
                   </span>
                 </div>
-              ) : !wcStarted ? (
+              ) : wcStarted ? (
+                <div className="inline-flex items-center gap-2 rounded-xl bg-red-500/8 border border-red-500/20 px-4 py-2">
+                  <span className="text-sm">🇮🇷</span>
+                  <span className="text-sm text-red-400/80">ایران با ۳ تساوی در مرحله گروهی حذف شد · سوم گروه G</span>
+                </div>
+              ) : (
                 <p className="text-sm text-white/40">افتتاحیه: ۱۱ ژوئن ۲۰۲۶</p>
-              ) : null}
+              )}
 
               {countdownLabel && (
                 <p className="text-xs text-white/30 font-medium">{countdownLabel}</p>
@@ -804,7 +838,10 @@ export default function WorldCupClient({ initialLiveData, initialStandings, init
                           <span className="text-[10px] text-green-400 flex items-center gap-1 mt-1"><LiveDot />{live.minute}</span>
                         </div>
                       ) : finished ? (
-                        <span className="text-xs text-on-surface-variant/30 shrink-0">پایان</span>
+                        <div className="flex flex-col items-center shrink-0">
+                          <span className="text-xl font-black text-on-surface/70 leading-none tabular-nums">{m.iranGoals}–{m.oppGoals}</span>
+                          <span className="text-[10px] text-on-surface-variant/30 mt-1">پایان</span>
+                        </div>
                       ) : upcoming ? (
                         <span className="text-[10px] text-[#3cd7ff]/50 bg-[#3cd7ff]/8 rounded-lg px-2.5 py-1 border border-[#3cd7ff]/10 shrink-0 font-bold">
                           {now < WC_START_UTC.getTime() ? "قبل از جام" : "آینده"}
@@ -885,9 +922,9 @@ export default function WorldCupClient({ initialLiveData, initialStandings, init
           <h2 className="text-sm font-bold text-on-surface mb-3">سوالات متداول جام جهانی ۲۰۲۶</h2>
           {[
             { q: "جام جهانی ۲۰۲۶ کجا برگزار می‌شود؟", a: "جام جهانی ۲۰۲۶ به میزبانی مشترک ایالات متحده آمریکا، کانادا و مکزیک از ۱۱ ژوئن تا ۱۹ ژوئیه ۲۰۲۶ برگزار می‌شود." },
-            { q: "ایران در کدام گروه جام جهانی ۲۰۲۶ است؟", a: "تیم ملی ایران در گروه G قرار دارد. رقبای ایران بلژیک، مصر و نیوزیلند هستند. بازی‌های ایران در لس آنجلس و سیاتل برگزار می‌شود." },
-            { q: "برنامه بازی‌های ایران در جام جهانی ۲۰۲۶ چیست؟", a: "ایران با نیوزیلند (۱۶ ژوئن)، بلژیک (۲۱ ژوئن) و مصر (۲۷ ژوئن) بازی می‌کند." },
-            { q: "جام جهانی ۲۰۲۶ چند تیم دارد؟", a: "برای اولین بار ۴۸ تیم در قالب ۱۲ گروه چهارتایی شرکت می‌کنند." },
+            { q: "ایران در جام جهانی ۲۰۲۶ چه نتیجه‌ای گرفت؟", a: "تیم ملی ایران در گروه G قرار داشت و با سه تساوی (۲-۲ نیوزیلند، ۰-۰ بلژیک، ۱-۱ مصر) با ۳ امتیاز سوم گروه شد و در مرحله گروهی حذف شد. بلژیک (۵ امتیاز) و مصر (۵ امتیاز) از این گروه صعود کردند." },
+            { q: "چه تیم‌هایی از گروه G جام جهانی ۲۰۲۶ صعود کردند؟", a: "بلژیک با ۵ امتیاز (اول) و مصر با ۵ امتیاز (دوم) از گروه G صعود کردند. ایران با ۳ امتیاز سوم شد و نیوزیلند با ۱ امتیاز چهارم." },
+            { q: "جام جهانی ۲۰۲۶ چند تیم دارد؟", a: "برای اولین بار ۴۸ تیم در قالب ۱۲ گروه چهارتایی شرکت می‌کنند. ۲ تیم برتر هر گروه و ۸ تیم برتر مرحله سوم به مرحله یک‌شانزدهم می‌روند." },
           ].map(({ q, a }) => (
             <details key={q} className="group bg-surface-container rounded-xl border border-white/5 overflow-hidden">
               <summary className="px-4 py-3 text-sm font-medium text-on-surface cursor-pointer list-none flex items-center justify-between gap-3">
