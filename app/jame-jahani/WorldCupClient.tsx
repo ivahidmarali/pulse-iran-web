@@ -93,8 +93,10 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
+const WC_EXCLUDED = ["انتخابی", "بسکتبال", "basketball", "والیبال", "واليبال", "volleyball", "هندبال", "handball", "فوتسال", "futsal", "زیر ۱", "u-1", "u17", "u20", "u23"];
 function isWCLeague(t: string) {
   const s = t.toLowerCase();
+  if (WC_EXCLUDED.some((x) => s.includes(x))) return false;
   return (s.includes("جام") && s.includes("جهانی")) || (s.includes("world") && s.includes("cup"));
 }
 function isIranTeam(n: string) { return n === "ایران" || n.toLowerCase() === "iran"; }
