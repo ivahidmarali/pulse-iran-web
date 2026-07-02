@@ -24,7 +24,13 @@ function getPersianDate(): string {
   }).format(new Date());
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}): Promise<Metadata> {
+  const { page: pageStr } = await searchParams;
+  const page = parseInt(pageStr ?? "1", 10) || 1;
   const today = getPersianDate();
   return {
     title: { absolute: `پالس ایران | اخبار ایران امروز — ${today}` },
@@ -45,6 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: SITE_URL,
       languages: { fa: SITE_URL, "x-default": SITE_URL },
     },
+    ...(page > 1 ? { robots: { index: false, follow: true } } : {}),
   };
 }
 
@@ -358,7 +365,8 @@ export default async function HomePage({
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-on-surface-variant/40 tabular-nums">به‌روز: {renderTime}</span>
                 <h1 className="text-sm font-bold text-secondary-fixed-dim/70 tracking-widest">
-                  اخبار ایران امروز — {today}
+                  اخبار ایران امروز
+                  <time dateTime={new Date().toISOString().slice(0, 10)} className="mr-1 font-normal text-on-surface-variant/50">{today}</time>
                 </h1>
               </div>
               {/* Story 1 — Political diversity strip */}

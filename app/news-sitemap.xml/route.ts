@@ -117,7 +117,7 @@ export async function GET() {
         <news:name>پالس ایران</news:name>
         <news:language>fa</news:language>
       </news:publication>
-      <news:publication_date>${new Date(item.posted_at).toISOString()}</news:publication_date>
+      <news:publication_date>${new Date(item.posted_at).toISOString().replace(/\.\d{3}Z$/, "Z")}</news:publication_date>
       <news:title><![CDATA[${cleanedTitle}]]></news:title>
     </news:news>
   </url>`;

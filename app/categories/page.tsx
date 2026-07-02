@@ -92,6 +92,15 @@ export async function generateMetadata({
       ? `آخرین اخبار ${label} از منابع معتبر داخلی و خارجی — به‌روزرسانی زنده در پالس ایران`
       : "مرور اخبار ایران بر اساس دسته‌بندی — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی، تکنولوژی",
     alternates: { canonical, languages: { fa: canonical, "x-default": canonical } },
+    openGraph: {
+      title: label ? `اخبار ${label} | پالس ایران` : "دسته‌بندی اخبار ایران | پالس ایران",
+      description: label
+        ? `آخرین اخبار ${label} از منابع معتبر داخلی و خارجی — به‌روزرسانی زنده در پالس ایران`
+        : "مرور اخبار ایران بر اساس دسته‌بندی — سیاسی، اقتصادی، بین‌الملل، ورزشی، اجتماعی، تکنولوژی",
+      url: canonical,
+      siteName: "پالس ایران",
+      type: "website",
+    },
     ...(page > 3 ? { robots: { index: false, follow: true } } : {}),
   };
 }

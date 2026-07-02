@@ -326,6 +326,9 @@ export default async function ArticlePage({
       cssSelector: ["h1", "[data-speakable]"],
     },
     inLanguage: "fa",
+    ...(item.summary && item.summary !== item.title && item.summary.length > 30
+      ? { articleBody: item.summary, wordCount: item.summary.trim().split(/\s+/).length }
+      : {}),
     ...(catName !== "اخبار" ? { articleSection: catName } : {}),
     // isBasedOn: signals to Google this is an aggregated summary of an upstream
     // source — disambiguates aggregation from duplication.

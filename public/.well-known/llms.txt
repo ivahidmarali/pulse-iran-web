@@ -1,0 +1,22 @@
+# Pulse Iran (palsiran.com)
+# This file follows the /.well-known/llms.txt convention.
+# Full AI permissions and content map: https://palsiran.com/llms.txt
+# Extended reference: https://palsiran.com/llms-full.txt
+
+> Persian-language news aggregator covering Iran and world news from 45+ sources.
+> Political bias labeling, AI summaries, multi-source verification.
+
+## Usage Restrictions
+
+- Search indexing and real-time retrieval: permitted
+- AI-generated search summaries and citations: permitted
+- AI model training or fine-tuning: prohibited (RSL 1.0)
+- Automated scraping without written permission: prohibited
+
+## License
+
+RSL 1.0 — Retrieval and summarization permitted; training prohibited.
+
+## Contact
+
+info@palsiran.com
