@@ -8,6 +8,9 @@ const MAX_PER_PAGE = 100; // API hard limit (le=100)
 const MAX_NEWS_ARTICLES = 1000; // Google News sitemap cap
 const MAX_PAGES = Math.ceil(MAX_NEWS_ARTICLES / MAX_PER_PAGE);
 const INDEXNOW_KEY = "palsiran2026indexnow";
+const BING_API_KEY = process.env.BING_WEBMASTER_API_KEY ?? "";
+const SITEMAP_URL = `${SITE_URL}/sitemap.xml`;
+const NEWS_SITEMAP_URL = `${SITE_URL}/news-sitemap.xml`;
 
 // Module-level: persists across ISR regenerations within the same process.
 // Ensures we only submit articles published after the previous ping.
@@ -128,25 +131,40 @@ export async function GET() {
 ${urls}
 </urlset>`;
 
-  // Ping IndexNow only with articles published since the last ping (fire-and-forget).
+  // Ping IndexNow (distributes to Bing, Yandex, etc.) for new articles only.
   const newSinceLastPing = unique.filter(
     (item) => new Date(item.posted_at).getTime() > lastIndexNowPingTs
   );
   const newUrls = newSinceLastPing.map((item) => articleUrl(articleId(item), item.title));
   if (newUrls.length > 0) {
     const pingTs = Date.now();
+    const indexNowBody = JSON.stringify({
+      host: "palsiran.com",
+      key: INDEXNOW_KEY,
+      keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
+      urlList: newUrls.slice(0, 10000),
+    });
+    // Generic aggregator (reaches Bing + Yandex + others)
     fetch("https://api.indexnow.org/indexnow", {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        host: "palsiran.com",
-        key: INDEXNOW_KEY,
-        keyLocation: `${SITE_URL}/${INDEXNOW_KEY}.txt`,
-        urlList: newUrls.slice(0, 10000),
-      }),
+      body: indexNowBody,
     })
       .then(() => { lastIndexNowPingTs = pingTs; })
-      .catch(() => { /* ignore indexnow errors */ });
+      .catch(() => {});
+    // Bing direct endpoint (belt-and-suspenders)
+    fetch("https://www.bing.com/indexnow", {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: indexNowBody,
+    }).catch(() => {});
+  }
+
+  // Submit both sitemaps to Bing Webmaster API (fire-and-forget, runs each ISR cycle).
+  if (BING_API_KEY) {
+    const bingBase = `https://ssl.bing.com/webmaster/api.svc/json/SubmitSitemap?apikey=${BING_API_KEY}&siteUrl=${encodeURIComponent("https://palsiran.com")}&sitemapUrl=`;
+    fetch(bingBase + encodeURIComponent(SITEMAP_URL)).catch(() => {});
+    fetch(bingBase + encodeURIComponent(NEWS_SITEMAP_URL)).catch(() => {});
   }
 
   return new Response(xml, {

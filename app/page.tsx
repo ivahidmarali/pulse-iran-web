@@ -27,17 +27,18 @@ function getPersianDate(): string {
 export async function generateMetadata(): Promise<Metadata> {
   const today = getPersianDate();
   return {
-    title: { absolute: `اخبار ایران امروز — ${today} | پالس ایران` },
+    title: { absolute: `پالس ایران | اخبار ایران امروز — ${today}` },
     description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده سیاست، اقتصاد، بین‌الملل، ارز و بورس — بی‌طرف از ۴۵+ منبع.`,
     openGraph: {
-      title: `اخبار ایران امروز — ${today} | پالس ایران`,
+      title: `پالس ایران | اخبار ایران امروز — ${today}`,
       description: `آخرین اخبار روز ایران و جهان در ${today}. پوشش زنده بی‌طرف از ۴۵+ منبع خبری.`,
+      siteName: "پالس ایران",
       type: "website",
       url: SITE_URL,
     },
     twitter: {
       card: "summary_large_image",
-      title: `اخبار ایران امروز — ${today} | پالس ایران`,
+      title: `پالس ایران | اخبار ایران امروز — ${today}`,
       description: `آخرین اخبار روز ایران و جهان در ${today}`,
     },
     alternates: {
