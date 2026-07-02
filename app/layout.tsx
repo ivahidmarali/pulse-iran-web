@@ -136,7 +136,7 @@ const organizationJsonLd = {
     width: 512,
     height: 512,
   },
-  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran"],
+  sameAs: ["https://t.me/palsiran", "https://x.com/palsiran_news", "https://www.youtube.com/@palsiran", "https://www.linkedin.com/company/120293901/"],
   publishingPrinciples: `${SITE_URL}/about/editorial-policy`,
   correctionsPolicy: `${SITE_URL}/corrections`,
   diversityPolicy: `${SITE_URL}/about/editorial-policy`,
