@@ -257,51 +257,77 @@ function StandingsTable({ staticTeams, liveRows }: {
 
 // ── Tournament bracket ──────────────────────────────────────────────────────
 
-interface BM { t1: string; t2: string; f1: string; f2: string; s1?: number; s2?: number; pen?: string; upcoming?: boolean; }
+interface BM { t1: string; t2: string; f1: string; f2: string; s1?: number; s2?: number; pen?: string; penScore?: string; upcoming?: boolean; live?: boolean; date?: string; }
+
+// نتایج از ورزش۳ (varzesh3.com) — به‌روزرسانی ۱۷ تیر ۱۴۰۵ / July 8, 2026
+const R32: BM[] = [
+  { t1: "آفریقای جنوبی",  t2: "کانادا",    f1: "🇿🇦", f2: "🇨🇦", s1: 0, s2: 1 },
+  { t1: "برزیل",          t2: "ژاپن",      f1: "🇧🇷", f2: "🇯🇵", s1: 2, s2: 1 },
+  { t1: "آلمان",          t2: "پاراگوئه",  f1: "🇩🇪", f2: "🇵🇾", s1: 1, s2: 1, pen: "پاراگوئه", penScore: "۴–۳" },
+  { t1: "هلند",           t2: "مراکش",     f1: "🇳🇱", f2: "🇲🇦", s1: 1, s2: 1, pen: "مراکش", penScore: "۳–۲" },
+  { t1: "ساحل عاج",       t2: "نروژ",      f1: "🇨🇮", f2: "🇳🇴", s1: 1, s2: 2 },
+  { t1: "فرانسه",         t2: "سوئد",      f1: "🇫🇷", f2: "🇸🇪", s1: 3, s2: 0 },
+  { t1: "مکزیک",          t2: "اکوادور",   f1: "🇲🇽", f2: "🇪🇨", s1: 2, s2: 0 },
+  { t1: "انگلستان",       t2: "کنگو",      f1: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", f2: "🇨🇩", s1: 2, s2: 1 },
+  { t1: "بلژیک",          t2: "سنگال",     f1: "🇧🇪", f2: "🇸🇳", s1: 3, s2: 2 },
+  { t1: "ایالات متحده",   t2: "بوسنی",     f1: "🇺🇸", f2: "🇧🇦", s1: 2, s2: 0 },
+  { t1: "اسپانیا",        t2: "اتریش",     f1: "🇪🇸", f2: "🇦🇹", s1: 3, s2: 0 },
+  { t1: "پرتغال",         t2: "کرواسی",    f1: "🇵🇹", f2: "🇭🇷", s1: 2, s2: 1 },
+  { t1: "سوئیس",          t2: "الجزایر",   f1: "🇨🇭", f2: "🇩🇿", s1: 2, s2: 0 },
+  { t1: "استرالیا",       t2: "مصر",       f1: "🇦🇺", f2: "🇪🇬", s1: 1, s2: 1, pen: "مصر", penScore: "۴–۲" },
+  { t1: "آرژانتین",       t2: "کیپ ورد",   f1: "🇦🇷", f2: "🇨🇻", s1: 3, s2: 2 },
+  { t1: "کلمبیا",         t2: "غنا",       f1: "🇨🇴", f2: "🇬🇭", s1: 1, s2: 0 },
+];
 
 const R16: BM[] = [
-  { t1: "پاراگوئه",      t2: "آلمان",          f1: "🇵🇾", f2: "🇩🇪", pen: "پاراگوئه" },
-  { t1: "فرانسه",        t2: "سوئد",           f1: "🇫🇷", f2: "🇸🇪", s1: 3, s2: 0 },
-  { t1: "کانادا",        t2: "آفریقای جنوبی",  f1: "🇨🇦", f2: "🇿🇦", s1: 1, s2: 0 },
-  { t1: "مراکش",         t2: "هلند",           f1: "🇲🇦", f2: "🇳🇱", pen: "مراکش" },
-  { t1: "بلژیک",         t2: "سنگال",          f1: "🇧🇪", f2: "🇸🇳", s1: 3, s2: 2 },
-  { t1: "برزیل",         t2: "ژاپن",           f1: "🇧🇷", f2: "🇯🇵", s1: 2, s2: 1 },
-  { t1: "نروژ",          t2: "ساحل عاج",       f1: "🇳🇴", f2: "🇨🇮", s1: 2, s2: 1 },
-  { t1: "مکزیک",         t2: "اکوادور",        f1: "🇲🇽", f2: "🇪🇨", s1: 2, s2: 0 },
-  { t1: "انگلستان",      t2: "کنگو",           f1: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", f2: "🇨🇩", s1: 2, s2: 1 },
-  { t1: "پرتغال",        t2: "کرواسی",         f1: "🇵🇹", f2: "🇭🇷", upcoming: true },
-  { t1: "اسپانیا",       t2: "اتریش",          f1: "🇪🇸", f2: "🇦🇹", upcoming: true },
-  { t1: "ایالات متحده",  t2: "بوسنی",          f1: "🇺🇸", f2: "🇧🇦", upcoming: true },
-  { t1: "استرالیا",      t2: "مصر",            f1: "🇦🇺", f2: "🇪🇬", upcoming: true },
-  { t1: "سوئیس",         t2: "الجزایر",        f1: "🇨🇭", f2: "🇩🇿", upcoming: true },
-  { t1: "کلمبیا",        t2: "غنا",            f1: "🇨🇴", f2: "🇬🇭", upcoming: true },
-  { t1: "آرژانتین",      t2: "کیپ ورد",        f1: "🇦🇷", f2: "🇨🇻", upcoming: true },
+  { t1: "کانادا",         t2: "مراکش",    f1: "🇨🇦", f2: "🇲🇦", s1: 0, s2: 3 },
+  { t1: "پاراگوئه",       t2: "فرانسه",   f1: "🇵🇾", f2: "🇫🇷", s1: 0, s2: 1 },
+  { t1: "برزیل",          t2: "نروژ",     f1: "🇧🇷", f2: "🇳🇴", s1: 1, s2: 2 },
+  { t1: "مکزیک",          t2: "انگلستان", f1: "🇲🇽", f2: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", s1: 2, s2: 3 },
+  { t1: "پرتغال",         t2: "اسپانیا",  f1: "🇵🇹", f2: "🇪🇸", s1: 0, s2: 1 },
+  { t1: "ایالات متحده",   t2: "بلژیک",    f1: "🇺🇸", f2: "🇧🇪", s1: 1, s2: 4 },
+  { t1: "آرژانتین",       t2: "مصر",      f1: "🇦🇷", f2: "🇪🇬", s1: 3, s2: 2 },
+  { t1: "سوئیس",          t2: "کلمبیا",   f1: "🇨🇭", f2: "🇨🇴", live: true },
 ];
 
 const QF: BM[] = [
-  { t1: "پاراگوئه", t2: "فرانسه",   f1: "🇵🇾", f2: "🇫🇷" },
-  { t1: "کانادا",   t2: "مراکش",    f1: "🇨🇦", f2: "🇲🇦" },
-  { t1: "برزیل",    t2: "نروژ",     f1: "🇧🇷", f2: "🇳🇴" },
-  { t1: "مکزیک",    t2: "انگلستان", f1: "🇲🇽", f2: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+  { t1: "فرانسه",           t2: "مراکش",    f1: "🇫🇷", f2: "🇲🇦", upcoming: true, date: "2026-07-09T20:00:00Z" },
+  { t1: "اسپانیا",          t2: "بلژیک",    f1: "🇪🇸", f2: "🇧🇪", upcoming: true, date: "2026-07-10T19:00:00Z" },
+  { t1: "نروژ",             t2: "انگلستان", f1: "🇳🇴", f2: "🏴󠁧󠁢󠁥󠁮󠁧󠁿", upcoming: true, date: "2026-07-10T21:00:00Z" },
+  { t1: "آرژانتین",         t2: "سوئیس / کلمبیا", f1: "🇦🇷", f2: "🏆", upcoming: true, date: "2026-07-11T01:00:00Z" },
 ];
 
-function BracketCard({ m, compact = false }: { m: BM; compact?: boolean }) {
-  const done = !m.upcoming;
-  const winner = m.pen ?? (m.s1 !== undefined && m.s2 !== undefined ? (m.s1 > m.s2 ? m.t1 : m.t2) : null);
+function BracketCard({ m }: { m: BM }) {
+  const done = !m.upcoming && !m.live;
+  const winner = m.pen ?? (m.s1 !== undefined && m.s2 !== undefined && m.s1 !== m.s2 ? (m.s1 > m.s2 ? m.t1 : m.t2) : null);
   return (
-    <div className={`rounded-xl border p-3 ${done ? "bg-surface-container border-white/8" : "bg-white/2 border-white/5 opacity-70"}`}>
+    <div className={`rounded-xl border p-3 ${
+      m.live ? "bg-green-500/5 border-green-500/25" :
+      done   ? "bg-surface-container border-white/8" :
+               "bg-white/2 border-white/5 opacity-70"
+    }`}>
       <div className="flex items-center gap-2">
         <div className={`flex items-center gap-1.5 flex-1 justify-end min-w-0 ${winner === m.t1 ? "opacity-100" : winner ? "opacity-40" : ""}`}>
           <span className="text-sm font-bold truncate text-on-surface">{m.t1}</span>
           <span className="text-lg leading-none">{m.f1}</span>
         </div>
         <div className="flex flex-col items-center shrink-0 min-w-[52px]">
-          {m.pen ? (
-            <span className="text-[10px] text-on-surface-variant/50 font-bold">پنالتی</span>
+          {m.live ? (
+            <span className="flex items-center gap-1 text-[10px] text-green-400 font-bold"><LiveDot />زنده</span>
           ) : m.s1 !== undefined ? (
-            <span className="text-sm font-black text-on-surface tabular-nums">{m.s1}–{m.s2}</span>
+            <>
+              <span className="text-sm font-black text-on-surface tabular-nums">{m.s1}–{m.s2}</span>
+              {m.pen && <span className="text-[9px] text-amber-400/70 font-bold mt-0.5">پنالتی {m.penScore}</span>}
+            </>
           ) : (
-            <span className="text-xs text-on-surface-variant/30">vs</span>
+            <>
+              <span className="text-xs text-on-surface-variant/30">vs</span>
+              {m.date && (
+                <span className="text-[9px] text-on-surface-variant/40 mt-0.5 whitespace-nowrap tabular-nums">
+                  {tehranDate(m.date)} · {tehranTime(m.date)}
+                </span>
+              )}
+            </>
           )}
         </div>
         <div className={`flex items-center gap-1.5 flex-1 justify-start min-w-0 ${winner === m.t2 ? "opacity-100" : winner ? "opacity-40" : ""}`}>
@@ -314,8 +340,8 @@ function BracketCard({ m, compact = false }: { m: BM; compact?: boolean }) {
 }
 
 function BracketSection() {
-  const [tab, setTab] = useState<"r16" | "qf">("r16");
-  const doneCount = R16.filter((m) => !m.upcoming).length;
+  const [tab, setTab] = useState<"r32" | "r16" | "qf">("r16");
+  const r16Done = R16.filter((m) => !m.upcoming && !m.live).length;
   return (
     <section>
       <h2 className="text-sm font-bold text-on-surface mb-4 flex items-center gap-2">
@@ -323,14 +349,24 @@ function BracketSection() {
       </h2>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-4">
-        {([["r16", `یک شانزدهم (${doneCount}/۱۶)`], ["qf", "یک هشتم (۴ مشخص)"]] as const).map(([key, label]) => (
+      <div className="flex gap-2 mb-4 flex-wrap">
+        {([
+          ["r32", "یک شانزدهم (۱۶/۱۶)"],
+          ["r16", `یک هشتم (${String(r16Done).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d])}/۸)`],
+          ["qf", "یک چهارم نهایی"],
+        ] as const).map(([key, label]) => (
           <button key={key} onClick={() => setTab(key)}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-all ${tab === key ? "bg-[#3cd7ff]/15 text-[#3cd7ff] border-[#3cd7ff]/30" : "text-on-surface-variant/60 border-white/8 bg-surface-container"}`}>
             {label}
           </button>
         ))}
       </div>
+
+      {tab === "r32" && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {R32.map((m) => <BracketCard key={m.t1 + m.t2} m={m} />)}
+        </div>
+      )}
 
       {tab === "r16" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -344,7 +380,7 @@ function BracketSection() {
             {QF.map((m) => <BracketCard key={m.t1 + m.t2} m={m} />)}
           </div>
           <p className="text-[11px] text-on-surface-variant/30 text-center">
-            ۴ جفت دیگر پس از تکمیل یک‌شانزدهم مشخص می‌شوند
+            حریف آرژانتین پس از پایان بازی سوئیس – کلمبیا مشخص می‌شود
           </p>
         </>
       )}
