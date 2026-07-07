@@ -22,8 +22,10 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: 'cohere-ai', allow: '/' },
       { userAgent: 'AI2Bot', allow: '/' },
       { userAgent: 'YouBot', allow: '/' },
+      // Common Crawl feeds LLM pretraining corpora — allowed so the brand
+      // exists in future models' knowledge (ChatGPT memory-based answers)
+      { userAgent: 'CCBot', allow: '/' },
       // Training-only scrapers — blocked (no real-time citation value)
-      { userAgent: 'CCBot', disallow: '/' },
       { userAgent: 'Bytespider', disallow: '/' },
       { userAgent: 'Amazonbot', disallow: '/' },
       { userAgent: 'meta-externalagent', disallow: '/' },

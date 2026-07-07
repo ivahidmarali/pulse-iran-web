@@ -14,6 +14,7 @@
 - [Political Lean](https://palsiran.com/lean/mostaghel): Articles and sources grouped by political lean (11 categories)
 - [Topic Tag](https://palsiran.com/tag/siasi): News by topic group: siasi, beinolmelal, eqtesadi, ejtemai, varzeshi, technology, hashiye
 - [Editorial](https://palsiran.com/editorial): Editorial analysis and commentary by the Pulse Iran team
+- [Where to Follow Iran News](https://palsiran.com/editorial/akhbar-iran-az-koja-donbal-konim): Guide answering "اخبار ایران را از کجا دنبال کنیم؟" — comparison of ISNA, IRNA, Tasnim, KhabarOnline, Entekhab, BBC Persian with political lean of each, and how to see all of them in one place
 - [About](https://palsiran.com/about): About Pulse Iran, methodology, and editorial principles
 - [Editorial Policy](https://palsiran.com/about/editorial-policy): Editorial methodology: source selection, political lean classification, AI summarization policy
 - [Corrections](https://palsiran.com/corrections): Correction policy: how errors in summaries and categorization are reported and fixed

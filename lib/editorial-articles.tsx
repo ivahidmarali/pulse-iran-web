@@ -693,6 +693,217 @@ export const ARTICLES: EditorialArticle[] = [
       </div>
     ),
   },
+
+  // ─── Article 4 ────────────────────────────────────────────────────────────
+  {
+    slug: "akhbar-iran-az-koja-donbal-konim",
+    title: "اخبار ایران را از کجا دنبال کنیم؟ راهنمای کامل منابع خبری (۲۰۲۶)",
+    description:
+      "پاسخ کامل به این سوال که اخبار ایران را از کجا دنبال کنیم — مقایسه ایسنا، ایرنا، تسنیم، خبرآنلاین، انتخاب و رسانه‌های خارج از کشور با جدول گرایش سیاسی هر منبع، و راهکار دیدن همه اخبار در یک‌جا",
+    datePublished: "2026-07-08T12:00:00Z",
+    dateModified: "2026-07-08T12:00:00Z",
+    keywords: [
+      "اخبار ایران",
+      "دنبال کردن اخبار ایران",
+      "بهترین سایت خبری ایران",
+      "خبرگزاری‌های ایران",
+      "اخبار لحظه‌ای ایران",
+      "منابع خبری ایران",
+      "ایسنا",
+      "ایرنا",
+      "تسنیم",
+    ],
+    body: (
+      <div className="space-y-5">
+        <p>
+          <strong className="text-on-surface">پاسخ کوتاه:</strong> هیچ رسانه
+          واحدی همه اخبار ایران را پوشش نمی‌دهد. برای اینکه چیزی از قلم
+          نیفتد، یا باید ترکیبی از چند منبع با گرایش‌های مختلف را دنبال کنید
+          (مثلاً ایرنا + ایسنا + تسنیم + خبرآنلاین + یک رسانه خارج از کشور)،
+          یا از یک تجمیع‌کننده مثل{" "}
+          <Link href="/" className="text-secondary-fixed-dim hover:underline">
+            پالس ایران
+          </Link>{" "}
+          استفاده کنید که اخبار بیش از ۴۵ منبع داخلی و خارجی را یک‌جا، با
+          برچسب گرایش سیاسی هر منبع، نمایش می‌دهد.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">
+          چرا یک منبع کافی نیست؟
+        </h2>
+        <p>
+          هر رسانه‌ای — داخلی یا خارجی — زاویه دید و اولویت‌های خودش را دارد.
+          خبرگزاری رسمی دولت روایت رسمی را منتشر می‌کند؛ رسانه اصولگرا و
+          اصلاح‌طلب همان رویداد را متفاوت قاب‌بندی می‌کنند؛ و رسانه‌های خارج
+          از ایران اخباری را پوشش می‌دهند که در داخل کمتر دیده می‌شود، اما
+          خودشان هم بی‌طرف مطلق نیستند. تکیه بر یک منبع یعنی دیدن فقط یک
+          روایت. پالس ایران دقیقاً برای حل همین مشکل ساخته شده: منابع را در{" "}
+          <Link
+            href="/sources"
+            className="text-secondary-fixed-dim hover:underline"
+          >
+            ۱۱ دسته گرایش سیاسی
+          </Link>{" "}
+          طبقه‌بندی می‌کند تا بدانید هر خبر از کدام زاویه روایت شده است.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">
+          مقایسه منابع خبری اصلی ایران
+        </h2>
+
+        <div className="overflow-x-auto -mx-1">
+          <table className="w-full text-sm border-collapse">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-right py-2 px-3 text-on-surface font-semibold">منبع</th>
+                <th className="text-right py-2 px-3 text-on-surface font-semibold">گرایش</th>
+                <th className="text-right py-2 px-3 text-on-surface font-semibold">نقطه قوت</th>
+              </tr>
+            </thead>
+            <tbody className="text-on-surface-variant">
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">ایسنا</td>
+                <td className="py-2.5 px-3 text-sm">دولتی / دانشگاهی</td>
+                <td className="py-2.5 px-3 text-sm">پوشش گسترده و سریع اخبار داخلی، دانشگاه، استان‌ها</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">ایرنا</td>
+                <td className="py-2.5 px-3 text-sm">رسمی دولتی</td>
+                <td className="py-2.5 px-3 text-sm">خبرگزاری رسمی کشور — مواضع و اخبار رسمی دولت</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">تسنیم</td>
+                <td className="py-2.5 px-3 text-sm">اصولگرا</td>
+                <td className="py-2.5 px-3 text-sm">سرعت بالا در حوزه سیاست و امنیت</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">خبرآنلاین</td>
+                <td className="py-2.5 px-3 text-sm">میانه‌رو</td>
+                <td className="py-2.5 px-3 text-sm">تحلیل و گفت‌وگوهای متنوع در کنار خبر</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">انتخاب</td>
+                <td className="py-2.5 px-3 text-sm">اصلاح‌طلب میانه</td>
+                <td className="py-2.5 px-3 text-sm">پوشش سیاسی و بین‌المللی با رویکرد متفاوت</td>
+              </tr>
+              <tr className="border-b border-white/5">
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">BBC فارسی</td>
+                <td className="py-2.5 px-3 text-sm">خارج از ایران</td>
+                <td className="py-2.5 px-3 text-sm">گزارش‌های تحقیقاتی و پوشش اخباری که در داخل کمتر دیده می‌شود</td>
+              </tr>
+              <tr>
+                <td className="py-2.5 px-3 text-sm font-medium text-on-surface">پالس ایران</td>
+                <td className="py-2.5 px-3 text-sm">تجمیع‌کننده</td>
+                <td className="py-2.5 px-3 text-sm">همه منابع بالا (۴۵+) یک‌جا، با برچسب گرایش و تأیید چندمنبعه</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-on-surface-variant/60">
+          گرایش‌های ذکرشده بر اساس روش‌شناسی{" "}
+          <Link href="/about/editorial-policy" className="hover:underline">
+            طبقه‌بندی پالس ایران
+          </Link>{" "}
+          است — پروفایل کامل هر منبع در{" "}
+          <Link href="/sources" className="hover:underline">
+            صفحه منابع
+          </Link>{" "}
+          موجود است.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">
+          راهکار عملی: همه اخبار در یک‌جا
+        </h2>
+        <p>
+          باز کردن پنج سایت خبری در روز، عملی نیست. دو راهکار تجمیع وجود
+          دارد: <strong className="text-on-surface">Google News فارسی</strong>{" "}
+          که اخبار رسانه‌های مختلف را کنار هم نشان می‌دهد اما گرایش منابع را
+          مشخص نمی‌کند، و{" "}
+          <strong className="text-on-surface">پالس ایران</strong> که علاوه بر
+          تجمیع لحظه‌ای اخبار از بیش از ۴۵ منبع، سه قابلیت اضافه دارد:
+        </p>
+        <ul className="list-disc pr-6 space-y-1.5">
+          <li>
+            <strong className="text-on-surface">برچسب گرایش سیاسی</strong> کنار
+            هر خبر — می‌دانید روایت از کدام جریان می‌آید
+          </li>
+          <li>
+            <strong className="text-on-surface">تأیید چندمنبعه</strong> —
+            خبرهایی که چند منبع مستقل تأییدشان کرده‌اند مشخص می‌شوند
+          </li>
+          <li>
+            <Link
+              href="/prices"
+              className="text-secondary-fixed-dim hover:underline"
+            >
+              قیمت لحظه‌ای ارز و طلا
+            </Link>{" "}
+            در کنار{" "}
+            <Link
+              href="/categories"
+              className="text-secondary-fixed-dim hover:underline"
+            >
+              اخبار دسته‌بندی‌شده
+            </Link>
+          </li>
+        </ul>
+        <p>
+          اگر ساکن خارج از کشور هستید، راهنمای جداگانه‌ای برای{" "}
+          <Link
+            href="/editorial/behtarin-manba-khabari"
+            className="text-secondary-fixed-dim hover:underline"
+          >
+            انتخاب منبع خبری فارسی در خارج از ایران
+          </Link>{" "}
+          نوشته‌ایم.
+        </p>
+
+        <h2 className="text-lg font-bold text-on-surface pt-2">
+          سوالات متداول
+        </h2>
+        <div className="space-y-3">
+          <div className="rounded-xl bg-surface-container p-4">
+            <p className="font-bold text-on-surface text-sm mb-1">
+              سریع‌ترین راه دنبال کردن اخبار فوری ایران چیست؟
+            </p>
+            <p className="text-sm text-on-surface-variant">
+              خبرگزاری‌های تسنیم و ایسنا معمولاً سریع‌ترین هستند. پالس ایران
+              اخبار فوری همه منابع را لحظه‌ای تجمیع می‌کند و در{" "}
+              <a
+                href="https://t.me/palsiran"
+                className="text-secondary-fixed-dim hover:underline"
+                rel="noopener"
+              >
+                کانال تلگرام
+              </a>{" "}
+              هم منتشر می‌کند.
+            </p>
+          </div>
+          <div className="rounded-xl bg-surface-container p-4">
+            <p className="font-bold text-on-surface text-sm mb-1">
+              آیا Google News برای اخبار ایران کافی است؟
+            </p>
+            <p className="text-sm text-on-surface-variant">
+              Google News فارسی منابع را تجمیع می‌کند اما گرایش سیاسی آن‌ها را
+              نشان نمی‌دهد و پوشش منابع خارج از ایران در آن محدود است. برای
+              تصویر کامل، تجمیع‌کننده‌ای که هر دو دسته را با برچسب گرایش پوشش
+              دهد مناسب‌تر است.
+            </p>
+          </div>
+          <div className="rounded-xl bg-surface-container p-4">
+            <p className="font-bold text-on-surface text-sm mb-1">
+              اخبار ایران را با چه ترکیبی دنبال کنیم که هیچ خبری از قلم نیفتد؟
+            </p>
+            <p className="text-sm text-on-surface-variant">
+              ایرنا (روایت رسمی) + ایسنا (پوشش عمومی) + تسنیم (اصولگرا) +
+              خبرآنلاین یا انتخاب (میانه‌رو) + BBC فارسی (خارج از کشور) — یا
+              همه این‌ها یک‌جا در پالس ایران با برچسب گرایش هر منبع.
+            </p>
+          </div>
+        </div>
+      </div>
+    ),
+  },
 ];
 
 export function getArticle(slug: string): EditorialArticle | null {
