@@ -7,6 +7,9 @@ export default function Footer() {
         {/* Logo + tagline */}
         <div className="space-y-4">
           <div className="text-headline-lg font-headline-lg text-secondary-fixed-dim">پالس ایران</div>
+          <div className="text-on-surface-variant text-sm" lang="en" dir="ltr">
+            Palsiran — Pulse Iran
+          </div>
           <p className="text-on-surface-variant text-sm leading-loose">
             مرجع اخبار فوری<br />بی‌طرف از همه منابع
           </p>
@@ -93,7 +96,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center mt-8 pt-6 border-t border-white/5">
-        <p className="text-on-surface-variant text-xs">© ۱۴۰۵ پالس ایران — تمامی حقوق محفوظ است | <a href="mailto:info@palsiran.com" className="hover:text-on-surface transition-colors">info@palsiran.com</a></p>
+        <p className="text-on-surface-variant text-xs">© ۱۴۰۵ پالس ایران — تمامی حقوق محفوظ است | <span lang="en" dir="ltr">Palsiran (Pulse Iran) — Persian News Aggregator</span> | <a href="mailto:info@palsiran.com" className="hover:text-on-surface transition-colors">info@palsiran.com</a></p>
       </div>
     </footer>
   );

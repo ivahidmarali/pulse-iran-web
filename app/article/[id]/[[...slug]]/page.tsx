@@ -11,6 +11,7 @@ import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
+import { isSubstantialArticle } from "@/lib/article-quality";
 import type { NewsItem } from "@/lib/types";
 
 export const revalidate = 300;
@@ -183,9 +184,10 @@ export async function generateMetadata({
   const catName = categoryName(item.category);
   // OG spec requires ISO 8601; item.posted_at from the API may be space-separated.
   const publishedIso = new Date(item.posted_at).toISOString();
-  // Thin articles (no AI summary → page shows only a link to the source) don't offer
-  // original value to Google. Noindex them to concentrate crawl budget on good content.
-  const hasContent = Boolean(item.summary && item.summary !== item.title && item.summary.length > 30);
+  // Thin or low-importance articles don't offer original value to Google.
+  // Noindex them to concentrate crawl budget on the newsworthy subset —
+  // same gate that decides sitemap membership (lib/article-quality.ts).
+  const hasContent = isSubstantialArticle(item);
 
   return {
     title: seoTitle,

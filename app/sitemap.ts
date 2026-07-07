@@ -1,6 +1,7 @@
 export const revalidate = 3600;
 
 import { articleUrl, articleId, generateSlug, SITE_URL } from "@/lib/utils";
+import { isSubstantialArticle } from "@/lib/article-quality";
 import { ARTICLES } from "@/lib/editorial-articles";
 import type { NewsItem, SourceInfo } from "@/lib/types";
 import type { MetadataRoute } from "next";
@@ -114,9 +115,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
   // Use articleUrl() so sitemap URLs exactly match the canonical tags in metadata
-  // Exclude articles from removed/inappropriate sources
+  // Exclude articles from removed/inappropriate sources and articles below the
+  // substance gate (those pages are noindexed — listing them contradicts that)
   const articleRoutes: MetadataRoute.Sitemap = uniqueItems
     .filter((item) => !EXCLUDED_SOURCE_SLUGS.has(generateSlug(item.source ?? "")))
+    .filter((item) => isSubstantialArticle(item))
     .map((item) => ({
       url: articleUrl(articleId(item), item.title),
       lastModified: item.posted_at ? new Date(item.posted_at) : new Date(),

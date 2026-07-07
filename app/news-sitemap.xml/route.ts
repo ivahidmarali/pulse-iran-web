@@ -1,4 +1,5 @@
 import { articleUrl, articleId, SITE_URL } from "@/lib/utils";
+import { cleanTitle, isSubstantialArticle } from "@/lib/article-quality";
 
 export const revalidate = 300; // regenerate every 5 minutes
 
@@ -16,40 +17,13 @@ const NEWS_SITEMAP_URL = `${SITE_URL}/news-sitemap.xml`;
 // Ensures we only submit articles published after the previous ping.
 let lastIndexNowPingTs = 0;
 
-// Keywords that indicate spam/ad content — exclude from news sitemap
-const SPAM_PATTERNS = [
-  /رایگان.{0,10}گیگ/,
-  /شرط.بندی/,
-  /کازینو/,
-  /بت\.ایران/,
-  /آدرس جدید/,
-  /ثبت.نام.{0,10}بونوس/,
-  /هزار تومن.{0,20}تست/,
-];
-
-function isSpam(title: string): boolean {
-  return SPAM_PATTERNS.some((re) => re.test(title));
-}
-
-// Strip Markdown link syntax [text](url) → text and emoji characters
-function cleanTitle(title: string): string {
-  return title
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
-    // Supplementary emoji (surrogate pairs: U+1F000–U+1FAFF, U+2600–U+27BF)
-    .replace(/[\uD83C-\uDBFF][\uDC00-\uDFFF]/g, "")
-    // BMP emoji ranges (misc symbols, dingbats, enclosed)
-    .replace(/[☀-➿⬀-⯿　-〿]/g, "")
-    // Variation selectors and combining enclosing keycap
-    .replace(/[︀-️⃣]/g, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-}
-
 interface Item {
   item_id: string;
   title: string;
   posted_at: string;
   source?: string;
+  summary?: string;
+  importance?: string;
 }
 
 const EXCLUDED_SOURCES = new Set(["chekhabarre"]);
@@ -78,7 +52,9 @@ export async function GET() {
           continue;
         }
         if (!i.title) continue;
-        if (isSpam(i.title)) continue;
+        // Substance gate: real AI summary + high importance. Also covers spam
+        // titles. Everything below the bar is noindexed on the page itself.
+        if (!isSubstantialArticle(i)) continue;
         if (EXCLUDED_SOURCES.has(i.source ?? "")) continue;
         items.push(i);
         if (items.length >= MAX_NEWS_ARTICLES) break;

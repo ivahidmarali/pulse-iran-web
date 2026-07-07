@@ -141,8 +141,13 @@ export default async function AboutPage() {
               بی‌طرف، از همه منابع،{" "}
               <span className="text-secondary-fixed-dim">بدون سانسور</span>
             </h1>
-            <p className="text-body-lg font-body-lg text-on-surface-variant mb-12 leading-relaxed">
+            <p className="text-body-lg font-body-lg text-on-surface-variant mb-6 leading-relaxed">
               پالس ایران به عنوان یک مرکز پایش داده و اخبار، مأموریت دارد تا بدون پیش‌فرض‌های سیاسی، تمامی جریان‌های خبری را در یک قاب واحد به نمایش بگذارد. ما معتقدیم آگاهی کامل تنها از طریق دسترسی به تنوع آرا میسر است.
+            </p>
+            <p className="text-body-md font-body-md text-on-surface-variant mb-12 leading-relaxed" lang="en" dir="ltr">
+              Palsiran (Pulse Iran) is an independent Persian-language news aggregator covering
+              Iran and world news in real time from 45+ sources, with transparent political-lean
+              labeling for every source.
             </p>
           </div>
         </section>
