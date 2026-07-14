@@ -42,7 +42,10 @@ const nextConfig = {
       {
         // Vazirmatn is fully self-hosted via next/font — no googleapis/gstatic needed
         key: "Content-Security-Policy",
-        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://www.googletagmanager.com https://api.indexnow.org https://www.bing.com https://ssl.bing.com; frame-src https://t.me https://telegram.org;",
+        // connect-src must include analytics.google.com, stats.g.doubleclick.net and
+        // www.google.com — gtag.js sends /g/collect beacons there; blocking them
+        // silently drops all GA4 data (confirmed via CSP violation console errors)
+        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://telegram.org; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://www.googletagmanager.com https://api.indexnow.org https://www.bing.com https://ssl.bing.com; frame-src https://t.me https://telegram.org;",
       },
     ];
 
@@ -66,16 +69,30 @@ const nextConfig = {
         source: "/(jame-jahani|%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C)",
         headers: [{ key: "Cache-Control", value: "public, s-maxage=120, stale-while-revalidate=240" }],
       },
-      // Static asset pages (prices, categories, lean, tag): 60s CDN cache
-      {
-        source: "/(prices|prices/:path*|categories|archive|search|sources|lean/:path*|tag/:path*|editorial/:path*|about/:path*)",
+      // Listing pages: 60s CDN cache. One rule per path — path-to-regexp does not
+      // match ":param*" alternatives inside a group, so the old combined pattern
+      // silently skipped lean/tag/source/editorial/about and they shipped with
+      // "private, no-store" (zero CDN caching on indexable pages).
+      ...[
+        "/prices",
+        "/prices/:path*",
+        "/categories",
+        "/archive",
+        "/search",
+        "/sources",
+        "/lean/:path*",
+        "/tag/:path*",
+        "/source/:path*",
+        "/editorial/:path*",
+        "/editorial",
+        "/about/:path*",
+        "/about",
+      ].map((source) => ({
+        source,
         headers: [{ key: "Cache-Control", value: "public, s-maxage=60, stale-while-revalidate=120" }],
-      },
-      // Sitemaps: 5 min cache (matches revalidate interval)
-      {
-        source: "/(sitemap.xml|news-sitemap.xml)",
-        headers: [{ key: "Cache-Control", value: "public, s-maxage=300, stale-while-revalidate=300" }],
-      },
+      })),
+      // Sitemaps set their own Cache-Control inside the route handlers — a second
+      // rule here produced duplicate conflicting Cache-Control headers (RFC 9110).
     ];
   },
 };

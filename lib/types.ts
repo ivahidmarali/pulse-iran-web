@@ -10,6 +10,7 @@ export interface NewsItem {
   is_breaking?: boolean;
   image_url?: string;
   summary?: string;
+  web_summary?: string;
   link?: string;
   importance?: "high" | "medium" | "low";
   telegram_posted?: boolean;

@@ -9,7 +9,10 @@ export const SITE_URL =
 export function generateSlug(title: string): string {
   let slug = title
     .replace(/\s+/g, "-")
+    // Persian/Arabic punctuation sits inside U+0600-U+06FF but doesn't belong in slugs
+    .replace(/[\u060C\u061B\u061F\u066A\u066B\u066C]/g, "")
     .replace(/[^\u0600-\u06FF\w-]/g, "")
+    .replace(/-{2,}/g, "-")
     .replace(/^[-]+/, "")
     .replace(/[-]+$/, "");
   // Break at last hyphen before position 60 for clean word boundary
@@ -25,11 +28,14 @@ export function articleId(item: { url_id?: string; item_id: string }): string {
   return item.url_id || item.item_id;
 }
 
-/** Internal href for an article page (with optional slug for SEO) */
+/** Internal href for an article page (with optional slug for SEO).
+ * The slug is percent-encoded so canonicals, sitemap <loc>s and JSON-LD @id
+ * all share one identical URL string (raw Unicode vs encoded forms used to
+ * diverge, which forces Google to reconcile two representations). */
 export function articleHref(itemId: string, title?: string): string {
   const slug = title ? generateSlug(title) : "";
   if (!slug) return `/article/${encodeURIComponent(itemId)}`;
-  return `/article/${encodeURIComponent(itemId)}/${slug}`;
+  return `/article/${encodeURIComponent(itemId)}/${encodeURIComponent(slug)}`;
 }
 
 /** Full canonical URL for an article */

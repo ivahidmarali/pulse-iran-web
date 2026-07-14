@@ -5,7 +5,7 @@ import MobileFooter from "@/components/layout/MobileFooter";
 import CategoryTabs from "@/components/layout/CategoryTabs";
 import NewsCard from "@/components/news/NewsCard";
 import { getNews, getSources, getCategories } from "@/lib/api";
-import { getCategoryFilter, CATEGORY_GROUPS } from "@/lib/categories";
+import { getCategoryFilter, getActiveGroup, CATEGORY_GROUPS, GROUP_TAG_SLUGS } from "@/lib/categories";
 import { NewsItem, SourceInfo } from "@/lib/types";
 import { toPersianNum, SITE_URL, safeJsonLd, sourceHref } from "@/lib/utils";
 
@@ -80,12 +80,14 @@ export async function generateMetadata({
   const { cat, group, source, page: pageStr } = await searchParams;
   const page = parseInt(pageStr ?? "1", 10) || 1;
   const label = cat || group || source;
-  const q = new URLSearchParams();
-  if (cat) q.set("cat", cat);
-  if (group) q.set("group", group);
-  if (source) q.set("source", source);
-  const qs = q.toString();
-  const canonical = `${SITE_URL}/categories${qs ? `?${qs}` : ""}`;
+  // Parameterized views (?group=/?cat=/?source=) are filtered duplicates of the
+  // permanent /tag/ pages (or the unfiltered listing) — canonicalize to those so
+  // Google doesn't index 50+ query-string variants competing with each other.
+  const activeGroup = getActiveGroup(cat, group);
+  const tagSlug = activeGroup !== "همه" && !source ? GROUP_TAG_SLUGS[activeGroup] : undefined;
+  const canonical = tagSlug
+    ? `${SITE_URL}/tag/${tagSlug}`
+    : `${SITE_URL}/categories`;
   return {
     title: { absolute: label ? `اخبار ${label} | پالس ایران` : "دسته‌بندی اخبار ایران | پالس ایران" },
     description: label

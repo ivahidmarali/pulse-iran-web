@@ -72,6 +72,18 @@ export const CATEGORY_GROUPS: Record<string, CategoryGroup> = {
   },
 };
 
+/** Group name → clean /tag/ page slug. Used so canonicals and breadcrumbs
+ * point at the permanent tag pages instead of ?group= parameterized URLs. */
+export const GROUP_TAG_SLUGS: Record<string, string> = {
+  "سیاسی": "siasi",
+  "بین‌الملل": "beinolmelal",
+  "اقتصادی": "eqtesadi",
+  "اجتماعی": "ejtemai",
+  "ورزشی": "varzeshi",
+  "تکنولوژی": "technology",
+  "حاشیه": "hashiye",
+};
+
 /** Extract the emoji prefix (everything before the first space) for LIKE matching.
  * Handles both "💻 تکنولوژی" (old) and "💻تکنولوژی" (new compact) — both become "💻".
  */

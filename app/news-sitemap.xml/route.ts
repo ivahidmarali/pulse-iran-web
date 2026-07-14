@@ -24,6 +24,7 @@ interface Item {
   source?: string;
   summary?: string;
   importance?: string;
+  category?: string;
 }
 
 const EXCLUDED_SOURCES = new Set(["chekhabarre"]);
@@ -85,6 +86,10 @@ export async function GET() {
     .map(
       (item, i) => {
         const cleanedTitle = cleanTitle(item.title).replace(/]]>/g, "]]]]><![CDATA[>");
+        // Emoji-stripped category (e.g. "💵 دلار و ارز" → "دلار و ارز") as topical hint
+        const keywords = item.category
+          ? cleanTitle(item.category).replace(/]]>/g, "")
+          : "";
         return `
   <url>
     <loc>${articleUrls[i]}</loc>
@@ -94,7 +99,8 @@ export async function GET() {
         <news:language>fa</news:language>
       </news:publication>
       <news:publication_date>${new Date(item.posted_at).toISOString().replace(/\.\d{3}Z$/, "Z")}</news:publication_date>
-      <news:title><![CDATA[${cleanedTitle}]]></news:title>
+      <news:title><![CDATA[${cleanedTitle}]]></news:title>${keywords ? `
+      <news:keywords><![CDATA[${keywords}]]></news:keywords>` : ""}
     </news:news>
   </url>`;
       }

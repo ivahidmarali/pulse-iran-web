@@ -11,6 +11,7 @@ import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
+import { GROUP_TAG_SLUGS } from "@/lib/categories";
 import { isSubstantialArticle } from "@/lib/article-quality";
 import type { NewsItem } from "@/lib/types";
 
@@ -275,9 +276,19 @@ export default async function ArticlePage({
     "💻 تکنولوژی": "تکنولوژی", "📱 موبایل و گجت": "تکنولوژی",
   };
   const groupName = item.category ? (CATEGORY_GROUP_MAP[item.category] ?? catName) : "اخبار";
-  const groupUrl = item.category
-    ? `${SITE_URL}/categories?group=${encodeURIComponent(groupName)}`
-    : `${SITE_URL}/categories`;
+  // Breadcrumbs point at the permanent /tag/ pages — the ?group= parameterized
+  // views canonicalize away, so linking them from schema wastes crawl signals.
+  const tagSlug = GROUP_TAG_SLUGS[groupName];
+  const groupUrl = tagSlug ? `${SITE_URL}/tag/${tagSlug}` : `${SITE_URL}/categories`;
+
+  // Prefer the long-form web summary (120-180 words, multi-paragraph) written
+  // for the article page; older rows only carry the short Telegram summary.
+  const body =
+    item.web_summary && item.web_summary.trim().length > (item.summary?.trim().length ?? 0)
+      ? item.web_summary.trim()
+      : (item.summary ?? "").trim();
+  const hasBody = body.length > 30 && body !== item.title;
+  const bodyParagraphs = body.split(/\n+/).map((p) => p.trim()).filter(Boolean);
 
   // Build JSON-LD from trusted server-only data
   const breadcrumbJsonLd = {
@@ -307,12 +318,20 @@ export default async function ArticlePage({
     return (cut > 10 ? text.slice(0, cut) : text.slice(0, max)) + "…";
   }
 
+  // Headline capped at a word boundary — a hard slice(0, 110) cut Persian
+  // words in half, which Google News treats as a malformed headline.
+  function truncateHeadline(text: string, max = 110): string {
+    if (text.length <= max) return text;
+    const cut = text.lastIndexOf(" ", max);
+    return (cut > 40 ? text.slice(0, cut) : text.slice(0, max)).trim();
+  }
+
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     "@id": canonical,
     url: canonical,
-    headline: displayTitle.slice(0, 110),
+    headline: truncateHeadline(displayTitle),
     description: truncateAtWord(
       item.summary && item.summary.length > 30 ? item.summary : item.title
     ),
@@ -328,10 +347,15 @@ export default async function ArticlePage({
       cssSelector: ["h1", "[data-speakable]"],
     },
     inLanguage: "fa",
-    ...(item.summary && item.summary !== item.title && item.summary.length > 30
-      ? { articleBody: item.summary, wordCount: item.summary.trim().split(/\s+/).length }
+    ...(hasBody
+      ? { articleBody: body, wordCount: body.split(/\s+/).length }
       : {}),
-    ...(catName !== "اخبار" ? { articleSection: catName } : {}),
+    ...(catName !== "اخبار"
+      ? {
+          articleSection: catName,
+          keywords: Array.from(new Set([catName, groupName])).filter((k) => k !== "اخبار"),
+        }
+      : {}),
     // isBasedOn: signals to Google this is an aggregated summary of an upstream
     // source — disambiguates aggregation from duplication.
     ...(item.link
@@ -369,8 +393,8 @@ export default async function ArticlePage({
                 )}
               </div>
               <div className="flex items-center gap-3">
-                {item.summary && item.summary.length > 30 && (
-                  <span>{toPersianNum(readingTime(item.summary))} دقیقه</span>
+                {hasBody && (
+                  <span>{toPersianNum(readingTime(body))} دقیقه</span>
                 )}
                 <time dateTime={publishedIso}>🕐 {ago}</time>
               </div>
@@ -421,14 +445,17 @@ export default async function ArticlePage({
             </div>
 
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
-              {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
+              {hasBody ? (
                 <>
-                  <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
-                    {item.summary}
-                  </p>
-                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end">
+                  {bodyParagraphs.map((para, i) => (
+                    <p key={i} data-speakable={i === 0 || undefined} className="font-body-lg text-body-lg text-on-surface leading-8">
+                      {para}
+                    </p>
+                  ))}
+                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
                     <span>🤖</span>
-                    <span>این خلاصه با هوش مصنوعی تهیه شده</span>
+                    <span>خلاصه با هوش مصنوعی تهیه شده —</span>
+                    <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
                   </p>
                 </>
               ) : (
@@ -575,8 +602,8 @@ export default async function ArticlePage({
                     )}
                   </span>
                   <time dateTime={publishedIso}>🕐 {ago}</time>
-                  {item.summary && item.summary.length > 30 && (
-                    <span>{toPersianNum(readingTime(item.summary))} دقیقه مطالعه</span>
+                  {hasBody && (
+                    <span>{toPersianNum(readingTime(body))} دقیقه مطالعه</span>
                   )}
                 </div>
                 <ArticleActions title={displayTitle} itemId={item.item_id} source={item.source} />
@@ -592,14 +619,17 @@ export default async function ArticlePage({
             ) : null}
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
-              {item.summary && item.summary !== item.title && item.summary.length > 30 ? (
+              {hasBody ? (
                 <>
-                  <p data-speakable className="font-body-lg text-body-lg text-on-surface leading-8">
-                    {item.summary}
-                  </p>
-                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end">
+                  {bodyParagraphs.map((para, i) => (
+                    <p key={i} data-speakable={i === 0 || undefined} className="font-body-lg text-body-lg text-on-surface leading-8">
+                      {para}
+                    </p>
+                  ))}
+                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
                     <span>🤖</span>
-                    <span>این خلاصه با هوش مصنوعی تهیه شده</span>
+                    <span>خلاصه با هوش مصنوعی تهیه شده —</span>
+                    <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
                   </p>
                 </>
               ) : (

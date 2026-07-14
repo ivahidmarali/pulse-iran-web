@@ -10,7 +10,9 @@ const INTERNAL_API = process.env.INTERNAL_API_URL ?? "http://127.0.0.1:8000";
 const PAGE_SIZE = 100;
 // Cap sitemap at recent articles only — fetching all 14K+ articles wastes crawl
 // budget on a low-authority domain. news-sitemap.xml handles the last-48h feed.
-const MAX_SITEMAP_ARTICLES = 500;
+// Must stay a superset of the news sitemap (up to 1000 URLs/48h) so articles
+// aging out of the news window remain discoverable for long-term crawling.
+const MAX_SITEMAP_ARTICLES = 1500;
 
 const LEAN_SLUGS = [
   "osoulgarayan", "rasmi-dolati", "eslah-talab", "eslah-talab-mianeh",

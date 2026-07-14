@@ -9,6 +9,12 @@ import type { SourceInfo } from "@/lib/types";
 
 export const revalidate = 3600;
 
+// All lean slugs are known at build time — pre-render them statically so the
+// pages ship with ISR cache headers instead of falling back to dynamic rendering
+export function generateStaticParams() {
+  return Object.keys(LEAN_SLUGS).map((slug) => ({ slug }));
+}
+
 interface LeanInfo {
   name: string;
   description: string;

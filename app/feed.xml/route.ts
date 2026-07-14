@@ -2,12 +2,15 @@ import { getNews } from "@/lib/api";
 import { articleUrl, articleId, SITE_URL } from "@/lib/utils";
 
 const CONTENT_NS = 'xmlns:content="http://purl.org/rss/1.0/modules/content/"';
+const DC_NS = 'xmlns:dc="http://purl.org/dc/elements/1.1/"';
 
 export const dynamic = "force-dynamic";
 export const revalidate = 300;
 
 export async function GET() {
-  const data = await getNews(1, 30);
+  // 100 items ≈ several hours of coverage — 30 items spanned under an hour at
+  // peak publish rate, so aggregators polling hourly missed most articles
+  const data = await getNews(1, 100);
   const items = data.items ?? [];
 
   const rssItems = items
@@ -17,13 +20,20 @@ export async function GET() {
       const description = item.summary && item.summary.length > 30
         ? escapeXml(item.summary)
         : escapeXml(item.title);
+      const fullBody =
+        item.web_summary && item.web_summary.length > (item.summary?.length ?? 0)
+          ? item.web_summary
+          : item.summary && item.summary.length > 30
+            ? item.summary
+            : item.title;
       return `    <item>
       <title>${escapeXml(item.title)}</title>
       <link>${escapeXml(link)}</link>
       <guid isPermaLink="true">${escapeXml(link)}</guid>
       <pubDate>${pubDate}</pubDate>
+      <dc:creator>تحریریه پالس ایران</dc:creator>
       <description>${description}</description>
-      <content:encoded><![CDATA[${item.summary && item.summary.length > 30 ? item.summary : item.title}${item.link ? `\n\nمنبع: ${item.source} — ${item.link}` : ""}]]></content:encoded>
+      <content:encoded><![CDATA[${fullBody}${item.link ? `\n\nمنبع: ${item.source} — ${item.link}` : ""}]]></content:encoded>
       <source url="${SITE_URL}">${escapeXml(item.source)}</source>
       ${item.category ? `<category>${escapeXml(item.category)}</category>` : ""}
       ${item.political_lean ? `<category>${escapeXml(item.political_lean)}</category>` : ""}
@@ -32,7 +42,7 @@ export async function GET() {
     .join("\n");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" ${CONTENT_NS}>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" ${CONTENT_NS} ${DC_NS}>
   <channel>
     <title>پالس ایران — اخبار فوری ایران و جهان</title>
     <link>${SITE_URL}</link>

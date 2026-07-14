@@ -17,30 +17,41 @@ export const metadata: Metadata = {
   },
 };
 
+// ProfilePage wrapping the Person entity — Google's E-E-A-T guidance treats a
+// dedicated, schema-anchored author profile as a primary authorship signal
 const personJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${SITE_URL}/#editor`,
-  name: "Vahid Marali",
-  alternateName: "وحید مارالی",
-  jobTitle: "Founder & Editor-in-Chief",
-  description: "وحید مارالی بنیان‌گذار و سردبیر پالس ایران — پلتفرم تجمیع اخبار فارسی با طبقه‌بندی گرایش سیاسی منابع",
+  "@type": "ProfilePage",
+  "@id": `${canonical}#profilepage`,
   url: canonical,
-  worksFor: { "@id": `${SITE_URL}/#organization` },
-  email: "info@palsiran.com",
-  sameAs: [
-    "https://t.me/palsiran",
-    "https://x.com/palsiran_news",
-    "https://www.youtube.com/@palsiran",
-  ],
-  knowsAbout: [
-    "Persian media analysis",
-    "Iranian politics",
-    "News aggregation",
-    "Political bias in media",
-    "Iranian diaspora",
-    "Middle East news",
-  ],
+  name: "وحید مارالی — بنیان‌گذار و سردبیر پالس ایران",
+  inLanguage: "fa",
+  dateCreated: "2026-06-09",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  mainEntity: {
+    "@type": "Person",
+    "@id": `${SITE_URL}/#editor`,
+    name: "Vahid Marali",
+    alternateName: "وحید مارالی",
+    jobTitle: "Founder & Editor-in-Chief",
+    description: "وحید مارالی بنیان‌گذار و سردبیر پالس ایران — پلتفرم تجمیع اخبار فارسی با طبقه‌بندی گرایش سیاسی منابع",
+    url: canonical,
+    worksFor: { "@id": `${SITE_URL}/#organization` },
+    email: "info@palsiran.com",
+    sameAs: [
+      "https://t.me/palsiran",
+      "https://x.com/palsiran_news",
+      "https://www.youtube.com/@palsiran",
+    ],
+    knowsAbout: [
+      "Persian media analysis",
+      "Iranian politics",
+      "News aggregation",
+      "Political bias in media",
+      "Iranian diaspora",
+      "Middle East news",
+    ],
+  },
 };
 
 const breadcrumbJsonLd = {
