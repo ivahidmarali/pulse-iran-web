@@ -33,7 +33,6 @@ export default function robots(): MetadataRoute.Robots {
     sitemap: [
       'https://palsiran.com/sitemap.xml',
       'https://palsiran.com/news-sitemap.xml',
-      'https://palsiran.com/feed.xml',
     ],
   }
 }

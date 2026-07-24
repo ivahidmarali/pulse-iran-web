@@ -48,7 +48,7 @@ async function fetchInitialLiveScore(): Promise<LiveScoreData | null> {
 }
 
 export const metadata: Metadata = {
-  title: "نتایج زنده فوتبال | پالس ایران",
+  title: "نتایج زنده فوتبال",
   description:
     "نتایج زنده فوتبال لیگ قهرمانان، لیگ برتر ایران، جام جهانی، و لیگ‌های بزرگ اروپایی — به‌روزرسانی خودکار هر ۳۰ ثانیه در پالس ایران",
   alternates: {

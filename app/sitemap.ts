@@ -78,7 +78,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, lastModified: latestArticleDate },
     { url: `${SITE_URL}/livescore`, lastModified: new Date() },
-    { url: `${SITE_URL}/جام-جهانی`, lastModified: new Date() },
     { url: `${SITE_URL}/prices`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/categories`, lastModified: latestArticleDate },
     { url: `${SITE_URL}/archive`, lastModified: latestArticleDate },
@@ -112,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const sourceRoutes: MetadataRoute.Sitemap = sources
     .filter((src) => !EXCLUDED_SOURCE_SLUGS.has(generateSlug(src.name)))
     .map((src) => ({
-      url: `${SITE_URL}/source/${generateSlug(src.name)}`,
+      url: encodeURI(`${SITE_URL}/source/${generateSlug(src.name)}`),
       lastModified: latestArticleDate,
     }));
 

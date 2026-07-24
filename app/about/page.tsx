@@ -15,11 +15,16 @@ export const metadata: Metadata = {
     title: "درباره پالس ایران",
     description: "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی",
     url: `${SITE_URL}/about`,
+    siteName: "پالس ایران",
+    locale: "fa_IR",
     type: "website",
+    images: [{ url: `${SITE_URL}/og-default.jpg`, width: 1200, height: 630, alt: "پالس ایران — درباره ما" }],
   },
   twitter: {
+    card: "summary_large_image",
     title: "درباره پالس ایران",
     description: "پالس ایران سامانه تجمیع اخبار از بیش از ۴۵ منبع خبری ایرانی و بین‌المللی",
+    images: [`${SITE_URL}/og-default.jpg`],
   },
   alternates: { canonical: `${SITE_URL}/about`, languages: { fa: `${SITE_URL}/about`, "x-default": `${SITE_URL}/about` } },
 };

@@ -160,7 +160,7 @@ export default async function CategoriesPage({
 
         <main className="flex-1 pb-4 px-container-margin pt-4">
           {!cat && !group && !source ? (
-            <h1 className="text-base font-bold text-on-surface text-right mb-4">دسته‌بندی اخبار ایران</h1>
+            <div role="heading" aria-level={1} className="text-base font-bold text-on-surface text-right mb-4">دسته‌بندی اخبار ایران</div>
           ) : (
             <div className="flex items-center gap-2 mb-4">
               <span className="text-sm font-medium text-on-surface">

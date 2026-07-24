@@ -26,8 +26,19 @@ export async function GET() {
           : item.summary && item.summary.length > 30
             ? item.summary
             : item.title;
+      // Use summary's first sentence as title when the raw title is a long Telegram message body
+      const rssTitle = (() => {
+        if (item.title.length <= 100) return item.title;
+        if (item.summary && item.summary.length > 20) {
+          const m = item.summary.match(/^.{20,90}[.!؟\n]/);
+          if (m) return m[0].trim().replace(/[.!؟]$/, "");
+          return item.summary.slice(0, 80).trim() + "…";
+        }
+        const cut = item.title.lastIndexOf(" ", 80);
+        return (cut > 20 ? item.title.slice(0, cut) : item.title.slice(0, 80)) + "…";
+      })();
       return `    <item>
-      <title>${escapeXml(item.title)}</title>
+      <title>${escapeXml(rssTitle)}</title>
       <link>${escapeXml(link)}</link>
       <guid isPermaLink="true">${escapeXml(link)}</guid>
       <pubDate>${pubDate}</pubDate>

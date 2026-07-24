@@ -10,7 +10,7 @@
 - [Archive](https://palsiran.com/archive): Full news archive with date and source filters
 - [Search](https://palsiran.com/search): Full-text search across all articles
 - [Sources](https://palsiran.com/sources): Directory of all monitored news sources with political lean indicators
-- [Source Profile](https://palsiran.com/source/bbc-persian): Individual source profile: description, political lean, credibility score, article feed
+- [Source Profile](https://palsiran.com/source/irna): Individual source profile: description, political lean, credibility score, article feed
 - [Political Lean](https://palsiran.com/lean/mostaghel): Articles and sources grouped by political lean (11 categories)
 - [Topic Tag](https://palsiran.com/tag/siasi): News by topic group: siasi, beinolmelal, eqtesadi, ejtemai, varzeshi, technology, hashiye
 - [Editorial](https://palsiran.com/editorial): Editorial analysis and commentary by the Pulse Iran team
@@ -18,8 +18,15 @@
 - [About](https://palsiran.com/about): About Pulse Iran, methodology, and editorial principles
 - [Editorial Policy](https://palsiran.com/about/editorial-policy): Editorial methodology: source selection, political lean classification, AI summarization policy
 - [Corrections](https://palsiran.com/corrections): Correction policy: how errors in summaries and categorization are reported and fixed
-- [World Cup 2026](https://palsiran.com/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C): FIFA World Cup 2026 hub: live scores, group standings, Iran team schedule (Group G: Iran, Belgium, Egypt, New Zealand), tournament bracket
-- [RSS Feed](https://palsiran.com/feed.xml): RSS feed with latest 30 articles
+- [RSS Feed](https://palsiran.com/feed.xml): RSS feed with latest 100 articles
+
+## Endpoints
+
+- Sitemap: https://palsiran.com/sitemap.xml
+- News Sitemap (Google News): https://palsiran.com/news-sitemap.xml
+- RSS Feed: https://palsiran.com/feed.xml
+- Live Prices API: https://palsiran.com/prices (human-readable); backend at /api/prices
+- Full LLMs reference: https://palsiran.com/llms-full.txt
 
 ## Political Lean Categories
 
@@ -47,6 +54,37 @@ Pulse Iran classifies sources into 11 political lean categories:
 - [تکنولوژی — Technology](https://palsiran.com/tag/technology): Tech and digital news
 - [حاشیه — Culture & Entertainment](https://palsiran.com/tag/hashiye): Entertainment, celebrity, and culture
 
+## Sources
+
+Pulse Iran monitors 45+ Iranian and international news sources. Major monitored outlets:
+
+**State / Official Media (رسمی دولتی):**
+IRNA (ایرنا), Shana (شانا), IRIB News (شبکه خبر), Dolat.ir (پایگاه اطلاع‌رسانی دولت)
+
+**Principlist / Conservative (اصولگرا):**
+Tasnim (تسنیم), Fars News (فارس), Mashregh News (مشرق), Jomhouri Eslami (جمهوری اسلامی), Alef (الف), Javan (جوان), Raja News (رجا نیوز)
+
+**Moderate Conservative (محافظه‌کار میانه):**
+Khabar Online (خبرآنلاین), Donya-e-Eqtesad (دنیای اقتصاد), Hamshahri (همشهری)
+
+**Reformist (اصلاح‌طلب):**
+ISNA (ایسنا), Etemad (اعتماد), Shargh (شرق), Jamaran (جماران), Aftab News (آفتاب‌نیوز)
+
+**Centrist Reformist (اصلاح‌طلب میانه):**
+Entekhab (انتخاب), ILNA (ایلنا), Iran Newspaper (ایران)
+
+**Independent (مستقل):**
+Reuters Farsi (رویترز), AFP, AP, Al Jazeera (الجزیره), Zoomit (زومیت), Eghtesad Online (اقتصاد آنلاین), Farda News (فردانیوز)
+
+**Western Liberal (لیبرال غربی):**
+BBC Persian (بی‌بی‌سی فارسی), Radio Farda (رادیو فردا), Euronews Farsi (یورونیوز), DW Farsi (دویچه‌وله), VOA Farsi (صدای آمریکا)
+
+**Anti-IRI (مخالف جمهوری اسلامی):**
+Iran International (ایران اینترنشنال), Gooya News (گویا نیوز), IranWire
+
+**Arab Conservative (محافظه‌کار عربی):**
+Alarabiya Farsi (العربیه فارسی), Al Jazeera Arabic coverage
+
 ## Key Facts
 
 **What is Pulse Iran?**
@@ -63,6 +101,14 @@ When the same news event is independently confirmed by 3 or more separate source
 
 **Who operates Pulse Iran?**
 Pulse Iran is operated by Vahid Marali (وحید مارالی), a media technologist and journalist. Contact: info@palsiran.com.
+
+## درباره پالس ایران
+
+پالس ایران (palsiran.com) یک سامانه تجمیع اخبار فارسی است که از مارس ۲۰۲۴ بیش از ۴۵ منبع خبری ایرانی و بین‌المللی را به صورت لحظه‌ای رصد می‌کند. این سامانه یک رسانه‌ خبری مستقل نیست — بلکه اخبار را جمع‌آوری، خلاصه‌سازی (با هوش مصنوعی) و با اشاره به منبع اصلی ارائه می‌دهد.
+
+ویژگی منحصربه‌فرد پالس ایران برچسب‌گذاری گرایش سیاسی هر منبع است. هر منبع در یکی از ۱۱ دسته سیاسی طبقه‌بندی می‌شود — از رسانه‌های رسمی دولتی تا رسانه‌های مخالف جمهوری اسلامی — تا خوانندگان بتوانند همزمان پوشش رسانه‌های مختلف را مقایسه کنند.
+
+سردبیر و بنیان‌گذار: وحید مارالی (Vahid Marali) — info@palsiran.com
 
 ## Language
 
@@ -86,6 +132,8 @@ Direction: RTL
 - AI model training or fine-tuning: prohibited (RSL 1.0)
 - Automated scraping without written permission: prohibited
 
+Note on AI crawler access: robots.txt permits retrieval crawlers (ClaudeBot, GPTBot, PerplexityBot, etc.) for real-time citation use. The RSL 1.0 license above applies to model training use of this content — retrieval and citation is explicitly permitted.
+
 ## License & Attribution
 
 License: RSL 1.0 — Retrieval and summarization permitted; training prohibited.
@@ -106,7 +154,7 @@ Publisher: Vahid Marali (وحید مارالی), info@palsiran.com.
 Website: https://palsiran.com
 Email: info@palsiran.com
 Telegram: https://t.me/palsiran
-X/Twitter: https://x.com/palsiran_news
+YouTube: https://www.youtube.com/@palsiran
 
 ## Optional
 
