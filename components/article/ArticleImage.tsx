@@ -6,9 +6,10 @@ interface Props {
   src: string;
   alt: string;
   className?: string;
+  priority?: boolean;
 }
 
-export default function ArticleImage({ src, alt, className }: Props) {
+export default function ArticleImage({ src, alt, className, priority }: Props) {
   const [error, setError] = useState(false);
   return (
     <div className={`relative w-full aspect-video rounded-xl overflow-hidden ${className ?? ""}`}>
@@ -19,6 +20,8 @@ export default function ArticleImage({ src, alt, className }: Props) {
         className="object-cover"
         onError={() => setError(true)}
         sizes="(max-width: 768px) 100vw, 75vw"
+        priority={priority}
+        fetchPriority={priority ? "high" : undefined}
       />
     </div>
   );

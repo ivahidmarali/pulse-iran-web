@@ -437,7 +437,7 @@ export default async function ArticlePage({
             ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
-              <ArticleImage src={item.image_url} alt={displayTitle} className="mb-6" />
+              <ArticleImage src={item.image_url} alt={displayTitle} className="mb-6" priority />
             ) : null}
 
             <div className="flex flex-row-reverse items-center justify-between py-4 border-y border-white/5 mb-6">
@@ -615,7 +615,7 @@ export default async function ArticlePage({
             ) : item.video_url ? (
               <TelegramEmbed videoUrl={item.video_url} />
             ) : item.image_url ? (
-              <ArticleImage src={item.image_url} alt={displayTitle} />
+              <ArticleImage src={item.image_url} alt={displayTitle} priority />
             ) : null}
 
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
