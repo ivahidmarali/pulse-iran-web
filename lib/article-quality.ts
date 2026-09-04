@@ -39,6 +39,10 @@ export function cleanTitle(title: string): string {
 }
 
 const MIN_SUMMARY_WORDS = 20;
+// "medium" importance (economy, sports results, protests, official statements —
+// the site's actual day-to-day output) needs a longer, more substantial summary
+// than "high" to qualify, since it wasn't judged newsworthy enough on its own.
+const MIN_SUMMARY_WORDS_MEDIUM = 35;
 
 export interface ArticleQualitySignals {
   title: string;
@@ -50,6 +54,15 @@ export function isSubstantialArticle(item: ArticleQualitySignals): boolean {
   if (isSpamTitle(item.title)) return false;
   const summary = (item.summary ?? "").trim();
   if (!summary || summary === item.title.trim()) return false;
-  if (summary.split(/\s+/).length < MIN_SUMMARY_WORDS) return false;
-  return item.importance === "high";
+  const wordCount = summary.split(/\s+/).length;
+  if (wordCount < MIN_SUMMARY_WORDS) return false;
+
+  // "high" importance (war, nuclear, major political decisions) is deliberately
+  // narrow at the classification level — see summarizer.py. Restricting the
+  // sitemap/indexing gate to "high" alone starves Google of ~97% of daily
+  // output. Admit "medium" too, but only when the summary is long enough to
+  // be genuinely substantial on its own (not just a one-line relay).
+  if (item.importance === "high") return true;
+  if (item.importance === "medium") return wordCount >= MIN_SUMMARY_WORDS_MEDIUM;
+  return false;
 }

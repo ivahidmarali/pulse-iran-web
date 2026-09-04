@@ -136,6 +136,11 @@ export default async function CurrencyPage({
     weekday: "long", year: "numeric", month: "long", day: "numeric",
   }).format(new Date());
 
+  // Exchange/commodity rates aren't purchasable goods — Product/Offer schema
+  // was a content-type mismatch (Google flagged Rich Results warnings for
+  // missing merchant fields a Product legitimately requires). Dataset +
+  // PropertyValue describes this as data, not merchandise, while remaining
+  // useful for AI/LLM fact-extraction.
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -146,22 +151,17 @@ export default async function CurrencyPage({
     inLanguage: "fa",
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntity: items.length > 0 ? {
-      "@type": "ItemList",
+      "@type": "Dataset",
       name: cfg.title,
-      itemListElement: items.map((item, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        item: {
-          "@type": "Product",
-          name: PRICE_META[item.key]?.name ?? item.key,
-          offers: {
-            "@type": "Offer",
-            priceCurrency: "IRR",
-            price: item.price * 10,
-            priceValidUntil: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
-            availability: "https://schema.org/InStock",
-          },
-        },
+      description: cfg.description,
+      temporalCoverage: new Date().toISOString(),
+      creator: { "@id": `${SITE_URL}/#organization` },
+      variableMeasured: items.map((item) => ({
+        "@type": "PropertyValue",
+        name: PRICE_META[item.key]?.name ?? item.key,
+        value: item.price * 10,
+        unitText: "IRR",
+        measurementTechnique: "بازار آزاد ایران",
       })),
     } : undefined,
   };
