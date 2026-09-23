@@ -23,6 +23,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">داشبورد</Link>
           <Link href="/admin/sources" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">منابع</Link>
           <Link href="/admin/posts" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">پست‌ها</Link>
+          <Link href="/admin/articles" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">مقاله جدید</Link>
           <Link href="/" className="text-on-surface-variant hover:text-secondary-fixed-dim transition-colors">
             <span className="material-symbols-outlined text-[18px]">open_in_new</span>
           </Link>

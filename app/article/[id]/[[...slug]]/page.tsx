@@ -9,6 +9,7 @@ import ArticleNavBar from "@/components/article/ArticleNavBar";
 import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
+import ArticleBody, { bodyPlainText } from "@/components/article/ArticleBody";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import { GROUP_TAG_SLUGS } from "@/lib/categories";
@@ -289,6 +290,10 @@ export default async function ArticlePage({
       : (item.summary ?? "").trim();
   const hasBody = body.length > 30 && body !== item.title;
   const bodyParagraphs = body.split(/\n+/).map((p) => p.trim()).filter(Boolean);
+  const plainBody = bodyPlainText(body);
+  // Hand-written articles published from /admin (no upstream source / AI summary)
+  const isEditorial = item.item_id.startsWith("ed-");
+  const sourceLink = isEditorial ? "/about" : sourceHref(item.source);
 
   // Build JSON-LD from trusted server-only data
   const breadcrumbJsonLd = {
@@ -348,7 +353,7 @@ export default async function ArticlePage({
     },
     inLanguage: "fa",
     ...(hasBody
-      ? { articleBody: body, wordCount: body.split(/\s+/).length }
+      ? { articleBody: plainBody, wordCount: plainBody.split(/\s+/).length }
       : {}),
     ...(catName !== "اخبار"
       ? {
@@ -385,7 +390,7 @@ export default async function ArticlePage({
             </nav>
             <div className="flex flex-row-reverse items-center justify-between mb-4 text-label-sm text-on-surface-variant">
               <div className="flex items-center gap-2">
-                <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
+                <Link href={sourceLink} className="text-secondary-fixed-dim font-bold hover:underline">{item.source}</Link>
                 {item.political_lean && LEAN_META[item.political_lean] && (
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${LEAN_META[item.political_lean].text} ${LEAN_META[item.political_lean].bg}`}>
                     {item.political_lean}
@@ -394,7 +399,7 @@ export default async function ArticlePage({
               </div>
               <div className="flex items-center gap-3">
                 {hasBody && (
-                  <span>{toPersianNum(readingTime(body))} دقیقه</span>
+                  <span>{toPersianNum(readingTime(plainBody))} دقیقه</span>
                 )}
                 <time dateTime={publishedIso}>🕐 {ago}</time>
               </div>
@@ -447,16 +452,14 @@ export default async function ArticlePage({
             <div className="bg-surface-container/30 p-6 rounded-2xl border border-white/5 space-y-4 leading-relaxed">
               {hasBody ? (
                 <>
-                  {bodyParagraphs.map((para, i) => (
-                    <p key={i} data-speakable={i === 0 || undefined} className="font-body-lg text-body-lg text-on-surface leading-8">
-                      {para}
+                  <ArticleBody paragraphs={bodyParagraphs} />
+                  {!isEditorial && (
+                    <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
+                      <span>🤖</span>
+                      <span>خلاصه با هوش مصنوعی تهیه شده —</span>
+                      <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
                     </p>
-                  ))}
-                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
-                    <span>🤖</span>
-                    <span>خلاصه با هوش مصنوعی تهیه شده —</span>
-                    <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
-                  </p>
+                  )}
                 </>
               ) : (
                 <div className="text-center py-4 space-y-4">
@@ -477,7 +480,7 @@ export default async function ArticlePage({
               )}
               <div className="flex items-center gap-3 mt-4 text-label-sm text-on-surface-variant">
                 <span>منبع:</span>
-                <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
+                <Link href={sourceLink} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
               </div>
             </div>
           </article>
@@ -594,7 +597,7 @@ export default async function ArticlePage({
               <div className="flex items-center justify-between py-4 border-y border-white/5 text-on-surface-variant">
                 <div className="flex items-center gap-4 text-sm">
                   <span className="flex items-center gap-2">
-                    📰 منبع: <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
+                    📰 منبع: <Link href={sourceLink} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
                     {item.political_lean && LEAN_META[item.political_lean] && (
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${LEAN_META[item.political_lean].text} ${LEAN_META[item.political_lean].bg}`}>
                         {item.political_lean}
@@ -603,7 +606,7 @@ export default async function ArticlePage({
                   </span>
                   <time dateTime={publishedIso}>🕐 {ago}</time>
                   {hasBody && (
-                    <span>{toPersianNum(readingTime(body))} دقیقه مطالعه</span>
+                    <span>{toPersianNum(readingTime(plainBody))} دقیقه مطالعه</span>
                   )}
                 </div>
                 <ArticleActions title={displayTitle} itemId={item.item_id} source={item.source} />
@@ -621,16 +624,14 @@ export default async function ArticlePage({
             <div className="bg-surface-container/30 p-8 rounded-2xl border border-white/5 space-y-6 leading-relaxed">
               {hasBody ? (
                 <>
-                  {bodyParagraphs.map((para, i) => (
-                    <p key={i} data-speakable={i === 0 || undefined} className="font-body-lg text-body-lg text-on-surface leading-8">
-                      {para}
+                  <ArticleBody paragraphs={bodyParagraphs} />
+                  {!isEditorial && (
+                    <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
+                      <span>🤖</span>
+                      <span>خلاصه با هوش مصنوعی تهیه شده —</span>
+                      <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
                     </p>
-                  ))}
-                  <p className="text-[11px] text-on-surface-variant/50 flex items-center gap-1 justify-end flex-wrap">
-                    <span>🤖</span>
-                    <span>خلاصه با هوش مصنوعی تهیه شده —</span>
-                    <Link href="/about" className="underline hover:text-secondary-fixed-dim">تحریریه پالس ایران</Link>
-                  </p>
+                  )}
                 </>
               ) : (
                 <div className="text-center py-6 space-y-4">
@@ -661,7 +662,7 @@ export default async function ArticlePage({
                     {item.source} 🔗
                   </a>
                 ) : (
-                  <Link href={sourceHref(item.source)} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
+                  <Link href={sourceLink} className="text-secondary-fixed-dim hover:underline">{item.source}</Link>
                 )}
               </div>
             </div>
