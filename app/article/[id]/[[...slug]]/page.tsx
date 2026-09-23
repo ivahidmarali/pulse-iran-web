@@ -13,6 +13,7 @@ import ArticleBody, { bodyPlainText } from "@/components/article/ArticleBody";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import { GROUP_TAG_SLUGS } from "@/lib/categories";
+import { EDITORIAL_META } from "@/lib/editorial-meta";
 import { isSubstantialArticle } from "@/lib/article-quality";
 import type { NewsItem } from "@/lib/types";
 
@@ -252,6 +253,20 @@ export default async function ArticlePage({
     if (target !== bare) redirect(`${SITE_URL}${target}`);
   }
 
+  // Editorial articles with a hand-picked slug: any other slug (e.g. the old
+  // title-derived one) 308s to the canonical URL, so links and index entries
+  // to the previous URL consolidate onto the new one.
+  const fixedSlug = EDITORIAL_META[cleanId]?.slug;
+  if (fixedSlug && slug) {
+    let requested = slug.join("/");
+    try {
+      requested = decodeURIComponent(requested);
+    } catch {
+      /* keep as-is */
+    }
+    if (requested !== fixedSlug) permanentRedirect(articleUrl(cleanId, article.title));
+  }
+
   const related = await fetchRelated(decodedId, article?.category);
   const item = article;
 
@@ -352,6 +367,7 @@ export default async function ArticlePage({
       cssSelector: ["h1", "[data-speakable]"],
     },
     inLanguage: "fa",
+    ...(EDITORIAL_META[cleanId]?.about ? { about: EDITORIAL_META[cleanId].about } : {}),
     ...(hasBody
       ? { articleBody: plainBody, wordCount: plainBody.split(/\s+/).length }
       : {}),

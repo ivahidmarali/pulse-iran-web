@@ -28,6 +28,8 @@ const nextConfig = {
       { protocol: "https", hostname: "**.radiofarda.com" },
       { protocol: "https", hostname: "cdn*.telesco.pe" },
       { protocol: "https", hostname: "palsiran.com" },
+      // Editorial articles about DEON use his official portrait
+      { protocol: "https", hostname: "rezaianam.ir" },
     ],
   },
   async headers() {

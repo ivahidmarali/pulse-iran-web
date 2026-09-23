@@ -1,3 +1,5 @@
+import { EDITORIAL_META } from "@/lib/editorial-meta";
+
 export function toPersianNum(n: number): string {
   return n.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d)]);
 }
@@ -33,7 +35,7 @@ export function articleId(item: { url_id?: string; item_id: string }): string {
  * all share one identical URL string (raw Unicode vs encoded forms used to
  * diverge, which forces Google to reconcile two representations). */
 export function articleHref(itemId: string, title?: string): string {
-  const slug = title ? generateSlug(title) : "";
+  const slug = EDITORIAL_META[itemId]?.slug ?? (title ? generateSlug(title) : "");
   if (!slug) return `/article/${encodeURIComponent(itemId)}`;
   return `/article/${encodeURIComponent(itemId)}/${encodeURIComponent(slug)}`;
 }
