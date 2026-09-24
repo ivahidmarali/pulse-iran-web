@@ -9,7 +9,7 @@ import ArticleNavBar from "@/components/article/ArticleNavBar";
 import TelegramEmbed from "@/components/article/TelegramEmbed";
 import TelegramPostWidget from "@/components/article/TelegramPostWidget";
 import ArticleImage from "@/components/article/ArticleImage";
-import ArticleBody, { bodyPlainText } from "@/components/article/ArticleBody";
+import ArticleBody, { bodyImages, bodyPlainText } from "@/components/article/ArticleBody";
 import { getNewsById, getNews } from "@/lib/api";
 import { articleHref, articleUrl, articleId, safeJsonLd, sourceHref, SITE_URL } from "@/lib/utils";
 import { GROUP_TAG_SLUGS } from "@/lib/categories";
@@ -355,7 +355,10 @@ export default async function ArticlePage({
     description: truncateAtWord(
       item.summary && item.summary.length > 30 ? item.summary : item.title
     ),
-    image: imageNode,
+    // Hero first, then photos placed in the body (editorial articles).
+    image: bodyImages(body).length
+      ? [imageNode, ...bodyImages(body).map((img) => ({ "@type": "ImageObject", url: img.url, ...(img.caption ? { caption: img.caption } : {}) }))]
+      : imageNode,
     datePublished: new Date(item.posted_at).toISOString(),
     dateModified: new Date(item.posted_at).toISOString(),
     author: authorNode,
