@@ -183,17 +183,6 @@ In `/app/news-sitemap.xml/route.ts`:
 
 ---
 
-### M6 — Create Author Page /about/vahid-marali
-**Effort:** 1-2 hours  
-
-Create `app/about/vahid-marali/page.tsx`:
-- Person schema with `@id: "…/#editor"`, `sameAs`, `knowsAbout`
-- 200-300 word bio in Persian
-- Link to editorial policy + first editorial article
-- Update `editorPersonJsonLd` in layout.tsx: `url` → `${SITE_URL}/about/vahid-marali`
-
----
-
 ### M7 — Fix sitemap.ts Fetch Caching
 **Effort:** 5 minutes  
 

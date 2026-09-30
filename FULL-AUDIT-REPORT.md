@@ -175,16 +175,6 @@ The site's primary differentiator (transparent bias labeling) is visible on sour
 
 ---
 
-### 2.4 Named Author Attribution Gap ⚠️ MEDIUM
-
-Editorial articles use "تیم پالس ایران" as author. Person entity for Vahid Marali exists in schema but is disconnected from authorship. No dedicated author bio page.
-
-**Fix:**
-1. Change editorial article `author` to `{ "@type": "Person", "@id": "…/#editor", "name": "وحید مارالی" }`
-2. Add visible byline on editorial articles
-3. Create `/about/vahid-marali` as canonical author page
-
----
 
 ### 2.5 Zero External Referring Domains ⚠️ HIGH
 

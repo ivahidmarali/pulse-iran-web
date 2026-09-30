@@ -7,8 +7,6 @@ const nextConfig = {
       { source: "/worldcup", destination: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", permanent: true },
       // ASCII internal route → canonical Persian URL (keeps URLs clean for users)
       { source: "/jame-jahani", destination: "/%D8%AC%D8%A7%D9%85-%D8%AC%D9%87%D8%A7%D9%86%DB%8C", permanent: true },
-      // The personal author page was removed; send old links to /about.
-      { source: "/about/vahid-marali", destination: "/about", permanent: true },
       // The harfetchatbot mini app lived at /app here until 2026-09-25. Call and
       // game buttons already sent in Telegram still point at it, so send them
       // on to the mini app's real home. Query string (?call=<token>) carries over.
