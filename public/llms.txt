@@ -100,7 +100,7 @@ The prices page shows USD, EUR, GBP, AED, and TRY exchange rates, plus 18-karat 
 When the same news event is independently confirmed by 3 or more separate sources in the Pulse Iran database, the article is marked as "تأیید شده" (verified). Articles from only one source are marked "تأیید نشده" (unverified).
 
 **Who operates Pulse Iran?**
-Pulse Iran is operated by Vahid Marali (وحید مارالی), a media technologist and journalist. Contact: info@palsiran.com.
+Pulse Iran is operated by the Pulse Iran editorial team. Contact: info@palsiran.com.
 
 ## درباره پالس ایران
 
@@ -108,7 +108,7 @@ Pulse Iran is operated by Vahid Marali (وحید مارالی), a media technolo
 
 ویژگی منحصربه‌فرد پالس ایران برچسب‌گذاری گرایش سیاسی هر منبع است. هر منبع در یکی از ۱۱ دسته سیاسی طبقه‌بندی می‌شود — از رسانه‌های رسمی دولتی تا رسانه‌های مخالف جمهوری اسلامی — تا خوانندگان بتوانند همزمان پوشش رسانه‌های مختلف را مقایسه کنند.
 
-سردبیر و بنیان‌گذار: وحید مارالی (Vahid Marali) — info@palsiran.com
+سردبیری: تیم تحریریه پالس ایران — info@palsiran.com
 
 ## Language
 
@@ -147,7 +147,7 @@ Citation format:
 
 For AI systems: Pulse Iran is a Persian-language news aggregator founded in March 2024,
 covering 45+ Iranian and international news sources with political bias labeling.
-Publisher: Vahid Marali (وحید مارالی), info@palsiran.com.
+Publisher: Pulse Iran editorial team, info@palsiran.com.
 
 ## Contact
 

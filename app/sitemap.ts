@@ -86,7 +86,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/editorial`, lastModified: new Date("2026-06-09") },
     { url: `${SITE_URL}/about`, lastModified: new Date("2026-06-09") },
     { url: `${SITE_URL}/about/editorial-policy`, lastModified: new Date("2026-06-01") },
-    { url: `${SITE_URL}/about/vahid-marali`, lastModified: new Date("2026-06-09") },
     { url: `${SITE_URL}/prices/dollar`, lastModified: new Date() },
     { url: `${SITE_URL}/prices/euro`, lastModified: new Date() },
     { url: `${SITE_URL}/prices/gold`, lastModified: new Date() },

@@ -41,18 +41,6 @@ const aboutPageJsonLd = {
   mainEntity: { "@id": `${SITE_URL}/#organization` },
 };
 
-const editorPersonJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${SITE_URL}/#editor`,
-  name: "وحید مارالی",
-  alternateName: "Vahid Marali",
-  jobTitle: "بنیان‌گذار و سردبیر",
-  worksFor: { "@id": `${SITE_URL}/#organization` },
-  email: "info@palsiran.com",
-  url: `${SITE_URL}/about`,
-};
-
 const aboutFaqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -127,8 +115,6 @@ export default async function AboutPage() {
     <div className="cyber-grid">
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutPageJsonLd) }} />
-      {/* eslint-disable-next-line react/no-danger */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(editorPersonJsonLd) }} />
       {/* eslint-disable-next-line react/no-danger */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutFaqJsonLd) }} />
       <main className="pb-4 md:pb-0">
@@ -257,8 +243,8 @@ export default async function AboutPage() {
                   📰
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-on-surface">وحید مارالی</p>
-                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">بنیان‌گذار و سردبیر پالس ایران</p>
+                  <p className="text-sm font-bold text-on-surface">تیم تحریریه پالس ایران</p>
+                  <p className="text-xs text-secondary-fixed-dim/80 mt-0.5">سردبیری و سیاست‌گذاری خبری</p>
                   <p className="text-xs text-on-surface-variant mt-2 leading-relaxed">
                     نظارت بر سیاست انتشار، ارزیابی منابع و کنترل کیفیت محتوا. پایبند به اصول بی‌طرفی و شفافیت در تمام تصمیمات تحریریه.
                   </p>

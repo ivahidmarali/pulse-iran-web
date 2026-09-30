@@ -62,12 +62,7 @@ export default async function EditorialArticlePage({
     url: canonical,
     inLanguage: "fa",
     keywords: article.keywords.join(", "),
-    author: {
-      "@type": "Person",
-      "@id": `${SITE_URL}/#editor`,
-      name: "Vahid Marali",
-      url: `${SITE_URL}/about/vahid-marali`,
-    },
+    author: { "@id": `${SITE_URL}/#organization` },
     publisher: { "@id": `${SITE_URL}/#organization` },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
     articleSection: "تحریریه",
@@ -173,8 +168,8 @@ export default async function EditorialArticlePage({
           <article>
             <h1 className="text-3xl font-black text-on-surface leading-tight mb-4">{article.title}</h1>
             <div className="flex items-center gap-4 text-sm text-on-surface-variant mb-8 pb-6 border-b border-white/10">
-              <Link href="/about/vahid-marali" className="font-medium hover:text-secondary-fixed-dim">
-                وحید مارالی
+              <Link href="/about" className="font-medium hover:text-secondary-fixed-dim">
+                تیم پالس ایران
               </Link>
               <span>·</span>
               <time dateTime={article.datePublished}>
